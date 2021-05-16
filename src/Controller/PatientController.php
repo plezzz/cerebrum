@@ -36,6 +36,7 @@ class PatientController extends AbstractController
 
 
         if ($form->isSubmitted() && $form->isValid()) {
+
             $patient = $form->getData();
             $egn = $patient->getEGN();
             $this->patientService->save($patient);
@@ -57,16 +58,17 @@ class PatientController extends AbstractController
     public function idCardCreate(Request $request): Response
     {
 
-        //$egn = $request->query->get('egn');
-        //$patient = $this->patientService->findOneByEGN($egn)->getId();
+        $egn = $request->query->get('egn');
+        $patient = $this->patientService->findOneByEGN($egn);
         $idCard = new IDCard();
+        //$idCard->setPatient($patient);
         $form = $this->createForm(IDCardType::class, $idCard);
         $form->handleRequest($request);
 
 
         if ($form->isSubmitted() && $form->isValid()) {
             $idCard = $form->getData();
-            print_r($idCard);
+            $this->patientService->saveIDCard($idCard, $patient);
 
 
             //return $this->redirectToRoute('patient/id-card-create');

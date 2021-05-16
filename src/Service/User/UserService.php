@@ -45,10 +45,10 @@ class UserService implements UserServiceInterface
 
     /**
      * @param User $user
-     * @return User
+     * @return bool
      * @throws ORMException
      */
-    public function save(User $user): User
+    public function save(User $user): bool
     {
         $user->setPassword(
             $this->passwordEncoder->encodePassword(
@@ -57,14 +57,15 @@ class UserService implements UserServiceInterface
             )
         );
 
+
         $user->setCreatedAt($this->dateTimeService->setDateTimeNow());
         $user->setEditedAt($this->dateTimeService->setDateTimeNow());
         $user->setIsActive(true);
         $user->setIsDeleted(false);
         $user->setIsVerified(false);
+        //print_r($user);
 
-        $this->userRepository->insert($user);
-        return $user;
+        return $this->userRepository->insert($user);
     }
 
     /**

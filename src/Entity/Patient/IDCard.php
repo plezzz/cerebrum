@@ -6,9 +6,15 @@ use App\Entity\User;
 use App\Repository\Patient\IDCardRepository;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=IDCardRepository::class)
+ * @UniqueEntity(
+ *     fields={"IDNumber"},
+ *     message="Вече съществува човек с това ЕГН."
+ * )
  */
 class IDCard
 {
@@ -20,26 +26,32 @@ class IDCard
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
+     * @Assert\NotBlank(message = "Полето не може да бъде празно")
+     * @Assert\Regex("/^[0-9]{9,11}$/", message="Грешен номер")
+     * @ORM\Column(type="string", length=10)
      */
     private $IDNumber;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @Assert\NotBlank(message = "Полето не може да бъде празно")
+     * @ORM\Column(type="date")
      */
     private $validity;
 
     /**
+     * @Assert\NotBlank(message = "Полето не може да бъде празно")
      * @ORM\Column(type="string", length=255)
      */
     private $placeOfResidenceByID;
 
     /**
+     * @Assert\NotBlank(message = "Полето не може да бъде празно")
      * @ORM\Column(type="string", length=255)
      */
     private $placeOfResidenceByCurrentLocation;
 
     /**
+     * @Assert\NotBlank(message = "Полето не може да бъде празно")
      * @ORM\Column(type="string", length=255)
      */
     private $publishedBy;
@@ -47,19 +59,31 @@ class IDCard
     /**
      * @ORM\OneToOne(targetEntity=Patient::class, mappedBy="IDCard", cascade={"persist", "remove"})
      */
-    private $patient;
+    private ?Patient $patient;
 
     /**
-     * @ORM\OneToOne(targetEntity=User::class, cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity=User::class)
      * @ORM\JoinColumn(nullable=false)
      */
-    private $createdBy;
+    private $createdBY;
 
     /**
-     * @ORM\OneToOne(targetEntity=User::class, cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity=User::class)
      * @ORM\JoinColumn(nullable=false)
      */
     private $editedBy;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $editedAt;
+
+
 
     public function getId(): ?int
     {
@@ -148,14 +172,14 @@ class IDCard
         return $this;
     }
 
-    public function getCreatedBy(): ?User
+    public function getCreatedBY(): ?User
     {
-        return $this->createdBy;
+        return $this->createdBY;
     }
 
-    public function setCreatedBy(User $createdBy): self
+    public function setCreatedBY(?User $createdBY): self
     {
-        $this->createdBy = $createdBy;
+        $this->createdBY = $createdBY;
 
         return $this;
     }
@@ -165,9 +189,33 @@ class IDCard
         return $this->editedBy;
     }
 
-    public function setEditedBy(User $editedBy): self
+    public function setEditedBy(?User $editedBy): self
     {
         $this->editedBy = $editedBy;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getEditedAt(): ?DateTimeInterface
+    {
+        return $this->editedAt;
+    }
+
+    public function setEditedAt(DateTimeInterface $editedAt): self
+    {
+        $this->editedAt = $editedAt;
 
         return $this;
     }

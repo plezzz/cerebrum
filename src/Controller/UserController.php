@@ -41,21 +41,8 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // $form->getData() holds the submitted values
-            // but, the original `$task` variable has also been updated
-            $task = $form->getData();
+            $user = $form->getData();
             $this->userService->save($user);
-
-            print_r($task);
-
-
-            // ... perform some action, such as saving the task to the database
-            // for example, if Task is a Doctrine entity, save it!
-            // $entityManager = $this->getDoctrine()->getManager();
-            // $entityManager->persist($task);
-            // $entityManager->flush();
-
-            // return $this->redirectToRoute('home');
         }
 
         return $this->render('user/index.html.twig', [
@@ -77,7 +64,7 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $role = $form->getData();
-           $this->roleService->save($role);
+            $this->roleService->save($role);
             print_r($role);
 
 

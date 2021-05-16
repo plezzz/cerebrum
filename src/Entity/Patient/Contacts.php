@@ -60,16 +60,17 @@ class Contacts
     private ?Patient $patient;
 
     /**
-     * @ORM\OneToOne(targetEntity=User::class, cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity=User::class)
      * @ORM\JoinColumn(nullable=false)
      */
-    private ?User $createdBy;
+    private $createdBy;
 
     /**
-     * @ORM\OneToOne(targetEntity=User::class, cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity=User::class)
      * @ORM\JoinColumn(nullable=false)
      */
-    private ?User $editedBy;
+    private $editedBy;
+
 
     public function getId(): ?int
     {
@@ -177,7 +178,7 @@ class Contacts
         return $this->createdBy;
     }
 
-    public function setCreatedBy(User $createdBy): self
+    public function setCreatedBy(?User $createdBy): self
     {
         $this->createdBy = $createdBy;
 
@@ -189,7 +190,7 @@ class Contacts
         return $this->editedBy;
     }
 
-    public function setEditedBy(User $editedBy): self
+    public function setEditedBy(?User $editedBy): self
     {
         $this->editedBy = $editedBy;
 

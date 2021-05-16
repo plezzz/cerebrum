@@ -6,12 +6,19 @@ namespace App\Entity\Patient;
 
 use App\Entity\User;
 use App\Repository\PatientRepository;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=PatientRepository::class)
+ * @UniqueEntity(
+ *     fields={"EGN"},
+ *     message="Вече съществува човек с това ЕГН."
+ * )
  */
 class Patient
 {
@@ -23,22 +30,31 @@ class Patient
     private ?int $id;
 
     /**
+     * @Assert\NotBlank(message = "Полето не може да бъде празно")
+     *
      * @ORM\Column(type="string", length=255)
      */
     private ?string $firstName;
 
     /**
+     * @Assert\NotBlank(message = "Полето не може да бъде празно")
+     *
      * @ORM\Column(type="string", length=255)
      */
     private ?string $middleName;
 
     /**
+     * @Assert\NotBlank(message = "Полето не може да бъде празно")
+     *
      * @ORM\Column(type="string", length=255)
      */
     private ?string $lastName;
 
     /**
-     * @ORM\Column(type="string", length=255, unique=true)
+     * @Assert\NotBlank(message = "Полето не може да бъде празно")
+     * @Assert\Regex("/^[0-9]{10}$/", message="Грешно ЕГН"),
+     *
+     * @ORM\Column(type="string", length=10)
      */
     private ?string $EGN;
 
@@ -51,7 +67,7 @@ class Patient
     /**
      * @ORM\OneToMany(targetEntity=Contacts::class, mappedBy="patient", orphanRemoval=true)
      */
-    private ArrayCollection $Contacts;
+    private Collection $Contacts;
 
     /**
      * @ORM\OneToOne(targetEntity=IDCard::class, inversedBy="patient", cascade={"persist", "remove"})
@@ -59,16 +75,24 @@ class Patient
     private ?IDCard $IDCard;
 
     /**
-     * @ORM\OneToOne(targetEntity=User::class, cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\Column(type="datetime")
      */
-    private ?User $createdBy;
+    private $createdAt;
 
     /**
-     * @ORM\OneToOne(targetEntity=User::class, cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\Column(type="datetime")
      */
-    private ?User $editedBy;
+    private $editedAt;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="createdPatients")
+     */
+    private $createdBy;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="editedPatients")
+     */
+    private $editedBy;
 
     public function __construct()
     {
@@ -182,12 +206,37 @@ class Patient
         return $this;
     }
 
+
+    public function getCreatedAt(): ?DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getEditedAt(): ?DateTimeInterface
+    {
+        return $this->editedAt;
+    }
+
+    public function setEditedAt(DateTimeInterface $editedAt): self
+    {
+        $this->editedAt = $editedAt;
+
+        return $this;
+    }
+
     public function getCreatedBy(): ?User
     {
         return $this->createdBy;
     }
 
-    public function setCreatedBy(User $createdBy): self
+    public function setCreatedBy(?User $createdBy): self
     {
         $this->createdBy = $createdBy;
 
@@ -199,7 +248,7 @@ class Patient
         return $this->editedBy;
     }
 
-    public function setEditedBy(User $editedBy): self
+    public function setEditedBy(?User $editedBy): self
     {
         $this->editedBy = $editedBy;
 

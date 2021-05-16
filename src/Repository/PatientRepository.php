@@ -37,6 +37,22 @@ class PatientRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * @param Patient $patient
+     * @return bool
+     * @throws ORMException
+     */
+    public function update(Patient $patient)
+    {
+        try {
+            $this->_em->persist($patient);
+            $this->_em->flush();
+            return true;
+        } catch (OptimisticLockException $e) {
+            return false;
+        }
+    }
+
     // /**
     //  * @return Patient[] Returns an array of Patient objects
     //  */

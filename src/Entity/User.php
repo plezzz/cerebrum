@@ -2,14 +2,19 @@
 
 namespace App\Entity;
 
+use App\Entity\Patient\Patient;
 use App\Repository\UserRepository;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @UniqueEntity(fields={"email"},message="Този имейл вече е използван!")
  */
 class User implements UserInterface
 {
@@ -21,6 +26,9 @@ class User implements UserInterface
     private ?int $id;
 
     /**
+     * @Assert\Email(
+     *     message = "'{{ value }}' не е валиден имейл.")
+     * @Assert\NotBlank(message = "Полето не може да бъде празно")
      * @ORM\Column(type="string", length=180, unique=true)
      */
     private ?string $email;
@@ -37,12 +45,15 @@ class User implements UserInterface
     private $roles;
 
     /**
+     * @Assert\NotBlank(message = "Полето не може да бъде празно")
+     * @Assert\Regex("/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{10,}$/", message="Паролата трябва да бъде минимум 10 символа на латиница, да съдържа поне една голяма и малка буква, число и специален знак.")
      * @var string The hashed password
      * @ORM\Column(type="string")
      */
     private string $password;
 
     /**
+     * @Assert\NotBlank(message = "Полето не може да бъде празно")
      * @ORM\Column(type="integer")
      */
     private ?int $mobilePhone;
@@ -58,11 +69,13 @@ class User implements UserInterface
     private ?DateTimeInterface $editedAt;
 
     /**
+     * @Assert\NotBlank(message = "Полето не може да бъде празно")
      * @ORM\Column(type="string", length=255)
      */
     private ?string $firstName;
 
     /**
+     * @Assert\NotBlank(message = "Полето не може да бъде празно")
      * @ORM\Column(type="string", length=255)
      */
     private ?string $lastName;
@@ -83,20 +96,34 @@ class User implements UserInterface
     private $isVerified;
 
     /**
-     * @ORM\OneToOne(targetEntity=User::class, cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\ManyToOne(targetEntity=User::class)
      */
     private $createdBy;
 
     /**
-     * @ORM\OneToOne(targetEntity=User::class, cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\ManyToOne(targetEntity=User::class)
      */
     private $editedBy;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Patient::class, mappedBy="createdBy")
+     */
+    private $createdPatients;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Patient::class, mappedBy="editedBy")
+     */
+    private $editedPatients;
+
+
+
+
 
     public function __construct()
     {
         $this->roles = new ArrayCollection();
+        $this->createdPatients = new ArrayCollection();
+        $this->editedPatients = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -258,29 +285,7 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getCreatedBy(): ?self
-    {
-        return $this->createdBy;
-    }
 
-    public function setCreatedBy(self $createdBy): self
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    public function getEditedBy(): ?self
-    {
-        return $this->editedBy;
-    }
-
-    public function setEditedBy(self $editedBy): self
-    {
-        $this->editedBy = $editedBy;
-
-        return $this;
-    }
 
     /**
      * Returns the roles granted to the user.
@@ -314,6 +319,97 @@ class User implements UserInterface
     public function addRole(Role $role)
     {
         $this->roles[] = $role;
+
+        return $this;
+    }
+
+    public function removeRole(Role $role)
+    {
+        $this->roles->removeElement($role);
+
+        return $this;
+    }
+
+    public function getCreatedBy(): ?self
+    {
+        return $this->createdBy;
+    }
+
+    public function setCreatedBy(?self $createdBy): self
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    public function getEditedBy(): ?self
+    {
+        return $this->editedBy;
+    }
+
+    public function setEditedBy(?self $editedBy): self
+    {
+        $this->editedBy = $editedBy;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Patient[]
+     */
+    public function getCreatedPatients(): Collection
+    {
+        return $this->createdPatients;
+    }
+
+    public function addCreatedPatient(Patient $createdPatient): self
+    {
+        if (!$this->createdPatients->contains($createdPatient)) {
+            $this->createdPatients[] = $createdPatient;
+            $createdPatient->setCreatedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCreatedPatient(Patient $createdPatient): self
+    {
+        if ($this->createdPatients->removeElement($createdPatient)) {
+            // set the owning side to null (unless already changed)
+            if ($createdPatient->getCreatedBy() === $this) {
+                $createdPatient->setCreatedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Patient[]
+     */
+    public function getEditedPatients(): Collection
+    {
+        return $this->editedPatients;
+    }
+
+    public function addEditedPatient(Patient $editedPatient): self
+    {
+        if (!$this->editedPatients->contains($editedPatient)) {
+            $this->editedPatients[] = $editedPatient;
+            $editedPatient->setEditedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEditedPatient(Patient $editedPatient): self
+    {
+        if ($this->editedPatients->removeElement($editedPatient)) {
+            // set the owning side to null (unless already changed)
+            if ($editedPatient->getEditedBy() === $this) {
+                $editedPatient->setEditedBy(null);
+            }
+        }
 
         return $this;
     }

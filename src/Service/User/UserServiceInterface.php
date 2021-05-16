@@ -10,7 +10,7 @@ interface UserServiceInterface
 {
     public function findOneByEmail(string $email): ?User;
 
-    public function save(User $user): ?User;
+    public function save(User $user): bool;
 
     public function findOneById(int $id): ?User;
 

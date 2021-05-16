@@ -46,7 +46,7 @@ class RoleService implements RoleServiceInterface
         $roleStylize = [];
         $roles = $this->roleRepository->findAll();
         foreach ($roles as $role) {
-            $roleStylize[$role->getTitle()] = $role->getName();
+            $roleStylize[$role->getTitle()] = $role;
         }
         return $roleStylize;
 
