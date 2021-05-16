@@ -42,3 +42,13 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
+    role_hierarchy:
+        ROLE_USER: ROLE_USER
+        ROLE_SANITAR: ROLE_SANITAR
+        ROLE_PSIHOLOG: ROLE_PSIHOLOG
+        ROLE_PSIHIATER: ROLE_PSIHIATER
+        ROLE_DOCTOR: [ROLE_PSIHOLOG, ROLE_PSIHIATER]
+        ROLE_ADMIN: [ROLE_ADMIN, ROLE_DOCTOR]
+        ROLE_SUPER_ADMIN: [ROLE_SUPER_ADMIN, ADMINISTRATOR,DOCTOR]
+#        ROLE_ADMIN: ROLE_USER
+#        ROLE_SUPER_ADMIN: [ ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH ]

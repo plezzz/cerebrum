@@ -8,7 +8,7 @@ use App\Entity\Role;
 
 interface RoleServiceInterface
 {
-    public function findOneBy(string $criteria);
+    public function findOneByName(string $criteria);
 
     public function findAll(): array;
 

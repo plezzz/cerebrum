@@ -19,7 +19,7 @@ class RoleService implements RoleServiceInterface
      * @param string $criteria
      * @return Role|null
      */
-    public function findOneBy(string $criteria): ?Role
+    public function findOneByName(string $criteria): ?Role
     {
         return $this->roleRepository->findOneBy(
             ['name' => $criteria]

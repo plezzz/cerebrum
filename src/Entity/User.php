@@ -4,8 +4,8 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use JetBrains\PhpStorm\Pure;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -26,9 +26,15 @@ class User implements UserInterface
     private ?string $email;
 
     /**
-     * @ORM\Column(type="json")
+     * @var ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="App\Entity\Role", inversedBy="users")
+     * @ORM\JoinTable(name="user_role",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")}
+     *      )
      */
-    private array $roles = [];
+    private $roles;
 
     /**
      * @var string The hashed password
@@ -78,15 +84,20 @@ class User implements UserInterface
 
     /**
      * @ORM\OneToOne(targetEntity=User::class, cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $createdBy;
 
     /**
      * @ORM\OneToOne(targetEntity=User::class, cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $editedBy;
+
+    public function __construct()
+    {
+        $this->roles = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -115,21 +126,6 @@ class User implements UserInterface
         return (string)$this->email;
     }
 
-    /**
-     * @see UserInterface
-     */
-    #[Pure] public function getRoles(): array
-    {
-        $roles = $this->roles;
-        return array_unique($roles);
-    }
-
-    public function setRoles(array $roles): self
-    {
-        $this->roles = $roles;
-
-        return $this;
-    }
 
     /**
      * @see UserInterface
@@ -282,6 +278,42 @@ class User implements UserInterface
     public function setEditedBy(self $editedBy): self
     {
         $this->editedBy = $editedBy;
+
+        return $this;
+    }
+
+    /**
+     * Returns the roles granted to the user.
+     *
+     *     public function getRoles()
+     *     {
+     *         return ['ROLE_USER'];
+     *     }
+     *
+     * Alternatively, the roles might be stored on a ``roles`` property,
+     * and populated in any number of different ways when the user object
+     * is created.
+     *
+     * @return array (Role|string)[] The user roles
+     */
+    public function getRoles()
+    {
+        $stringRoles = [];
+        foreach ($this->roles as $role) {
+            /** @var Role $role */
+            $stringRoles[] = $role->getName();
+        }
+        return $stringRoles;
+    }
+
+    /**
+     * @param Role $role
+     *
+     * @return User
+     */
+    public function addRole(Role $role)
+    {
+        $this->roles[] = $role;
 
         return $this;
     }
