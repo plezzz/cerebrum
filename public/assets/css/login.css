@@ -1,0 +1,25 @@
+@font-face {
+    font-family: "Segoe Print";
+    src: url(../fonts/segoepr.ttf);
+}
+
+/*#loginForm{*/
+/*    margin-top: 20%;*/
+/*}*/
+
+#loginFormImage{
+    max-width: 93%;
+    height: auto;
+}
+
+.login-logo{
+    font-size: 5rem;
+    font-family: "Segoe Print", serif;
+    color: rgb(224 198 159)!important;
+}
+
+.login-block{
+    background: repeating-linear-gradient(
+            82deg
+            , #f3e3bf,#f5e5c3,#f7e7d2, transparent 2px);
+}

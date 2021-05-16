@@ -1,0 +1,16 @@
+{% for item in items %}
+    {% if item.translatedLabel == "home" %}
+        {% set translatedLabel = '<i class="feather icon-home"></i>' %}
+        <a href="{{ item.url }}"><i class="feather icon-home"></i>ss</a>
+    {% else %}
+        {% if item.url %}
+            <a href="{{ item.url }}">{{ item.translatedLabel }}</a>
+        {% else %}
+            {{ item.translatedLabel }}
+        {% endif %}
+
+    {% endif %}
+    {% if not loop.last %}
+        &gt;
+    {% endif %}
+{% endfor %}
