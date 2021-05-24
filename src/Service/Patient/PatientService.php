@@ -137,4 +137,9 @@ class PatientService implements PatientServiceInterface
         $this->patientRepository->insert($patient);
         return $contacts->getId();
     }
+
+    public function findByEGN($EGN)
+    {
+        return $this->patientRepository->getByKeyword($EGN);
+    }
 }

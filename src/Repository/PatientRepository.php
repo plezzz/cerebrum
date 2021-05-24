@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Patient\Patient;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -51,6 +52,25 @@ class PatientRepository extends ServiceEntityRepository
         } catch (OptimisticLockException $e) {
             return false;
         }
+    }
+
+    public function findEntitiesByString($str){
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT e
+                FROM App:Patient e
+                WHERE e.EGN LIKE :str'
+            )
+            ->setParameter('str', '%'.$str.'%')
+            ->getResult();
+    }
+
+    public function getByKeyword($keyword): array
+    {
+        return $this->createQueryBuilder('m')
+            ->where("m.EGN LIKE '%$keyword%'")
+            ->getQuery()
+            ->getResult(AbstractQuery::HYDRATE_OBJECT);
     }
 
     // /**

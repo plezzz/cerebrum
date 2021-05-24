@@ -25,6 +25,6 @@ interface PatientServiceInterface
 
     public function saveContacts(Contacts $contacts, Patient $patient);
 
-
+    public function findByEGN($EGN);
 
 }

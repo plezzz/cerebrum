@@ -101,4 +101,5 @@ class UserService implements UserServiceInterface
     {
         return $this->userRepository->findAll();
     }
+
 }

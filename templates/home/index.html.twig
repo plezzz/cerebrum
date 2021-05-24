@@ -8,6 +8,7 @@
     </div>
 {% endblock %}
 {% block body %}
+
     <div class="page-body">
         <div class="row">
             <div class="col-sm-12">
@@ -16,6 +17,7 @@
                         <h5>Hello Card</h5>
                         <span>lorem ipsum dolor sit amet, consectetur adipisicing
                                                             elit</span>
+
                         <div class="card-header-right">
                             <ul class="list-unstyled card-option">
                                 <li><i class="feather icon-maximize full-card"></i></li>
@@ -47,4 +49,49 @@
             </div>
         </div>
     </div>
+{% endblock %}
+{% block javascriptend %}
+{#    <!-- jQuery is necessary -->#}
+{#    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>#}
+
+{#    <script type="text/javascript">#}
+{#        jQuery(document).ready(function() {#}
+{#            var searchRequest = null;#}
+{#            $("#search").keyup(function() {#}
+{#                var minlength = 3;#}
+{#                var that = this;#}
+{#                var value = $(this).val();#}
+{#                var entitySelector = $("#entitiesNav").html('');#}
+{#                if (value.length >= minlength ) {#}
+{#                    if (searchRequest != null)#}
+{#                        searchRequest.abort();#}
+{#                    searchRequest = $.ajax({#}
+{#                        type: "GET",#}
+{#                        url: "{{ path('search') }}",#}
+{#                        data: {#}
+{#                            'q' : value#}
+{#                        },#}
+{#                        dataType: "text",#}
+{#                        success: function(msg){#}
+{#                            //we need to check if the value is the same#}
+{#                            if (value==$(that).val()) {#}
+{#                                var result = JSON.parse(msg);#}
+{#                                $.each(result, function(key, arr) {#}
+{#                                    $.each(arr, function(id, value) {#}
+{#                                        if (key == 'entities') {#}
+{#                                            if (id != 'error') {#}
+{#                                                entitySelector.append('<li><a href="/daten/'+id+'">'+value+'</a></li>');#}
+{#                                            } else {#}
+{#                                                entitySelector.append('<li class="errorLi">'+value+'</li>');#}
+{#                                            }#}
+{#                                        }#}
+{#                                    });#}
+{#                                });#}
+{#                            }#}
+{#                        }#}
+{#                    });#}
+{#                }#}
+{#            });#}
+{#        });#}
+{#    </script>#}
 {% endblock %}
