@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Patient\Patient;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -28,7 +29,12 @@ class PatientType extends AbstractType
             ->add('EGN', TextType::class, [
                 'label' => false,
                 'attr' => ['placeholder' => 'ЕГН'],
-            ]);
+            ])
+            ->add('isInHospital',CheckboxType::class,[
+                'label'=>'Пациента в болница ли е?',
+                'value'=> false
+            ])
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)

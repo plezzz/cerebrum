@@ -4,8 +4,12 @@
 namespace App\Service\Patient;
 
 
+use App\Entity\Patient\Contacts;
+use App\Entity\Patient\Details;
 use App\Entity\Patient\IDCard;
 use App\Entity\Patient\Patient;
+use App\Repository\Patient\ContactsRepository;
+use App\Repository\Patient\DetailsRepository;
 use App\Repository\Patient\IDCardRepository;
 use App\Repository\PatientRepository;
 use App\Service\Common\DateTimeServiceInterface;
@@ -23,6 +27,8 @@ class PatientService implements PatientServiceInterface
     private DateTimeServiceInterface $dateTimeService;
     private UserServiceInterface $userService;
     private IDCardRepository $IDCardRepository;
+    private DetailsRepository $detailsRepository;
+    private ContactsRepository $contactRepository;
 
 //    // private RoleServiceInterface $roleService;
 
@@ -31,12 +37,16 @@ class PatientService implements PatientServiceInterface
         PatientRepository $patientRepository,
         DateTimeServiceInterface $dateTimeService,
         IDCardRepository $IDCardRepository,
+        DetailsRepository $detailsRepository,
+        ContactsRepository $contactsRepository
     )
     {
         $this->userService = $userService;
         $this->patientRepository = $patientRepository;
         $this->dateTimeService = $dateTimeService;
         $this->IDCardRepository = $IDCardRepository;
+        $this->detailsRepository = $detailsRepository;
+        $this->contactRepository = $contactsRepository;
     }
 
 
@@ -68,7 +78,7 @@ class PatientService implements PatientServiceInterface
         return $this->patientRepository->find($id);
     }
 
-    public function saveIDCard(IDCard $IDCard,Patient $patient)
+    public function saveIDCard(IDCard $IDCard, Patient $patient)
     {
         $user = $this->userService->currentUser();
         $date = $this->dateTimeService->setDateTimeNow();
@@ -83,5 +93,48 @@ class PatientService implements PatientServiceInterface
         $patient->setEditedAt($date);
         $this->patientRepository->insert($patient);
         return $IDCard->getId();
+    }
+
+    public function savePersonalDetails(Details $details, Patient $patient)
+    {
+        $user = $this->userService->currentUser();
+        $date = $this->dateTimeService->setDateTimeNow();
+        $details->setCreatedBy($user);
+        $details->setEditedBy($user);
+        $details->setCreatedAt($date);
+        $details->setEditedAt($date);
+
+        $this->detailsRepository->insert($details);
+        $patient->setDetails($details);
+        $patient->setEditedBy($user);
+        $patient->setEditedAt($date);
+        $this->patientRepository->insert($patient);
+        return $details->getId();
+    }
+
+    public function saveContacts(Contacts $contacts, Patient $patient)
+    {
+        $user = $this->userService->currentUser();
+        $date = $this->dateTimeService->setDateTimeNow();
+        $contacts->setCreatedBy($user);
+        $contacts->setEditedBy($user);
+        $contacts->setCreatedAt($date);
+        $contacts->setEditedAt($date);
+        $contacts->setPatient($patient);
+
+        if ($contacts->getIsDefaultContact() === true) {
+            $currentActive = $this->contactRepository->findOneBy(['isDefaultContact' => true]);
+            if ($currentActive !== null) {
+                $currentActive->setIsDefaultContact(false);
+                $this->contactRepository->insert($currentActive);
+            }
+        }
+
+        $this->contactRepository->insert($contacts);
+        $patient->addContact($contacts);
+        $patient->setEditedBy($user);
+        $patient->setEditedAt($date);
+        $this->patientRepository->insert($patient);
+        return $contacts->getId();
     }
 }

@@ -71,6 +71,21 @@ class Contacts
      */
     private $editedBy;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $editedAt;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isDefaultContact;
+
 
     public function getId(): ?int
     {
@@ -193,6 +208,42 @@ class Contacts
     public function setEditedBy(?User $editedBy): self
     {
         $this->editedBy = $editedBy;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getEditedAt(): ?\DateTimeInterface
+    {
+        return $this->editedAt;
+    }
+
+    public function setEditedAt(\DateTimeInterface $editedAt): self
+    {
+        $this->editedAt = $editedAt;
+
+        return $this;
+    }
+
+    public function getIsDefaultContact(): ?bool
+    {
+        return $this->isDefaultContact;
+    }
+
+    public function setIsDefaultContact(bool $isDefaultContact): self
+    {
+        $this->isDefaultContact = $isDefaultContact;
 
         return $this;
     }

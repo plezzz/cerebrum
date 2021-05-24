@@ -94,6 +94,17 @@ class Patient
      */
     private $editedBy;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isInHospital;
+
+    /**
+     * @ORM\Column(type="date")
+     */
+    private $dateOfBirth;
+
+
     public function __construct()
     {
         $this->Contacts = new ArrayCollection();
@@ -251,6 +262,30 @@ class Patient
     public function setEditedBy(?User $editedBy): self
     {
         $this->editedBy = $editedBy;
+
+        return $this;
+    }
+
+    public function getIsInHospital(): ?bool
+    {
+        return $this->isInHospital;
+    }
+
+    public function setIsInHospital(bool $isInHospital): self
+    {
+        $this->isInHospital = $isInHospital;
+
+        return $this;
+    }
+
+    public function getDateOfBirth(): ?\DateTimeInterface
+    {
+        return $this->dateOfBirth;
+    }
+
+    public function setDateOfBirth(\DateTimeInterface $dateOfBirth): self
+    {
+        $this->dateOfBirth = $dateOfBirth;
 
         return $this;
     }

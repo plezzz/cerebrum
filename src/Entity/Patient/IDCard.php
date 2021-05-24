@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass=IDCardRepository::class)
  * @UniqueEntity(
  *     fields={"IDNumber"},
- *     message="Вече съществува човек с това ЕГН."
+ *     message="Вече съществува човек с тази лична карта."
  * )
  */
 class IDCard

@@ -4,6 +4,8 @@ namespace App\Repository\Patient;
 
 use App\Entity\Patient\Contacts;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -17,6 +19,22 @@ class ContactsRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Contacts::class);
+    }
+
+    /**
+     * @param Contacts $contacts
+     * @return bool
+     * @throws ORMException
+     */
+    public function insert(Contacts $contacts): bool
+    {
+        try {
+            $this->_em->persist($contacts);
+            $this->_em->flush();
+            return true;
+        } catch (OptimisticLockException $e) {
+            return false;
+        }
     }
 
     // /**

@@ -4,6 +4,8 @@ namespace App\Repository\Patient;
 
 use App\Entity\Patient\Details;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -17,6 +19,22 @@ class DetailsRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Details::class);
+    }
+
+    /**
+     * @param Details $details
+     * @return bool
+     * @throws ORMException
+     */
+    public function insert(Details $details): bool
+    {
+        try {
+            $this->_em->persist($details);
+            $this->_em->flush();
+            return true;
+        } catch (OptimisticLockException $e) {
+            return false;
+        }
     }
 
     // /**

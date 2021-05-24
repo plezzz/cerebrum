@@ -1,0 +1,84 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Всички пациенти{% endblock %}
+{% block header %}
+    <div class="d-inline">
+        <h4>Всички пациенти</h4>
+        {# <span>Място където може да добавяте нови работници</span> #}
+    </div>
+{% endblock %}
+{% block breadcrumb %}
+    {{ asprega_breadcrumb() }}
+{% endblock %}
+{% block body %}
+    <div class="page-body">
+        <div class="row simple-cards users-card">
+            {% for patient in patients %}
+                <div class="col-md-12 col-xl-4">
+                    <div class="card user-card">
+                        <div class="card-header-img">
+                            <img class="img-fluid img-radius"
+                                 src="{{ asset('assets/images/user-card/img-round2.jpg') }}"
+                                 alt="card-img">
+                            <h4>{{ patient.firstName }} {{ patient.lastName }}</h4>
+                            <h5>abc123@domain.com</h5>
+                            <h6>Systems Administrator</h6>
+                        </div>
+
+                        <div class="row justify-content-center">
+                            <div class="col-auto">
+                                <div class="label-icon">
+                                    <i class="icofont icofont-bell-alt"></i>
+                                    <label
+                                            class="badge badge-primary badge-top-right">9</label>
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <div class="label-icon">
+                                    <i class="icofont icofont-heart"></i>
+                                    <label
+                                            class="badge badge-success badge-top-right">9</label>
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <div class="label-icon">
+                                    <i class="icofont icofont-bag-alt"></i>
+                                    <label
+                                            class="badge badge-danger badge-top-right">9</label>
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <div class="label-icon">
+                                    <i class="icofont icofont-ui-message"></i>
+                                    <label
+                                            class="badge badge-info badge-top-right">9</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p>Lorem ipsum dolor sit amet, consectet ur adipisicing elit, sed do
+                            eiusmod temp or incidi dunt ut labore et.</p>
+                        <div>
+                            <button type="button"
+                                    class="btn btn-primary waves-effect waves-light m-r-15"><i
+                                        class="icofont icofont-plus m-r-5"></i>Follow
+                            </button>
+                            <a href="{{ path('patient', {'id': patient.id}) }}">
+                                <button type="button"
+                                        class="btn btn-success waves-effect waves-light"><i
+                                            class="icofont icofont-user m-r-5"></i>Профил
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+{% block javascriptend %}
+{% endblock %}
