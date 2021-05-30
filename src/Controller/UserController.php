@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use AndreaSprega\Bundle\BreadcrumbBundle\Annotation\Breadcrumb;
+
 
 use App\Entity\Role;
 use App\Entity\User;
@@ -11,6 +11,7 @@ use App\Form\RoleType;
 use App\Service\Role\RoleServiceInterface;
 use App\Service\User\UserServiceInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;

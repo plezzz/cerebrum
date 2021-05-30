@@ -31,4 +31,9 @@ class DateTimeService implements DateTimeServiceInterface
         $dateFinish = new DateTime('0000-00-00 00:00:00');
         return $dateFinish;
     }
+
+    public function __toString(): string
+    {
+        return $this->setDateTimeNow();
+    }
 }

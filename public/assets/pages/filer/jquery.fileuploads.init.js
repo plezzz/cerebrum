@@ -98,7 +98,7 @@ $(document).ready(function(){
             drop: null,
         },
         uploadFile: {
-            url: "../plugins/jquery.filer/php/upload.php",
+            url: "/uploadDocument",
             data: null,
             type: 'POST',
             enctype: 'multipart/form-data',
@@ -124,13 +124,13 @@ $(document).ready(function(){
 				name: "Desert.jpg",
 				size: 145,
 				type: "image/jpg",
-				file: "../files/assets/images/file-upload/Desert.jpg"
+				file: "../assets/images/file-upload/Desert.jpg"
 			},
 			{
 				name: "overflow.jpg",
 				size: 145,
 				type: "image/jpg",
-				file: "../files/assets/images/file-upload/Desert.jpg"
+				file: "../assets/images/file-upload/Desert.jpg"
 			}
 		],
         addMore: false,
@@ -144,7 +144,7 @@ $(document).ready(function(){
         afterShow: null,
         onRemove: function(itemEl, file, id, listEl, boxEl, newInputEl, inputEl){
             var file = file.name;
-            $.post('../plugins/jquery.filer/php/remove_file.php', {file: file});
+            $.post('/assets/pages/jquery.filer/php/remove.php', {file: file});
         },
         onEmpty: null,
         options: null,

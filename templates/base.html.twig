@@ -25,7 +25,7 @@
     <!-- Style.css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/jquery.mCustomScrollbar.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/scss/partials/menu/_pcmenu.scss') }}">
+    <link rel="stylesheet" type="text/html" href="{{ asset('assets/scss/partials/menu/_pcmenu.scss') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('style.css') }}">
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ERLYDM9V60"></script>
@@ -449,8 +449,9 @@
 <script src="{{ asset('assets/js/pcoded.min.js') }}"></script>
 <script src="{{ asset('assets/js/vartical-layout.min.js') }}"></script>
 <script src="{{ asset('assets/js/jquery.mCustomScrollbar.concat.min.js') }}"></script>
+{% block javascriptend %}{% endblock %}
 <!-- Custom js -->
 <script type="text/javascript" src="{{ asset('assets/js/script.js') }}"></script>
-{% block javascriptend %}{% endblock %}
+
 </body>
 </html>

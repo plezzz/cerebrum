@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use AndreaSprega\Bundle\BreadcrumbBundle\Annotation\Breadcrumb;
+
 use App\Entity\Patient\Contacts;
 use App\Entity\Patient\Details;
 use App\Entity\Patient\IDCard;
@@ -12,6 +12,7 @@ use App\Form\PatientContactType;
 use App\Form\PatientDetailsType;
 use App\Form\PatientType;
 use App\Service\Patient\PatientServiceInterface;
+use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

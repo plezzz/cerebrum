@@ -115,6 +115,11 @@ class User implements UserInterface
      */
     private $editedPatients;
 
+    /**
+     * @ORM\OneToMany(targetEntity=FileUpload::class, mappedBy="createdBy")
+     */
+    private $fileUploads;
+
 
 
 
@@ -124,6 +129,7 @@ class User implements UserInterface
         $this->roles = new ArrayCollection();
         $this->createdPatients = new ArrayCollection();
         $this->editedPatients = new ArrayCollection();
+        $this->fileUploads = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -408,6 +414,36 @@ class User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($editedPatient->getEditedBy() === $this) {
                 $editedPatient->setEditedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|FileUpload[]
+     */
+    public function getFileUploads(): Collection
+    {
+        return $this->fileUploads;
+    }
+
+    public function addFileUpload(FileUpload $fileUpload): self
+    {
+        if (!$this->fileUploads->contains($fileUpload)) {
+            $this->fileUploads[] = $fileUpload;
+            $fileUpload->setCreatedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFileUpload(FileUpload $fileUpload): self
+    {
+        if ($this->fileUploads->removeElement($fileUpload)) {
+            // set the owning side to null (unless already changed)
+            if ($fileUpload->getCreatedBy() === $this) {
+                $fileUpload->setCreatedBy(null);
             }
         }
 

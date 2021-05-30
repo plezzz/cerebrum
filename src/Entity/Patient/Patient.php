@@ -4,6 +4,7 @@ namespace App\Entity\Patient;
 
 
 
+use App\Entity\FileUpload;
 use App\Entity\User;
 use App\Repository\PatientRepository;
 use DateTimeInterface;
@@ -115,10 +116,16 @@ class Patient
      */
     private $email;
 
+    /**
+     * @ORM\OneToMany(targetEntity=FileUpload::class, mappedBy="patient")
+     */
+    private $fileUploads;
+
 
     public function __construct()
     {
         $this->Contacts = new ArrayCollection();
+        $this->fileUploads = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -321,6 +328,36 @@ class Patient
     public function setEmail(?string $email): self
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|FileUpload[]
+     */
+    public function getFileUploads(): Collection
+    {
+        return $this->fileUploads;
+    }
+
+    public function addFileUpload(FileUpload $fileUpload): self
+    {
+        if (!$this->fileUploads->contains($fileUpload)) {
+            $this->fileUploads[] = $fileUpload;
+            $fileUpload->setPatient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFileUpload(FileUpload $fileUpload): self
+    {
+        if ($this->fileUploads->removeElement($fileUpload)) {
+            // set the owning side to null (unless already changed)
+            if ($fileUpload->getPatient() === $this) {
+                $fileUpload->setPatient(null);
+            }
+        }
 
         return $this;
     }
