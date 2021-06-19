@@ -32,6 +32,15 @@ class DateTimeService implements DateTimeServiceInterface
         return $dateFinish;
     }
 
+    /**
+     *
+     * @return string
+     */
+    public function setDateNow(): string
+    {
+        return date("dmY");
+    }
+
     public function __toString(): string
     {
         return $this->setDateTimeNow();

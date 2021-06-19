@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Entity\FileUpload;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -17,6 +19,22 @@ class FileUploadRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, FileUpload::class);
+    }
+
+    /**
+     * @param FileUpload $fileUpload
+     * @return bool
+     * @throws ORMException
+     */
+    public function insert(FileUpload $fileUpload): bool
+    {
+        try {
+            $this->_em->persist($fileUpload);
+            $this->_em->flush();
+            return true;
+        } catch (OptimisticLockException $e) {
+            return false;
+        }
     }
 
     // /**
