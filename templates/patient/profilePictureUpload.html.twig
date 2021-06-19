@@ -1,0 +1,33 @@
+{% block body %}
+    <div class="container container-fluid">
+        <div class="row">
+            <div class="col-lg-8">
+                {{ form_start(form, { attr: { 'accept-charset' : 'utf-8' }}) }}
+                <div class="form-group">
+                    {{ form_label(form.upload_file) }}
+                    {{ form_widget(form.upload_file) }}
+                    {{ form_errors(form.upload_file) }}
+                </div>
+                <div class="form-group">
+                    {{ form_widget(form.send, {'label': "Качи снимка", 'attr' : { 'class': 'btn btn-primary' }}) }}
+                    <button type="button"
+                            class="btn btn-default waves-effect "
+                            data-dismiss="modal">Затвори
+                    </button>
+                </div>
+                {{ form_rest(form) }}
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascriptend %}
+    <script type="text/javascript" src="{{ asset('bower_components/jquery/dist/jquery.min.js') }}"></script>
+    <script>
+        $('.custom-file-input').on('change', function(event) {
+            let inputFile = event.currentTarget;
+            $(inputFile).parent().find('.custom-file-label').html(inputFile.files[0].name);
+        });
+    </script>
+{% endblock %}

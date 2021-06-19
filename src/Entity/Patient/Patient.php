@@ -121,6 +121,11 @@ class Patient
      */
     private $fileUploads;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $profilePicture;
+
 
     public function __construct()
     {
@@ -358,6 +363,18 @@ class Patient
                 $fileUpload->setPatient(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getProfilePicture(): ?string
+    {
+        return $this->profilePicture;
+    }
+
+    public function setProfilePicture(string $profilePicture): self
+    {
+        $this->profilePicture = $profilePicture;
 
         return $this;
     }

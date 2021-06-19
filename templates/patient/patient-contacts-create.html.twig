@@ -23,8 +23,13 @@
     {# {{ form_row(, {'attr': {'class':"form-control",'type': 'month'}}) }} #}
     {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
     {{ form_widget(form) }}
-    <button type="submit">Запис</button>
+    <button type="submit">Добави още контакти</button>
+
+
     {{ form_end(form) }}
+    <a href="/patient/{{ patient.id }}">
+        <button>Виж Пациента</button>
+    </a>
 {% endblock %}
 
 {% block stylesheets %}

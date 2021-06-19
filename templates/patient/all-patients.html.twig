@@ -17,8 +17,8 @@
                 <div class="col-md-12 col-xl-4">
                     <div class="card user-card">
                         <div class="card-header-img">
-                            <img class="img-fluid img-radius"
-                                 src="{{ asset('assets/images/user-card/img-round2.jpg') }}"
+                            <img class="img-fluid img-radius" id="all-patient-img"
+                                 src="{{ asset('uploads/profilePicture/' ~ patient.profilePicture ) }}"
                                  alt="card-img">
                             <h4>{{ patient.firstName }} {{ patient.lastName }}</h4>
                             <h5>abc123@domain.com</h5>

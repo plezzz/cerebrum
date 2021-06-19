@@ -11,7 +11,9 @@ use App\Form\IDCardType;
 use App\Form\PatientContactType;
 use App\Form\PatientDetailsType;
 use App\Form\PatientType;
+use App\Form\ProfilePictureUploadType;
 use App\Service\Patient\PatientServiceInterface;
+use App\Service\Patient\ProfilePictureUploadService;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -158,7 +160,8 @@ class PatientController extends AbstractController
         }
 
         return $this->render('patient/patient-contacts-create.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'patient' => $patient
         ]);
     }
 
@@ -175,6 +178,27 @@ class PatientController extends AbstractController
 
         return $this->render('patient/patient-view.html.twig', [
             'patient' => $patient
+        ]);
+    }
+
+    /**
+     * @param $id
+     * @param Request $request
+     * @param ProfilePictureUploadService $profilePictureUploadService
+     * @return Response
+     */
+    #[Route('/profile-picture-upload', name: 'profile_picture_upload')]
+    public function uploadAction($id, Request $request, ProfilePictureUploadService $profilePictureUploadService): Response
+    {
+
+        $form = $this->createForm(ProfilePictureUploadType::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $fileData = $form['upload_file']->getData();
+            $profilePictureUploadService->upload($fileData,$id);
+        }
+        return $this->render('patient/profilePictureUpload.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
 }

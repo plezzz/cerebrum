@@ -12,6 +12,7 @@ interface PatientServiceInterface
 {
 
     public function save(Patient $patient): string;
+    public function edit(Patient $patient): bool;
 
     public function findAll(): array;
 

@@ -52,15 +52,28 @@ class PatientService implements PatientServiceInterface
 
     public function save(Patient $patient): string
     {
+
         $user = $this->userService->currentUser();
         $date = $this->dateTimeService->setDateTimeNow();
+
         $patient->setCreatedBy($user);
         $patient->setEditedBy($user);
         $patient->setCreatedAt($date);
         $patient->setEditedAt($date);
+        $patient->setProfilePicture('uni.png');
         $egn = $patient->getEGN();
         $this->patientRepository->insert($patient);
         return $egn;
+    }
+
+    public function edit(Patient $patient): bool
+    {
+        $user = $this->userService->currentUser();
+        $date = $this->dateTimeService->setDateTimeNow();
+        $patient->setEditedBy($user);
+        $patient->setEditedAt($date);
+       return $this->patientRepository->insert($patient);
+
     }
 
     public function findAll(): array
@@ -99,6 +112,12 @@ class PatientService implements PatientServiceInterface
     {
         $user = $this->userService->currentUser();
         $date = $this->dateTimeService->setDateTimeNow();
+        if ($details->getSex() === 'Жена'){
+            $profilePicture = 'female.png';
+        }else{
+            $profilePicture = 'male.png';
+        }
+
         $details->setCreatedBy($user);
         $details->setEditedBy($user);
         $details->setCreatedAt($date);
@@ -108,6 +127,7 @@ class PatientService implements PatientServiceInterface
         $patient->setDetails($details);
         $patient->setEditedBy($user);
         $patient->setEditedAt($date);
+        $patient->setProfilePicture($profilePicture);
         $this->patientRepository->insert($patient);
         return $details->getId();
     }
