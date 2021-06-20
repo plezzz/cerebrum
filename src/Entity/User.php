@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\Patient\Patient;
+use App\Entity\Patient\PsychiatricEvaluation;
 use App\Repository\UserRepository;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -119,6 +120,7 @@ class User implements UserInterface
      * @ORM\OneToMany(targetEntity=FileUpload::class, mappedBy="createdBy")
      */
     private $fileUploads;
+
 
 
 

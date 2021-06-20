@@ -10,6 +10,8 @@ use App\Entity\Patient\Patient;
 use App\Form\IDCardType;
 use App\Form\PatientContactType;
 use App\Form\PatientDetailsType;
+use App\Form\PatientPsychiatricEvaluationType;
+use App\Form\PatientReportType;
 use App\Form\PatientType;
 use App\Form\ProfilePictureUploadType;
 use App\Service\Patient\PatientServiceInterface;
@@ -45,8 +47,6 @@ class PatientController extends AbstractController
     }
 
 
-
-
     /**
      * @Breadcrumb({"label" = "home", "route" = "home"},{"label" = "Създаване на пациент", "route" = "patient-create"})
      * @param Request $request
@@ -66,7 +66,7 @@ class PatientController extends AbstractController
             $egn = $patient->getEGN();
             $this->patientService->save($patient);
 
-            return $this->redirectToRoute('patient-id-card-create',['egn'=>$egn]);
+            return $this->redirectToRoute('patient-id-card-create', ['egn' => $egn]);
         }
 
         return $this->render('patient/patient-create.html.twig', [
@@ -96,7 +96,7 @@ class PatientController extends AbstractController
             $this->patientService->saveIDCard($idCard, $patient);
 
 
-            return $this->redirectToRoute('patient-personal-info-create', ['egn'=>$egn]);
+            return $this->redirectToRoute('patient-personal-info-create', ['egn' => $egn]);
         }
 
         return $this->render('patient/id-card-create.html.twig', [
@@ -126,7 +126,7 @@ class PatientController extends AbstractController
             $this->patientService->savePersonalDetails($personalInfo, $patient);
 
 
-            return $this->redirectToRoute('patient-contacts-create', ['egn'=>$egn]);
+            return $this->redirectToRoute('patient-contacts-create', ['egn' => $egn]);
         }
 
         return $this->render('patient/personal-info-create.html.twig', [
@@ -156,7 +156,7 @@ class PatientController extends AbstractController
             $this->patientService->saveContacts($contacts, $patient);
 
 
-            return $this->redirectToRoute('patient-contacts-create', ['egn'=>$egn]);
+            return $this->redirectToRoute('patient-contacts-create', ['egn' => $egn]);
         }
 
         return $this->render('patient/patient-contacts-create.html.twig', [
@@ -172,12 +172,13 @@ class PatientController extends AbstractController
      * @return Response
      */
     #[Route('/patient/{id}', name: 'patient')]
-    public function PatientID(Request $request,$id): Response
+    public function PatientID(Request $request, $id): Response
     {
         $patient = $this->patientService->findOneByID($id);
-
+        $timeline = $this->patientService->getTimeline($id);
         return $this->render('patient/patient-view.html.twig', [
-            'patient' => $patient
+            'patient' => $patient,
+            'timeline'=>$timeline
         ]);
     }
 
@@ -190,14 +191,44 @@ class PatientController extends AbstractController
     #[Route('/profile-picture-upload', name: 'profile_picture_upload')]
     public function uploadAction($id, Request $request, ProfilePictureUploadService $profilePictureUploadService): Response
     {
-
         $form = $this->createForm(ProfilePictureUploadType::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $fileData = $form['upload_file']->getData();
-            $profilePictureUploadService->upload($fileData,$id);
+            $profilePictureUploadService->upload($fileData, $id);
         }
         return $this->render('patient/profilePictureUpload.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+
+    #[Route('/patient-report', name: 'patient_report')]
+    public function addReport($id, Request $request): Response
+    {
+        $patient = $this->patientService->findOneByID($id);
+        $form = $this->createForm(PatientReportType::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $report = $form->getData();
+            $this->patientService->addReport($report, $patient);
+        }
+        return $this->render('patient/report.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/patient-psychiatric-evaluation', name: 'patient_psychiatric_evaluation')]
+    public function addPatientPsychiatricEvaluation($id, Request $request): Response
+    {
+        $patient = $this->patientService->findOneByID($id);
+        $form = $this->createForm(PatientPsychiatricEvaluationType::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $formFields = $form->getData();
+            $this->patientService->addPsychiatricEvaluation($formFields, $patient);
+        }
+        return $this->render('patient/psychiatricEvaluation.html.twig', [
             'form' => $form->createView(),
         ]);
     }

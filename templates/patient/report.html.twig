@@ -1,0 +1,11 @@
+{% block body %}
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+    {{ form_widget(form) }}
+    <button type="submit">Изпрати</button>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascriptend %}
+
+{% endblock %}
+

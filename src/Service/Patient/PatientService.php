@@ -8,9 +8,13 @@ use App\Entity\Patient\Contacts;
 use App\Entity\Patient\Details;
 use App\Entity\Patient\IDCard;
 use App\Entity\Patient\Patient;
+use App\Entity\Patient\PsychiatricEvaluation;
+use App\Entity\Patient\Report;
 use App\Repository\Patient\ContactsRepository;
 use App\Repository\Patient\DetailsRepository;
 use App\Repository\Patient\IDCardRepository;
+use App\Repository\Patient\PsychiatricEvaluationRepository;
+use App\Repository\Patient\ReportRepository;
 use App\Repository\PatientRepository;
 use App\Service\Common\DateTimeServiceInterface;
 use App\Service\User\UserServiceInterface;
@@ -29,6 +33,8 @@ class PatientService implements PatientServiceInterface
     private IDCardRepository $IDCardRepository;
     private DetailsRepository $detailsRepository;
     private ContactsRepository $contactRepository;
+    private ReportRepository $reportRepository;
+    private PsychiatricEvaluationRepository $psychiatricEvaluationRepository;
 
 //    // private RoleServiceInterface $roleService;
 
@@ -38,7 +44,9 @@ class PatientService implements PatientServiceInterface
         DateTimeServiceInterface $dateTimeService,
         IDCardRepository $IDCardRepository,
         DetailsRepository $detailsRepository,
-        ContactsRepository $contactsRepository
+        ContactsRepository $contactsRepository,
+        ReportRepository $reportRepository,
+        PsychiatricEvaluationRepository $psychiatricEvaluationRepository,
     )
     {
         $this->userService = $userService;
@@ -47,6 +55,8 @@ class PatientService implements PatientServiceInterface
         $this->IDCardRepository = $IDCardRepository;
         $this->detailsRepository = $detailsRepository;
         $this->contactRepository = $contactsRepository;
+        $this->reportRepository = $reportRepository;
+        $this->psychiatricEvaluationRepository = $psychiatricEvaluationRepository;
     }
 
 
@@ -72,7 +82,7 @@ class PatientService implements PatientServiceInterface
         $date = $this->dateTimeService->setDateTimeNow();
         $patient->setEditedBy($user);
         $patient->setEditedAt($date);
-       return $this->patientRepository->insert($patient);
+        return $this->patientRepository->insert($patient);
 
     }
 
@@ -91,7 +101,7 @@ class PatientService implements PatientServiceInterface
         return $this->patientRepository->find($id);
     }
 
-    public function saveIDCard(IDCard $IDCard, Patient $patient)
+    public function saveIDCard(IDCard $IDCard, Patient $patient): ?int
     {
         $user = $this->userService->currentUser();
         $date = $this->dateTimeService->setDateTimeNow();
@@ -112,9 +122,9 @@ class PatientService implements PatientServiceInterface
     {
         $user = $this->userService->currentUser();
         $date = $this->dateTimeService->setDateTimeNow();
-        if ($details->getSex() === 'Жена'){
+        if ($details->getSex() === 'Жена') {
             $profilePicture = 'female.png';
-        }else{
+        } else {
             $profilePicture = 'male.png';
         }
 
@@ -161,5 +171,33 @@ class PatientService implements PatientServiceInterface
     public function findByEGN($EGN)
     {
         return $this->patientRepository->getByKeyword($EGN);
+    }
+
+    public function addReport(Report $report, Patient $patient): bool
+    {
+        $user = $this->userService->currentUser();
+        $date = $this->dateTimeService->setDateTimeNow();
+        $report->setCreatedBy($user);
+        $report->setCreatedAt($date);
+        $report->addPatient($patient);
+        return $this->reportRepository->insert($report);
+
+    }
+
+    public function addPsychiatricEvaluation(PsychiatricEvaluation $psychiatricEvaluation, Patient $patient): bool
+    {
+        $user = $this->userService->currentUser();
+        $date = $this->dateTimeService->setDateTimeNow();
+        $psychiatricEvaluation->setCreatedBy($user);
+        $psychiatricEvaluation->setCreatedAt($date);
+        $psychiatricEvaluation->setEditedBy($user);
+        $psychiatricEvaluation->setEditedAt($date);
+        $psychiatricEvaluation->addPatient($patient);
+        return $this->psychiatricEvaluationRepository->insert($psychiatricEvaluation);
+    }
+
+    public function getTimeline($id): array
+    {
+        return $this->reportRepository->timeline($id);
     }
 }

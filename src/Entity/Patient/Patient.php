@@ -126,11 +126,25 @@ class Patient
      */
     private $profilePicture;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=PsychiatricEvaluation::class, mappedBy="patient")
+     */
+    private $psychiatricEvaluations;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Report::class, mappedBy="patient")
+     */
+    private $reports;
+
+
+
 
     public function __construct()
     {
         $this->Contacts = new ArrayCollection();
         $this->fileUploads = new ArrayCollection();
+        $this->psychiatricEvaluations = new ArrayCollection();
+        $this->reports = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -378,4 +392,59 @@ class Patient
 
         return $this;
     }
+
+    /**
+     * @return Collection|PsychiatricEvaluation[]
+     */
+    public function getPsychiatricEvaluations(): Collection
+    {
+        return $this->psychiatricEvaluations;
+    }
+
+    public function addPsychiatricEvaluation(PsychiatricEvaluation $psychiatricEvaluation): self
+    {
+        if (!$this->psychiatricEvaluations->contains($psychiatricEvaluation)) {
+            $this->psychiatricEvaluations[] = $psychiatricEvaluation;
+            $psychiatricEvaluation->addPatient($this);
+        }
+
+        return $this;
+    }
+
+    public function removePsychiatricEvaluation(PsychiatricEvaluation $psychiatricEvaluation): self
+    {
+        if ($this->psychiatricEvaluations->removeElement($psychiatricEvaluation)) {
+            $psychiatricEvaluation->removePatient($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Report[]
+     */
+    public function getReports(): Collection
+    {
+        return $this->reports;
+    }
+
+    public function addReport(Report $report): self
+    {
+        if (!$this->reports->contains($report)) {
+            $this->reports[] = $report;
+            $report->addPatient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReport(Report $report): self
+    {
+        if ($this->reports->removeElement($report)) {
+            $report->removePatient($this);
+        }
+
+        return $this;
+    }
+
 }
