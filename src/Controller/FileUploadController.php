@@ -4,11 +4,11 @@ namespace App\Controller;
 
 use App\Entity\FileUpload;
 use App\Form\UploadType;
+use App\Service\Common\FileUploadService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Service\Common\FileUploadService;
 
 class FileUploadController extends AbstractController
 {
@@ -28,7 +28,7 @@ class FileUploadController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $fileData = $form['upload_file']->getData();
             $file = $form->getData();
-            $file_uploader->upload($fileData, $file,$id);
+            $file_uploader->upload($fileData, $file, $id);
         }
         return $this->render('patient/fileUpload.html.twig', [
             'form' => $form->createView(),

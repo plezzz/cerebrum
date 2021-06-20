@@ -29,8 +29,7 @@ class IDCardType extends AbstractType
             ->add('publishedBy', TextType::class, [
                 'label' => false,
                 'attr' => ['placeholder' => 'Издадена от'],
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

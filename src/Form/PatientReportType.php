@@ -13,11 +13,10 @@ class PatientReportType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('description', TextareaType::class,[
-                'label'=>'Описание',
-                'required'   => true,
-            ])
-        ;
+            ->add('description', TextareaType::class, [
+                'label' => 'Описание',
+                'required' => true,
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

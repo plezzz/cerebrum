@@ -405,6 +405,8 @@
 .flag-icon-dz {
   background-image: url(../fonts/dz.svg);
 }
+
+/*noinspection CssMissingComma*/
 .flag-icon-ee
 .flag-icon-dz.flag-icon-squared {
   background-image: url(../fonts/dz.svg);

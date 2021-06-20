@@ -54,14 +54,15 @@ class PatientRepository extends ServiceEntityRepository
         }
     }
 
-    public function findEntitiesByString($str){
+    public function findEntitiesByString($str)
+    {
         return $this->getEntityManager()
             ->createQuery(
                 'SELECT e
                 FROM App:Patient e
                 WHERE e.EGN LIKE :str'
             )
-            ->setParameter('str', '%'.$str.'%')
+            ->setParameter('str', '%' . $str . '%')
             ->getResult();
     }
 

@@ -35,9 +35,10 @@ class SearchController extends AbstractController
         return new Response(json_encode($result));
     }
 
-    public function getRealEntities($entities){
+    public function getRealEntities($entities)
+    {
 
-        foreach ($entities as $entity){
+        foreach ($entities as $entity) {
             $realEntities[$entity->getId()] = $entity->getFirstName();
         }
 

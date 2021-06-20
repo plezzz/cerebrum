@@ -84,7 +84,6 @@ class IDCard
     private $editedAt;
 
 
-
     public function getId(): ?int
     {
         return $this->id;

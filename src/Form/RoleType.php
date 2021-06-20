@@ -13,8 +13,7 @@ class RoleType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('title')
-        ;
+            ->add('title');
     }
 
     public function configureOptions(OptionsResolver $resolver)

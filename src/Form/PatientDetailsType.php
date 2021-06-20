@@ -14,9 +14,9 @@ class PatientDetailsType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('Sex',ChoiceType::class,[
+            ->add('Sex', ChoiceType::class, [
                 'label' => 'Пол',
-                'choices'  => [
+                'choices' => [
                     'Мъж' => 'Мъж',
                     'Жена' => 'Жена',
                 ],
@@ -37,16 +37,15 @@ class PatientDetailsType extends AbstractType
                 'label' => false,
                 'attr' => ['placeholder' => 'Цвят на очите'],
             ])
-            ->add('maritalStatus',ChoiceType::class,[
-                'label'=>'Семеен статус:',
-                'choices'  => [
+            ->add('maritalStatus', ChoiceType::class, [
+                'label' => 'Семеен статус:',
+                'choices' => [
                     'Неженен/Неомъжена' => 'Неженен/Неомъжена',
                     'Женен/Омъжена' => 'Женен/Омъжена',
                     'Разведен/Разведена' => 'Разведен/Разведена',
                     'Вдовец/Вдовица' => 'Вдовец/Вдовица',
                 ],
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

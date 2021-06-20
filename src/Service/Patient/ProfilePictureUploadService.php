@@ -2,7 +2,6 @@
 
 namespace App\Service\Patient;
 
-use App\Entity\FileUpload;
 use App\Repository\FileUploadRepository;
 use App\Service\Common\DateTimeService;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -30,11 +29,12 @@ class ProfilePictureUploadService
         $this->patientService = $patientService;
         $this->dateTimeService = $dateTimeService;
     }
-    public function upload(UploadedFile $file,$patientID)
+
+    public function upload(UploadedFile $file, $patientID)
     {
         $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         $safeFilename = $this->slugger->slug($originalFilename);
-        $fileName = $this->dateTimeService->setDateNow().'-'.$safeFilename.'-'.uniqid().'.'.$file->guessExtension();
+        $fileName = $this->dateTimeService->setDateNow() . '-' . $safeFilename . '-' . uniqid() . '.' . $file->guessExtension();
         $patient = $this->patientService->findOneByID($patientID);
         $patient->setProfilePicture($fileName);
         try {
@@ -45,6 +45,7 @@ class ProfilePictureUploadService
         }
         return $fileName;
     }
+
     public function getTargetDirectory()
     {
         return $this->targetDirectory;

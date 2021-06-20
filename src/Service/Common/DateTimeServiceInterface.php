@@ -9,5 +9,6 @@ use DateTime;
 interface DateTimeServiceInterface
 {
     public function setDateTimeNow(): DateTime;
-    public function setDateTimeBlank():DateTime;
+
+    public function setDateTimeBlank(): DateTime;
 }

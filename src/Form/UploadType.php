@@ -16,9 +16,9 @@ class UploadType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('description', TextareaType::class,[
-                'label'=>'Описание',
-                'required'   => false,
+            ->add('description', TextareaType::class, [
+                'label' => 'Описание',
+                'required' => false,
             ])
             ->add('upload_file', FileType::class, [
                 'label' => false,

@@ -3,7 +3,6 @@
 namespace App\Entity\Patient;
 
 
-
 use App\Entity\FileUpload;
 use App\Entity\User;
 use App\Repository\PatientRepository;
@@ -135,8 +134,6 @@ class Patient
      * @ORM\ManyToMany(targetEntity=Report::class, mappedBy="patient")
      */
     private $reports;
-
-
 
 
     public function __construct()

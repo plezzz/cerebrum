@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 
-
 use App\Entity\Role;
 use App\Entity\User;
 use App\Form\RegisterType;
@@ -12,8 +11,8 @@ use App\Service\Role\RoleServiceInterface;
 use App\Service\User\UserServiceInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 

@@ -38,12 +38,12 @@ class PatientType extends AbstractType
                 'widget' => 'single_text',
                 //'format' => 'dd/mm/yyyy', // Note here, it will change to default {{ year }}{{ month }}{{ day }} but dd/MM/yyyy will work
                 'input' => 'datetime',
-                'invalid_message'=>'s',
+                'invalid_message' => 's',
                 'required' => true,
                 'model_timezone' => 'Europe/Sofia',
                 'view_timezone' => 'Europe/Sofia',
                 'attr' => [
-                    'data-date-format'=>"DД MMMM YYYY"
+                    'data-date-format' => "DД MMMM YYYY"
                 ]
 //                'widget' => 'single_text',
 ////                'format' => 'yyyy-MM-dd',

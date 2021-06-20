@@ -76,7 +76,6 @@ class Details
     private $editedAt;
 
 
-
     public function getId(): ?int
     {
         return $this->id;

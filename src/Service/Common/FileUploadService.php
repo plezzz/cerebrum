@@ -36,13 +36,14 @@ class FileUploadService
         $this->userService = $userService;
         $this->patientService = $patientService;
     }
-    public function upload(UploadedFile $file,FileUpload $fileDB,$patientID)
+
+    public function upload(UploadedFile $file, FileUpload $fileDB, $patientID)
     {
         $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         $safeFilename = $this->slugger->slug($originalFilename);
-        $fileName = $this->dateTimeService->setDateNow().'-'.$safeFilename.'-'.uniqid().'.'.$file->guessExtension();
+        $fileName = $this->dateTimeService->setDateNow() . '-' . $safeFilename . '-' . uniqid() . '.' . $file->guessExtension();
 
-        $mime = explode('/',$file->getMimeType());
+        $mime = explode('/', $file->getMimeType());
         $user = $this->userService->currentUser();
         $patient = $this->patientService->findOneByID($patientID);
 
@@ -63,6 +64,7 @@ class FileUploadService
         }
         return $fileName;
     }
+
     public function getTargetDirectory()
     {
         return $this->targetDirectory;

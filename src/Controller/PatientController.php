@@ -178,7 +178,7 @@ class PatientController extends AbstractController
         $timeline = $this->patientService->getTimeline($id);
         return $this->render('patient/patient-view.html.twig', [
             'patient' => $patient,
-            'timeline'=>$timeline
+            'timeline' => $timeline
         ]);
     }
 

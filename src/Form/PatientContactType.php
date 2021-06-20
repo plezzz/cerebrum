@@ -43,15 +43,15 @@ class PatientContactType extends AbstractType
             ])
             ->add('isActive', CheckboxType::class, [
                 'label' => 'Използвам ли е контакта?',
-                'attr'=> ['checked'=>true]
+                'attr' => ['checked' => true]
             ])
             ->add('isDefaultContact', CheckboxType::class, [
                 'label' => 'Направи, този контакт по подразбиране?',
-                'attr'=> ['checked'=>false]
+                'attr' => ['checked' => false]
             ])
             ->add('note', TextareaType::class, [
                 'label' => 'Допълнителна информация',
-                ]);
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

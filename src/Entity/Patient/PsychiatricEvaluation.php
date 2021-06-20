@@ -215,6 +215,13 @@ class PsychiatricEvaluation
         return $this->createdBy;
     }
 
+    public function setCreatedBy(?User $createdBy): self
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
     public function addCreatedBy(User $createdBy): self
     {
         if (!$this->createdBy->contains($createdBy)) {
@@ -269,13 +276,6 @@ class PsychiatricEvaluation
     public function setEditedAt(DateTimeInterface $editedAt): self
     {
         $this->editedAt = $editedAt;
-
-        return $this;
-    }
-
-    public function setCreatedBy(?User $createdBy): self
-    {
-        $this->createdBy = $createdBy;
 
         return $this;
     }
