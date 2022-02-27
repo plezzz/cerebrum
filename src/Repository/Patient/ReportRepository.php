@@ -67,10 +67,14 @@ UNION
 ORDER BY created_at DESC LIMIT 50
             ';
         $stmt = $conn->prepare($sql);
-        $stmt->execute(['patientID' => $patientID]);
+
+//        $stmt->execute(['patientID' => $patientID]);
+//
+// // TODO vremeva linia - executeQuery() + fetchAllAssociative()
+        $result = $stmt->executeQuery(['patientID' => $patientID]);
 
         // returns an array of arrays (i.e. a raw data set)
-        return $stmt->fetchAllAssociative();
+        return $result->fetchAllAssociative();
     }
 
 
