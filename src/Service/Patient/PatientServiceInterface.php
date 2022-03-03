@@ -27,7 +27,7 @@ interface PatientServiceInterface
 
     public function savePersonalDetails(Details $details, Patient $patient);
 
-    public function saveContacts(Contacts $contacts, Patient $patient);
+    public function saveContacts(Contacts $contacts, Patient $patient, $isEdit);
 
     public function findByEGN($EGN);
 
@@ -36,5 +36,9 @@ interface PatientServiceInterface
     public function addPsychiatricEvaluation(PsychiatricEvaluation $psychiatricEvaluation, Patient $patient): bool;
 
     public function getTimeline($id): array;
+
+    public function findOneContactByID($id): ?Contacts;
+
+    public function deleteContact(int $id);
 
 }

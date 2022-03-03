@@ -52,6 +52,7 @@ class PatientController extends AbstractController
      * @param Request $request
      * @return Response
      */
+   // #[Route('/patient-create', name: 'patient-create',methods: ["GET"])]
     #[Route('/patient-create', name: 'patient-create')]
     public function patientCreate(Request $request): Response
     {
@@ -82,14 +83,12 @@ class PatientController extends AbstractController
     #[Route('/patient/id-card-create', name: 'patient-id-card-create')]
     public function idCardCreate(Request $request): Response
     {
-
         $egn = $request->query->get('egn');
         $patient = $this->patientService->findOneByEGN($egn);
         $idCard = new IDCard();
         //$idCard->setPatient($patient);
         $form = $this->createForm(IDCardType::class, $idCard);
         $form->handleRequest($request);
-
 
         if ($form->isSubmitted() && $form->isValid()) {
             $idCard = $form->getData();
@@ -142,7 +141,7 @@ class PatientController extends AbstractController
     #[Route('/patient/contact-create', name: 'patient-contacts-create')]
     public function patientContactsCreate(Request $request): Response
     {
-
+        $isEdit=false;
         $egn = $request->query->get('egn');
         $patient = $this->patientService->findOneByEGN($egn);
         $contacts = new Contacts();
@@ -153,7 +152,7 @@ class PatientController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $contacts = $form->getData();
-            $this->patientService->saveContacts($contacts, $patient);
+            $this->patientService->saveContacts($contacts, $patient,$isEdit);
 
 
             return $this->redirectToRoute('patient-contacts-create', ['egn' => $egn]);
@@ -164,6 +163,74 @@ class PatientController extends AbstractController
             'patient' => $patient
         ]);
     }
+
+    /**
+     * @Breadcrumb({"label" = "home", "route" = "home"},{"label" = "Пациент", "route" = "patient-create"},{"label" = "Контакти на пацеинта", "route" = "patient-contacts-edit"})
+     * @param Request $request
+     * @param $id
+     * @return Response
+     */
+    #[Route('/patient/contact-edit/{id}', name: 'patient-contacts-edit')]
+    public function patientContactsEdit(Request $request, $id): Response
+    {
+        $isEdit=true;
+        $contact = $this->patientService->findOneContactByID($id);
+        $patient = $this->patientService->findOneByID($contact->getPatient()->getId());
+
+        $form = $this->createForm(PatientContactType::class, $contact);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $contacts = $form->getData();
+            $this->patientService->saveContacts($contacts, $patient,$isEdit);
+
+            return $this->redirectToRoute('patient', ['id' => $patient->getId()]);
+        }
+
+        return $this->render('patient/patient-contacts-edit.html.twig', [
+            'form' => $form->createView(),
+            'contact' => $contact
+        ]);
+    }
+
+    /**
+     * @Breadcrumb({"label" = "home", "route" = "home"},{"label" = "Пациент", "route" = "patient"},{"label" = "Изтриване на пациент", "route" = "patient-contacts-delete"})
+     * @param Request $request
+     * @param $id
+
+     */
+    #[Route('/patient/contact-delete/{id}', name: 'patient-contacts-delete')]
+    public function patientContactsDelete(Request $request, $id): Response
+    {
+        $contact = $this->patientService->findOneContactByID($id);
+        $patient = $this->patientService->findOneByID($contact->getPatient()->getId());
+        $this->patientService->deleteContact($id);
+
+        return $this->redirectToRoute('patient', ['id' => $patient->getId()]);
+    }
+
+    /**
+     * @Breadcrumb({"label" = "home", "route" = "home"},{"label" = "Пациент", "route" = "patient"},{"label" = "Контакти на пацеинта", "route" = "patient-contacts-view-all"})
+     * @param Request $request
+     * @param $id
+     * @return Response
+     */
+    #[Route('/patient/contact-view-all/{id}', name: 'patient-contacts-view-all')]
+    public function patientContactsViewAll(Request $request, $id): Response
+    {
+        $patient = $this->patientService->findOneByID($id);
+        if ($patient === null){
+            return $this->redirectToRoute('home');
+        }
+        $contacts = $patient->getContacts();
+
+
+        return $this->render('patient/patient-contacts-view-all.html.twig', [
+            'patient' => $patient,
+            'contacts' => $contacts
+        ]);
+    }
+
 
     /**
      * @Breadcrumb({"label" = "home", "route" = "home"},{"label" = "Всички пациенти", "route" = "all-patients"})
@@ -203,6 +270,11 @@ class PatientController extends AbstractController
     }
 
 
+    /**
+     * @param $id
+     * @param Request $request
+     * @return Response
+     */
     #[Route('/patient-report', name: 'patient_report')]
     public function addReport($id, Request $request): Response
     {
@@ -218,6 +290,11 @@ class PatientController extends AbstractController
         ]);
     }
 
+    /**
+     * @param $id
+     * @param Request $request
+     * @return Response
+     */
     #[Route('/patient-psychiatric-evaluation', name: 'patient_psychiatric_evaluation')]
     public function addPatientPsychiatricEvaluation($id, Request $request): Response
     {

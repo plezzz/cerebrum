@@ -142,16 +142,19 @@ class PatientService implements PatientServiceInterface
         return $details->getId();
     }
 
-    public function saveContacts(Contacts $contacts, Patient $patient)
+    public function saveContacts(Contacts $contacts, Patient $patient, $isEdit)
     {
         $user = $this->userService->currentUser();
         $date = $this->dateTimeService->setDateTimeNow();
-        $contacts->setCreatedBy($user);
+        if (!$isEdit){
+            $contacts->setCreatedBy($user);
+            $contacts->setCreatedAt($date);
+        }
         $contacts->setEditedBy($user);
-        $contacts->setCreatedAt($date);
         $contacts->setEditedAt($date);
         $contacts->setPatient($patient);
 
+        //TODO: Прави промяна за всички пациенти не само за конкретния пацент.
         if ($contacts->getIsDefaultContact() === true) {
             $currentActive = $this->contactRepository->findOneBy(['isDefaultContact' => true]);
             if ($currentActive !== null) {
@@ -199,5 +202,25 @@ class PatientService implements PatientServiceInterface
     public function getTimeline($id): array
     {
         return $this->reportRepository->timeline($id);
+    }
+
+
+    /**
+     * @param $id
+     * @return Contacts|null
+     */
+    public function findOneContactByID($id): ?Contacts
+    {
+        return $this->contactRepository->find($id);
+    }
+
+    /**
+     * @param int $id
+     * @return bool
+     */
+    public function deleteContact(int $id): bool
+    {
+        $contact = $this->contactRepository->find($id);
+        return $this->contactRepository->delete($contact);
     }
 }

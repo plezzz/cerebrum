@@ -11,24 +11,13 @@
     {{ slope_it_breadcrumb() }}
 {% endblock %}
 {% block body %}
-    {# <div class="col-sm-12 col-xl-4 m-b-30"> #}
-    {# <div> #}
-    {# <label for="form_validity">Age</label> #}
-    {# <ul> #}
-    {# <li>This field is required</li> #}
-    {# </ul> #}
-    {# <input class="form-control" type="date" id="form_validity" name="form[validity]"/> #}
-    {# </div> #}
-    {# </div> #}
-    {# {{ form_row(, {'attr': {'class':"form-control",'type': 'month'}}) }} #}
     {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
     {{ form_widget(form) }}
-    <button type="submit">Запази</button>
-
+    <button type="submit">Запази и се върни към пациента</button>
 
     {{ form_end(form) }}
-    <a href="/patient/{{ patient.id }}">
-        <button>Виж Пациента</button>
+    <a href="/patient/{{ contact.patient.id }}">
+        <button>Върни се към пациента пациента</button>
     </a>
 {% endblock %}
 

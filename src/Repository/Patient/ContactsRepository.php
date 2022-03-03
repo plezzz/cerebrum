@@ -37,6 +37,21 @@ class ContactsRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * @param Contacts $contact
+     * @return bool
+     */
+    public function delete(Contacts $contact): bool
+    {
+        try {
+            $this->_em->remove($contact);
+            $this->_em->flush();
+            return true;
+        } catch (OptimisticLockException $e) {
+            return false;
+        }
+    }
+
     // /**
     //  * @return Contacts[] Returns an array of Contacts objects
     //  */
