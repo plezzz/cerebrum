@@ -18,6 +18,7 @@ use App\Repository\Patient\ReportRepository;
 use App\Repository\PatientRepository;
 use App\Service\Common\DateTimeServiceInterface;
 use App\Service\User\UserServiceInterface;
+use Doctrine\ORM\ORMException;
 
 
 /**
@@ -76,6 +77,9 @@ class PatientService implements PatientServiceInterface
         return $egn;
     }
 
+    /**
+     * @throws ORMException
+     */
     public function edit(Patient $patient): bool
     {
         $user = $this->userService->currentUser();

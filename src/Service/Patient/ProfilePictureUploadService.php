@@ -12,8 +12,10 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 class ProfilePictureUploadService
 {
     private $targetDirectory;
-    private $slugger;
-    private $dateTimeService;
+    private SluggerInterface $slugger;
+    private DateTimeService $dateTimeService;
+    private PatientService $patientService;
+    private FileUploadRepository $fileUploadRepository;
 
     public function __construct(
         $targetDirectory,
@@ -30,7 +32,7 @@ class ProfilePictureUploadService
         $this->dateTimeService = $dateTimeService;
     }
 
-    public function upload(UploadedFile $file, $patientID)
+    public function upload(UploadedFile $file, $patientID): ?string
     {
         $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         $safeFilename = $this->slugger->slug($originalFilename);
