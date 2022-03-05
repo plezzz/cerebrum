@@ -43,6 +43,7 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $form->getData();
             $this->userService->save($user);
+            return $this->redirectToRoute('all-users');
         }
 
         return $this->render('user/index.html.twig', [
@@ -65,14 +66,40 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $role = $form->getData();
             $this->roleService->save($role);
-            print_r($role);
-
-
-            // return $this->redirectToRoute('home');
+            return $this->redirectToRoute('all-users');
         }
 
         return $this->render('user/index.html.twig', [
             'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Breadcrumb({"label" = "home", "route" = "home"},{"label" = "Потребители", "route" = "all-users"})
+     * @param Request $request
+     * @return Response
+     */
+    #[Route('/all-users', name: 'all-users')]
+    public function allUsers(Request $request): Response
+    {
+     $users = $this->userService->findAll();
+
+        return $this->render('user/all.html.twig', [
+            'users' => $users,
+        ]);
+    }
+    /**
+     * @Breadcrumb({"label" = "home", "route" = "home"},{"label" = "Роли", "route" = "all-roles"})
+     * @param Request $request
+     * @return Response
+     */
+    #[Route('/all-roles', name: 'all-roles')]
+    public function allRoles(Request $request): Response
+    {
+        $roles = $this->roleService->findAll();
+
+        return $this->render('user/all-roles.html.twig', [
+            'roles' => $roles,
         ]);
     }
 }

@@ -12,8 +12,12 @@ class RoleType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name')
-            ->add('title');
+            ->add('name', null, [
+                'help' => 'Изисква се във формат: ROLE_USER, ROLE_Admin ...',
+            ])
+            ->add('title', null, [
+                'help' => 'Пример: Пациент, Администратор, Лекар ...',
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

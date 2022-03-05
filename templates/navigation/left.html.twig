@@ -1,0 +1,65 @@
+{% block left %}
+    <nav class="pcoded-navbar">
+        <div class="pcoded-inner-navbar main-menu">
+            <div class="pcoded-navigatio-lavel">Пациенти</div>
+            <ul class="pcoded-item pcoded-left-item">
+                <li class=" ">
+                    <a href="{{ path('all-patients') }}">
+                        <span class="pcoded-micon"><i class="feather icon-users"></i><b>A</b></span>
+                        <span class="pcoded-mtext">Всички</span>
+                    </a>
+                </li>
+                <li class=" ">
+                    <a href="{{ path('patient-create') }}">
+                        <span class="pcoded-micon"><i class="feather icon-user-plus"></i><b>A</b></span>
+                        <span class="pcoded-mtext">Добави</span>
+                        <span class="pcoded-badge label label-warning">НОВ</span>
+                    </a>
+                </li>
+            </ul>
+            {% if is_granted('ROLE_ADMIN') %}
+                <div class="pcoded-navigatio-lavel">Администрация</div>
+                <ul class="pcoded-item pcoded-left-item">
+                    <li class="pcoded-hasmenu">
+                        <a href="javascript:void(0)">
+                            <span class="pcoded-micon"><i class="feather icon-home"></i></span>
+                            <span class="pcoded-mtext">Персонал</span>
+                        </a>
+                        <ul class="pcoded-submenu">
+                            <li class="">
+                                <a href="{{ path('all-users') }}">
+                                    <span class="pcoded-mtext">Всички</span>
+                                </a>
+                            </li>
+                            <li class="">
+                                <a href="{{ path('register') }}">
+                                    <span class="pcoded-mtext">Добави</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    {% if is_granted('ROLE_SUPER_ADMIN') %}
+                        <li class="pcoded-hasmenu">
+                            <a href="javascript:void(0)">
+                                <span class="pcoded-micon"><i class="feather icon-user-plus"></i></span>
+                                <span class="pcoded-mtext">Роли</span>
+                            </a>
+                            <ul class="pcoded-submenu">
+                                <li class="">
+                                    <a href="{{ path('register') }}">
+                                        <span class="pcoded-mtext">Добави</span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a href="{{ path('all-roles') }}">
+                                        <span class="pcoded-mtext">Всички</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    {% endif %}
+                </ul>
+            {% endif %}
+        </div>
+    </nav>
+{% endblock %}

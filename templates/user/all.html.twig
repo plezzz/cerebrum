@@ -1,0 +1,116 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Всички потребители{% endblock %}
+{% block header %}
+    <div class="d-inline">
+        <h4>Всички потребители</h4>
+        {# <span>Място където може да добавяте нови работници</span> #}
+    </div>
+{% endblock %}
+{% block breadcrumb %}
+    {{ slope_it_breadcrumb() }}
+{% endblock %}
+{% block body %}
+    <!-- Column Selectors table start -->
+    <div class="card">
+        <div class="card-header">
+        </div>
+        <div class="card-block">
+            <div class="dt-responsive table-responsive">
+                <table class="table table-striped table-bordered  display nowrap" id="example" style="width:100%">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>email</th>
+                        <th>Role</th>
+                        <th>Mobile</th>
+                        <th>isActive</th>
+                        <th>isVerified</th>
+                        <th>Създадени пациенти</th>
+                        <th>Създаден от</th>
+                        <th>Редактиран от</th>
+                        <th>Създаден на</th>
+                        <th>Промен на</th>
+                        <th>Действие</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for user in users %}
+                        <tr>
+                            <td>{{ user.id }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.roles|join(', ') }}</td>
+                            <td>{{ user.mobilePhone }}</td>
+                            <td>
+                                {% if user.isActive %}
+                                    Да
+                                {% else %}
+                                    Не
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if user.isVerified %}
+                                    Да
+                                {% else %}
+                                    Не
+                                {% endif %}
+                            </td>
+                            <td>{{ user.createdPatients|length }}</td>
+                            <td>{{ user.createdBy.firstName }} {{ user.createdBy.lastName }}</td>
+                            <td>{{ user.editedBy.firstName }} {{ user.editedBy.lastName }}</td>
+                            <td>{{ user.createdAt|date("d.m.Y H:i", false) }}</td>
+                            <td>{{ user.editedAt|date("d.m.Y H:i", false) }}</td>
+                            <td class="text-center">
+{#                                 TODO: Да се довърши логиката за бутоните#}
+                                <a href="#"> <button class="btn btn-warning">Промени</button></a>
+                                <a href="#"> <button class="btn btn-danger">Изтрии</button></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+    <!-- Column Selectors end -->
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css"
+          href="{{ asset('bower_components/datatables.net-bs4/css/dataTables.bootstrap4.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/pages/data-table/css/buttons.dataTables.min.css') }}">
+    <link rel="stylesheet" type="text/css"
+          href="{{ asset('bower_components/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css') }}">
+    <link rel="stylesheet" type="text/css"
+          href="{{ asset('assets/pages/data-table/extensions/buttons/css/buttons.dataTables.min.css') }}">
+{% endblock %}
+{% block javascriptend %}
+
+    <!-- data-table js -->
+
+    <script src="{{ asset('bower_components/datatables.net/js/jquery.dataTables.min.js') }}"
+            type="text/javascript"></script>
+    <script src="{{ asset('assets/pages/data-table/extensions/buttons/js/dataTables.buttons.min.js') }}"
+            type="text/javascript"></script>
+    <script src="{{ asset('assets/pages/data-table/js/jszip.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/pages/data-table/js/pdfmake.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/pages/data-table/extensions/buttons/js/vfs_fonts.js') }}"
+            type="text/javascript"></script>
+    <script src="{{ asset('assets/pages/data-table/extensions/buttons/js/buttons.colVis.min.js') }}"
+            type="text/javascript"></script>
+    <script src="{{ asset('bower_components/datatables.net-buttons/js/buttons.print.min.js') }}"
+            type="text/javascript"></script>
+    <script src="{{ asset('bower_components/datatables.net-buttons/js/buttons.html5.min.js') }}"
+            type="text/javascript"></script>
+    <script src="{{ asset('assets/pages/data-table/js/dataTables.bootstrap4.min.js') }}"
+            type="text/javascript"></script>
+    <script src="{{ asset('bower_components/datatables.net-responsive/js/dataTables.responsive.min.js') }}"
+            type="text/javascript"></script>
+    <script src="{{ asset('bower_components/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js') }}"
+            type="text/javascript"></script>
+    <script src="{{ asset('assets/pages/data-table/extensions/buttons/js/extension-btns-custom.js') }}"
+            type="text/javascript"></script>
+    <script src="{{ asset('assets/js/contact-delete-modal.js') }}" type="text/javascript"></script>
+
+{% endblock %}

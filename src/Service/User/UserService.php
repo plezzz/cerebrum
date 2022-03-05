@@ -50,6 +50,7 @@ class UserService implements UserServiceInterface
      */
     public function save(User $user): bool
     {
+        $currentUser = $this->currentUser();
         $user->setPassword(
             $this->passwordEncoder->encodePassword(
                 $user,
@@ -59,10 +60,14 @@ class UserService implements UserServiceInterface
 
 
         $user->setCreatedAt($this->dateTimeService->setDateTimeNow());
+        $user->setCreatedBy($currentUser);
+        //TODO: да се направи имплементация за редакция на потребители
         $user->setEditedAt($this->dateTimeService->setDateTimeNow());
+        $user->setEditedBy($currentUser);
         $user->setIsActive(true);
         $user->setIsDeleted(false);
-        $user->setIsVerified(false);
+        //TODO: Да се направи имплементация за верифициране на потребители
+        $user->setIsVerified(true);
         //print_r($user);
 
         return $this->userRepository->insert($user);
