@@ -60,7 +60,8 @@ class PatientType extends AbstractType
             ])
             ->add('isInHospital', CheckboxType::class, [
                 'label' => 'Пациента в болница ли е?',
-                'value' => false
+                'value' => false,
+                'required' => false
             ]);
     }
 

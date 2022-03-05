@@ -26,7 +26,7 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        $roles = ['Потребител' => 'ROLE_USER', 'Администратор' => 'ROLE_ADMIN', 'Супер Администратор' => 'ROLE_SUPER_ADMIN'];
+        $roles = ['Потребител' => 'ROLE_USER','Персонал' => 'ROLE_PERSONAL','Лекар' => 'ROLE_DOCTOR', 'Администратор' => 'ROLE_ADMIN', 'Супер Администратор' => 'ROLE_SUPER_ADMIN'];
         foreach ($roles as $key => $value) {
             $role = new Role();
             $role->setName($value);
@@ -47,8 +47,8 @@ class AppFixtures extends Fixture
 //        var_dump('dd');
 //        print_r($this->roleService->findAll());
         //$user->setRoles($this->roleService->findAll());
-        $user->addRole($this->roleService->findOneByName('ROLE_USER'));
-        $user->addRole($this->roleService->findOneByName('ROLE_ADMIN'));
+//        $user->addRole($this->roleService->findOneByName('ROLE_USER'));
+//        $user->addRole($this->roleService->findOneByName('ROLE_ADMIN'));
         $user->addRole($this->roleService->findOneByName('ROLE_SUPER_ADMIN'));
         $user->setMobilePhone('886346234');
         $user->setCreatedAt($this->dateTimeService->setDateTimeNow());
