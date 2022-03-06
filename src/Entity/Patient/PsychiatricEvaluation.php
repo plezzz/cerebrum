@@ -24,46 +24,6 @@ class PsychiatricEvaluation
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $diagnostic;
-
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $MKB;
-
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $medicalHistory;
-
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $concomitantDiseases;
-
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $psychiatricEvaluation;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $observationPeriodFrom;
-
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    private $observationPeriodTo;
-
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $expertOpinion;
-
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
     private $note;
 
     /**
@@ -86,15 +46,185 @@ class PsychiatricEvaluation
      */
     private $createdBy;
 
+
     /**
-     * @ORM\ManyToMany(targetEntity=Patient::class, inversedBy="psychiatricEvaluations")
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $anamnesisWastaken;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $pastIllnesses;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $accompanyingDiseases;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $familyHistory;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $premorbidDevelopment;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $earlyDevelopment;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $pregnancy;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $birth;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $neonatalPeriod;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $nutrition;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $motorDevelopment;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $speechDevelopmentAndCommunication;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $selfService;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $socialization;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $behavior;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $family;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $styleOfAttachment;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $medicalHistory;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $hospitalization;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $lastHospitalization;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $manifestationsOfAutoaggressionOrAggression;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $allergies;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $lifeStyle;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $surfactantAbuse;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $problemsWithTheLaw;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $somaticStatus;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $neurologicalStatus;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $mentalStatus;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $syndrome;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $differentialDiagnosis;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $therapeuticPlan;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $therapy;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Patient::class, inversedBy="psychiatricEvaluation", cascade={"persist", "remove"})
      */
     private $patient;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $youth;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $adultAge;
 
     public function __construct()
     {
         $this->createdBy = new ArrayCollection();
-        $this->patient = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -102,101 +232,7 @@ class PsychiatricEvaluation
         return $this->id;
     }
 
-    public function getDiagnostic(): ?string
-    {
-        return $this->diagnostic;
-    }
 
-    public function setDiagnostic(string $diagnostic): self
-    {
-        $this->diagnostic = $diagnostic;
-
-        return $this;
-    }
-
-    public function getMKB(): ?string
-    {
-        return $this->MKB;
-    }
-
-    public function setMKB(string $MKB): self
-    {
-        $this->MKB = $MKB;
-
-        return $this;
-    }
-
-    public function getMedicalHistory(): ?string
-    {
-        return $this->medicalHistory;
-    }
-
-    public function setMedicalHistory(string $medicalHistory): self
-    {
-        $this->medicalHistory = $medicalHistory;
-
-        return $this;
-    }
-
-    public function getConcomitantDiseases(): ?string
-    {
-        return $this->concomitantDiseases;
-    }
-
-    public function setConcomitantDiseases(string $concomitantDiseases): self
-    {
-        $this->concomitantDiseases = $concomitantDiseases;
-
-        return $this;
-    }
-
-    public function getPsychiatricEvaluation(): ?string
-    {
-        return $this->psychiatricEvaluation;
-    }
-
-    public function setPsychiatricEvaluation(string $psychiatricEvaluation): self
-    {
-        $this->psychiatricEvaluation = $psychiatricEvaluation;
-
-        return $this;
-    }
-
-    public function getObservationPeriodFrom(): ?DateTimeInterface
-    {
-        return $this->observationPeriodFrom;
-    }
-
-    public function setObservationPeriodFrom(DateTimeInterface $observationPeriodFrom): self
-    {
-        $this->observationPeriodFrom = $observationPeriodFrom;
-
-        return $this;
-    }
-
-    public function getObservationPeriodTo(): ?DateTimeInterface
-    {
-        return $this->observationPeriodTo;
-    }
-
-    public function setObservationPeriodTo(DateTimeInterface $observationPeriodTo): self
-    {
-        $this->observationPeriodTo = $observationPeriodTo;
-
-        return $this;
-    }
-
-    public function getExpertOpinion(): ?string
-    {
-        return $this->expertOpinion;
-    }
-
-    public function setExpertOpinion(string $expertOpinion): self
-    {
-        $this->expertOpinion = $expertOpinion;
-
-        return $this;
-    }
 
     public function getNote(): ?string
     {
@@ -280,26 +316,424 @@ class PsychiatricEvaluation
         return $this;
     }
 
-    /**
-     * @return Collection
-     */
-    public function getPatient(): Collection
+
+
+    public function getAnamnesisWastaken(): ?string
     {
-        return $this->patient;
+        return $this->anamnesisWastaken;
     }
 
-    public function addPatient(Patient $patient): self
+    public function setAnamnesisWastaken(string $anamnesisWastaken): self
     {
-        if (!$this->patient->contains($patient)) {
-            $this->patient[] = $patient;
-        }
+        $this->anamnesisWastaken = $anamnesisWastaken;
 
         return $this;
     }
 
-    public function removePatient(Patient $patient): self
+    public function getPastIllnesses(): ?string
     {
-        $this->patient->removeElement($patient);
+        return $this->pastIllnesses;
+    }
+
+    public function setPastIllnesses(string $pastIllnesses): self
+    {
+        $this->pastIllnesses = $pastIllnesses;
+
+        return $this;
+    }
+
+    public function getAccompanyingDiseases(): ?string
+    {
+        return $this->accompanyingDiseases;
+    }
+
+    public function setAccompanyingDiseases(string $accompanyingDiseases): self
+    {
+        $this->accompanyingDiseases = $accompanyingDiseases;
+
+        return $this;
+    }
+
+    public function getFamilyHistory(): ?string
+    {
+        return $this->familyHistory;
+    }
+
+    public function setFamilyHistory(string $familyHistory): self
+    {
+        $this->familyHistory = $familyHistory;
+
+        return $this;
+    }
+
+    public function getPremorbidDevelopment(): ?string
+    {
+        return $this->premorbidDevelopment;
+    }
+
+    public function setPremorbidDevelopment(string $premorbidDevelopment): self
+    {
+        $this->premorbidDevelopment = $premorbidDevelopment;
+
+        return $this;
+    }
+
+    public function getEarlyDevelopment(): ?string
+    {
+        return $this->earlyDevelopment;
+    }
+
+    public function setEarlyDevelopment(string $earlyDevelopment): self
+    {
+        $this->earlyDevelopment = $earlyDevelopment;
+
+        return $this;
+    }
+
+    public function getPregnancy(): ?string
+    {
+        return $this->pregnancy;
+    }
+
+    public function setPregnancy(string $pregnancy): self
+    {
+        $this->pregnancy = $pregnancy;
+
+        return $this;
+    }
+
+    public function getBirth(): ?string
+    {
+        return $this->birth;
+    }
+
+    public function setBirth(string $birth): self
+    {
+        $this->birth = $birth;
+
+        return $this;
+    }
+
+    public function getNeonatalPeriod(): ?string
+    {
+        return $this->neonatalPeriod;
+    }
+
+    public function setNeonatalPeriod(string $neonatalPeriod): self
+    {
+        $this->neonatalPeriod = $neonatalPeriod;
+
+        return $this;
+    }
+
+    public function getNutrition(): ?string
+    {
+        return $this->nutrition;
+    }
+
+    public function setNutrition(string $nutrition): self
+    {
+        $this->nutrition = $nutrition;
+
+        return $this;
+    }
+
+    public function getMotorDevelopment(): ?string
+    {
+        return $this->motorDevelopment;
+    }
+
+    public function setMotorDevelopment(string $motorDevelopment): self
+    {
+        $this->motorDevelopment = $motorDevelopment;
+
+        return $this;
+    }
+
+    public function getSpeechDevelopmentAndCommunication(): ?string
+    {
+        return $this->speechDevelopmentAndCommunication;
+    }
+
+    public function setSpeechDevelopmentAndCommunication(string $speechDevelopmentAndCommunication): self
+    {
+        $this->speechDevelopmentAndCommunication = $speechDevelopmentAndCommunication;
+
+        return $this;
+    }
+
+    public function getSelfService(): ?string
+    {
+        return $this->selfService;
+    }
+
+    public function setSelfService(string $selfService): self
+    {
+        $this->selfService = $selfService;
+
+        return $this;
+    }
+
+    public function getSocialization(): ?string
+    {
+        return $this->socialization;
+    }
+
+    public function setSocialization(string $socialization): self
+    {
+        $this->socialization = $socialization;
+
+        return $this;
+    }
+
+    public function getBehavior(): ?string
+    {
+        return $this->behavior;
+    }
+
+    public function setBehavior(string $behavior): self
+    {
+        $this->behavior = $behavior;
+
+        return $this;
+    }
+
+    public function getFamily(): ?string
+    {
+        return $this->family;
+    }
+
+    public function setFamily(string $family): self
+    {
+        $this->family = $family;
+
+        return $this;
+    }
+
+    public function getStyleOfAttachment(): ?string
+    {
+        return $this->styleOfAttachment;
+    }
+
+    public function setStyleOfAttachment(string $styleOfAttachment): self
+    {
+        $this->styleOfAttachment = $styleOfAttachment;
+
+        return $this;
+    }
+
+    public function getMedicalHistory(): ?string
+    {
+        return $this->medicalHistory;
+    }
+
+    public function setMedicalHistory(string $medicalHistory): self
+    {
+        $this->medicalHistory = $medicalHistory;
+
+        return $this;
+    }
+
+    public function getHospitalization(): ?string
+    {
+        return $this->hospitalization;
+    }
+
+    public function setHospitalization(string $hospitalization): self
+    {
+        $this->hospitalization = $hospitalization;
+
+        return $this;
+    }
+
+    public function getLastHospitalization(): ?string
+    {
+        return $this->lastHospitalization;
+    }
+
+    public function setLastHospitalization(?string $lastHospitalization): self
+    {
+        $this->lastHospitalization = $lastHospitalization;
+
+        return $this;
+    }
+
+    public function getManifestationsOfAutoaggressionOrAggression(): ?string
+    {
+        return $this->manifestationsOfAutoaggressionOrAggression;
+    }
+
+    public function setManifestationsOfAutoaggressionOrAggression(string $manifestationsOfAutoaggressionOrAggression): self
+    {
+        $this->manifestationsOfAutoaggressionOrAggression = $manifestationsOfAutoaggressionOrAggression;
+
+        return $this;
+    }
+
+    public function getAllergies(): ?string
+    {
+        return $this->allergies;
+    }
+
+    public function setAllergies(string $allergies): self
+    {
+        $this->allergies = $allergies;
+
+        return $this;
+    }
+
+    public function getLifeStyle(): ?string
+    {
+        return $this->lifeStyle;
+    }
+
+    public function setLifeStyle(string $lifeStyle): self
+    {
+        $this->lifeStyle = $lifeStyle;
+
+        return $this;
+    }
+
+    public function getSurfactantAbuse(): ?string
+    {
+        return $this->surfactantAbuse;
+    }
+
+    public function setSurfactantAbuse(string $surfactantAbuse): self
+    {
+        $this->surfactantAbuse = $surfactantAbuse;
+
+        return $this;
+    }
+
+    public function getProblemsWithTheLaw(): ?string
+    {
+        return $this->problemsWithTheLaw;
+    }
+
+    public function setProblemsWithTheLaw(string $problemsWithTheLaw): self
+    {
+        $this->problemsWithTheLaw = $problemsWithTheLaw;
+
+        return $this;
+    }
+
+    public function getSomaticStatus(): ?string
+    {
+        return $this->somaticStatus;
+    }
+
+    public function setSomaticStatus(string $somaticStatus): self
+    {
+        $this->somaticStatus = $somaticStatus;
+
+        return $this;
+    }
+
+    public function getNeurologicalStatus(): ?string
+    {
+        return $this->neurologicalStatus;
+    }
+
+    public function setNeurologicalStatus(?string $neurologicalStatus): self
+    {
+        $this->neurologicalStatus = $neurologicalStatus;
+
+        return $this;
+    }
+
+    public function getMentalStatus(): ?string
+    {
+        return $this->mentalStatus;
+    }
+
+    public function setMentalStatus(?string $mentalStatus): self
+    {
+        $this->mentalStatus = $mentalStatus;
+
+        return $this;
+    }
+
+    public function getSyndrome(): ?string
+    {
+        return $this->syndrome;
+    }
+
+    public function setSyndrome(?string $syndrome): self
+    {
+        $this->syndrome = $syndrome;
+
+        return $this;
+    }
+
+    public function getDifferentialDiagnosis(): ?string
+    {
+        return $this->differentialDiagnosis;
+    }
+
+    public function setDifferentialDiagnosis(?string $differentialDiagnosis): self
+    {
+        $this->differentialDiagnosis = $differentialDiagnosis;
+
+        return $this;
+    }
+
+    public function getTherapeuticPlan(): ?string
+    {
+        return $this->therapeuticPlan;
+    }
+
+    public function setTherapeuticPlan(?string $therapeuticPlan): self
+    {
+        $this->therapeuticPlan = $therapeuticPlan;
+
+        return $this;
+    }
+
+    public function getTherapy(): ?string
+    {
+        return $this->therapy;
+    }
+
+    public function setTherapy(string $therapy): self
+    {
+        $this->therapy = $therapy;
+
+        return $this;
+    }
+
+    public function getPatient(): ?Patient
+    {
+        return $this->patient;
+    }
+
+    public function setPatient(?Patient $patient): self
+    {
+        $this->patient = $patient;
+
+        return $this;
+    }
+
+    public function getYouth(): ?string
+    {
+        return $this->youth;
+    }
+
+    public function setYouth(?string $youth): self
+    {
+        $this->youth = $youth;
+
+        return $this;
+    }
+
+    public function getAdultAge(): ?string
+    {
+        return $this->adultAge;
+    }
+
+    public function setAdultAge(?string $adultAge): self
+    {
+        $this->adultAge = $adultAge;
 
         return $this;
     }

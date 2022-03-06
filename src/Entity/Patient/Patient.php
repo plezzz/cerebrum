@@ -125,10 +125,6 @@ class Patient
      */
     private $profilePicture;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=PsychiatricEvaluation::class, mappedBy="patient")
-     */
-    private $psychiatricEvaluations;
 
     /**
      * @ORM\ManyToMany(targetEntity=Report::class, mappedBy="patient")
@@ -140,14 +136,24 @@ class Patient
      */
     private $socialEvaluations;
 
+    /**
+     * @ORM\OneToMany(targetEntity=PsychiatricEvaluationNote::class, mappedBy="patient")
+     */
+    private $psychiatricEvaluationNotes;
+
+    /**
+     * @ORM\OneToOne(targetEntity=PsychiatricEvaluation::class, mappedBy="patient", cascade={"persist", "remove"})
+     */
+    private $psychiatricEvaluation;
+
 
     public function __construct()
     {
         $this->Contacts = new ArrayCollection();
         $this->fileUploads = new ArrayCollection();
-        $this->psychiatricEvaluations = new ArrayCollection();
         $this->reports = new ArrayCollection();
         $this->socialEvaluations = new ArrayCollection();
+        $this->psychiatricEvaluationNotes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -396,32 +402,6 @@ class Patient
         return $this;
     }
 
-    /**
-     * @return Collection|PsychiatricEvaluation[]
-     */
-    public function getPsychiatricEvaluations(): Collection
-    {
-        return $this->psychiatricEvaluations;
-    }
-
-    public function addPsychiatricEvaluation(PsychiatricEvaluation $psychiatricEvaluation): self
-    {
-        if (!$this->psychiatricEvaluations->contains($psychiatricEvaluation)) {
-            $this->psychiatricEvaluations[] = $psychiatricEvaluation;
-            $psychiatricEvaluation->addPatient($this);
-        }
-
-        return $this;
-    }
-
-    public function removePsychiatricEvaluation(PsychiatricEvaluation $psychiatricEvaluation): self
-    {
-        if ($this->psychiatricEvaluations->removeElement($psychiatricEvaluation)) {
-            $psychiatricEvaluation->removePatient($this);
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection|Report[]
@@ -473,6 +453,58 @@ class Patient
         if ($this->socialEvaluations->removeElement($socialEvaluation)) {
             $socialEvaluation->removePatient($this);
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PsychiatricEvaluationNote>
+     */
+    public function getPsychiatricEvaluationNotes(): Collection
+    {
+        return $this->psychiatricEvaluationNotes;
+    }
+
+    public function addPsychiatricEvaluationNote(PsychiatricEvaluationNote $psychiatricEvaluationNote): self
+    {
+        if (!$this->psychiatricEvaluationNotes->contains($psychiatricEvaluationNote)) {
+            $this->psychiatricEvaluationNotes[] = $psychiatricEvaluationNote;
+            $psychiatricEvaluationNote->setPatient($this);
+        }
+
+        return $this;
+    }
+
+    public function removePsychiatricEvaluationNote(PsychiatricEvaluationNote $psychiatricEvaluationNote): self
+    {
+        if ($this->psychiatricEvaluationNotes->removeElement($psychiatricEvaluationNote)) {
+            // set the owning side to null (unless already changed)
+            if ($psychiatricEvaluationNote->getPatient() === $this) {
+                $psychiatricEvaluationNote->setPatient(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getPsychiatricEvaluation(): ?PsychiatricEvaluation
+    {
+        return $this->psychiatricEvaluation;
+    }
+
+    public function setPsychiatricEvaluation(?PsychiatricEvaluation $psychiatricEvaluation): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($psychiatricEvaluation === null && $this->psychiatricEvaluation !== null) {
+            $this->psychiatricEvaluation->setPatient(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($psychiatricEvaluation !== null && $psychiatricEvaluation->getPatient() !== $this) {
+            $psychiatricEvaluation->setPatient($this);
+        }
+
+        $this->psychiatricEvaluation = $psychiatricEvaluation;
 
         return $this;
     }

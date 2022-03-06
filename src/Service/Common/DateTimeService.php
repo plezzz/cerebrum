@@ -5,6 +5,7 @@ namespace App\Service\Common;
 
 
 use DateTime;
+use DateTimeImmutable;
 use DateTimeZone;
 use Exception;
 
@@ -44,5 +45,10 @@ class DateTimeService implements DateTimeServiceInterface
         $datetime = new DateTime('now');
         $datetime->setTimezone($timeZone);
         return $datetime;
+    }
+
+    public function dateTimeToImmutableDateTime($date): DateTimeImmutable
+    {
+        return DateTimeImmutable::createFromMutable( $date );
     }
 }

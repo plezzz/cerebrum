@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\Patient\Patient;
+use App\Entity\Patient\PsychiatricEvaluationNote;
 use App\Entity\Patient\SocialEvaluation;
 use App\Repository\UserRepository;
 use DateTimeInterface;
@@ -126,6 +127,11 @@ class User implements UserInterface
      */
     private $socialEvaluations;
 
+    /**
+     * @ORM\OneToMany(targetEntity=PsychiatricEvaluationNote::class, mappedBy="createdBy")
+     */
+    private $psychiatricEvaluationNotes;
+
 
     public function __construct()
     {
@@ -134,6 +140,7 @@ class User implements UserInterface
         $this->editedPatients = new ArrayCollection();
         $this->fileUploads = new ArrayCollection();
         $this->socialEvaluations = new ArrayCollection();
+        $this->psychiatricEvaluationNotes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -477,6 +484,36 @@ class User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($socialEvaluation->getEditedBy() === $this) {
                 $socialEvaluation->setEditedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PsychiatricEvaluationNote>
+     */
+    public function getPsychiatricEvaluationNotes(): Collection
+    {
+        return $this->psychiatricEvaluationNotes;
+    }
+
+    public function addPsychiatricEvaluationNote(PsychiatricEvaluationNote $psychiatricEvaluationNote): self
+    {
+        if (!$this->psychiatricEvaluationNotes->contains($psychiatricEvaluationNote)) {
+            $this->psychiatricEvaluationNotes[] = $psychiatricEvaluationNote;
+            $psychiatricEvaluationNote->setCreatedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removePsychiatricEvaluationNote(PsychiatricEvaluationNote $psychiatricEvaluationNote): self
+    {
+        if ($this->psychiatricEvaluationNotes->removeElement($psychiatricEvaluationNote)) {
+            // set the owning side to null (unless already changed)
+            if ($psychiatricEvaluationNote->getCreatedBy() === $this) {
+                $psychiatricEvaluationNote->setCreatedBy(null);
             }
         }
 

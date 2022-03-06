@@ -8,6 +8,7 @@ use App\Entity\Patient\Details;
 use App\Entity\Patient\IDCard;
 use App\Entity\Patient\Patient;
 use App\Entity\Patient\PsychiatricEvaluation;
+use App\Entity\Patient\PsychiatricEvaluationNote;
 use App\Entity\Patient\Report;
 use App\Entity\Patient\SocialEvaluation;
 
@@ -36,6 +37,8 @@ interface PatientServiceInterface
 
     public function addPsychiatricEvaluation(PsychiatricEvaluation $psychiatricEvaluation, Patient $patient): bool;
 
+    public function addPsychiatricEvaluationNote(PsychiatricEvaluationNote $psychiatricEvaluationNote, Patient $patient): void;
+
     public function getTimeline($id): array;
 
     public function findOneContactByID($id): ?Contacts;
@@ -43,5 +46,7 @@ interface PatientServiceInterface
     public function deleteContact(int $id);
 
     public function addSocialEvaluation(SocialEvaluation $socialEvaluation , Patient $patient): void;
+
+    public function getPsychiatricNotes($id): array;
 
 }

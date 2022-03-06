@@ -4,61 +4,51 @@ namespace App\Form;
 
 use App\Entity\Patient\PsychiatricEvaluation;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class PatientPsychiatricEvaluationType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('diagnostic', TextareaType::class, [
-                'label' => 'Диагноза',
-                'required' => false,
-            ])
-            ->add('MKB', TextareaType::class, [
-                'label' => 'МКБ',
-                'required' => false,
-            ])
-            ->add('medicalHistory', TextareaType::class, [
-                'label' => 'Анамнеза',
-                'required' => false,
-            ])
-            ->add('concomitantDiseases', TextareaType::class, [
-                'label' => 'Съпътстващи заболявания',
-                'required' => false,
-            ])
-            ->add('psychiatricEvaluation', TextareaType::class, [
-                'label' => 'Психиатрична оценка',
-                'required' => false,
-            ])
-            ->add('observationPeriodFrom', DateType::class, [
-                'label' => 'Период на наблюдение от',
-                'widget' => 'single_text',
-                'html5' => false,
-                'attr' => ['class' => 'js-datepicker'],
-                'format' => 'dd-MM-yyyy',
-            ])
-            ->add('observationPeriodTo', DateType::class, [
-                'label' => 'Период на наблюдение до',
-                'widget' => 'single_text',
-                'html5' => false,
-                'attr' => ['class' => 'js-datepicker'],
-                'format' => 'dd-MM-yyyy',
-            ])
-            ->add('expertOpinion', TextareaType::class, [
-                'label' => 'Експертно мнение',
-                'required' => false,
-            ])
-            ->add('note', TextareaType::class, [
-                'label' => 'Допълнителни бележки',
-                'required' => false,
-            ]);
+            ->add('note')
+            ->add('anamnesisWastaken')
+            ->add('pastIllnesses')
+            ->add('accompanyingDiseases')
+            ->add('familyHistory')
+            ->add('premorbidDevelopment')
+            ->add('earlyDevelopment')
+            ->add('pregnancy')
+            ->add('birth')
+            ->add('neonatalPeriod')
+            ->add('nutrition')
+            ->add('motorDevelopment')
+            ->add('speechDevelopmentAndCommunication')
+            ->add('selfService')
+            ->add('socialization')
+            ->add('behavior')
+            ->add('family')
+            ->add('styleOfAttachment')
+            ->add('medicalHistory')
+            ->add('hospitalization')
+            ->add('lastHospitalization')
+            ->add('manifestationsOfAutoaggressionOrAggression')
+            ->add('allergies')
+            ->add('lifeStyle')
+            ->add('surfactantAbuse')
+            ->add('problemsWithTheLaw')
+            ->add('somaticStatus')
+            ->add('neurologicalStatus')
+            ->add('mentalStatus')
+            ->add('syndrome')
+            ->add('differentialDiagnosis')
+            ->add('therapeuticPlan')
+            ->add('therapy')
+        ;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => PsychiatricEvaluation::class,

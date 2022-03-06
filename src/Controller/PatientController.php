@@ -10,6 +10,7 @@ use App\Entity\Patient\Patient;
 use App\Form\IDCardType;
 use App\Form\PatientContactType;
 use App\Form\PatientDetailsType;
+use App\Form\PatientPsychiatricEvaluationNoteType;
 use App\Form\PatientPsychiatricEvaluationType;
 use App\Form\PatientReportType;
 use App\Form\PatientType;
@@ -17,8 +18,6 @@ use App\Form\ProfilePictureUploadType;
 use App\Form\SocialEvaluationType;
 use App\Service\Patient\PatientServiceInterface;
 use App\Service\Patient\ProfilePictureUploadService;
-use http\Message\Body;
-use http\QueryString;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -244,10 +243,12 @@ class PatientController extends AbstractController
     public function PatientID(Request $request, $id): Response
     {
         $patient = $this->patientService->findOneByID($id);
+        $psychiatricNotes = $this->patientService->getPsychiatricNotes($patient->getId());
         $timeline = $this->patientService->getTimeline($id);
         return $this->render('patient/patient-view.html.twig', [
             'patient' => $patient,
-            'timeline' => $timeline
+            'timeline' => $timeline,
+            'psychiatricNotes' => $psychiatricNotes,
         ]);
     }
 
@@ -329,6 +330,33 @@ class PatientController extends AbstractController
      * @Breadcrumb({
      *     {"label" = "Начало", "route" = "home"},
      *     {"label" = "Всички пациенти", "route" = "all-patients"},
+     *     {"label" = "Психиатрична блежка"},
+     *     })
+     */
+    #[Route('/patient/add/psychiatric-evaluation-note', name: 'patient_psychiatric_evaluation_note')]
+    public function addPatientPsychiatricEvaluationNote(Request $request): Response
+    {
+        $id = $request->query->get('id');
+        $patient = $this->patientService->findOneByID($id);
+        $form = $this->createForm(PatientPsychiatricEvaluationNoteType::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $formFields = $form->getData();
+            $this->patientService->addPsychiatricEvaluationNote($formFields, $patient);
+            return $this->redirectToRoute('patient', ['id' => $patient->getId(), '_fragment' => 'psychiatric-evaluation']);
+        }
+        return $this->render('patient/psychiatric-evaluation-note.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @IsGranted("ROLE_DOCTOR")
+     * @param Request $request
+     * @return Response
+     * @Breadcrumb({
+     *     {"label" = "Начало", "route" = "home"},
+     *     {"label" = "Всички пациенти", "route" = "all-patients"},
      *     {"label" = "Всички пациенти"},
      *     })
      */
@@ -346,7 +374,7 @@ class PatientController extends AbstractController
         }
         return $this->render('patient/social-evaluation.html.twig', [
             'form' => $form->createView(),
-            'patient'=> $patient,
+            'patient' => $patient,
         ]);
     }
 }

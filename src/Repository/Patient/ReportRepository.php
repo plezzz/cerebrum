@@ -48,12 +48,12 @@ SELECT id, description, created_at, "Добавен е нов рапорт" AS l
 	FROM report 
 	LEFT JOIN report_patient ON report_patient.report_id = report.id
 	WHERE report_patient.patient_id = :patientID
-UNION
+/*UNION
     SELECT id, diagnostic, created_at, "Добавена е психиатрична оценка", "i_note_action.png"
     FROM
         psychiatric_evaluation
 	LEFT JOIN psychiatric_evaluation_patient ON psychiatric_evaluation_patient.psychiatric_evaluation_id = psychiatric_evaluation.id
-	WHERE psychiatric_evaluation_patient.patient_id = :patientID
+	WHERE psychiatric_evaluation_patient.patient_id = :patientID*/
 UNION	
 	  SELECT 
 		  id, original_name, created_at, "Добавен е нов файл", "i_documents_accepted.png"
