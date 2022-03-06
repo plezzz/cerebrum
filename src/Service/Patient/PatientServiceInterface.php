@@ -9,6 +9,7 @@ use App\Entity\Patient\IDCard;
 use App\Entity\Patient\Patient;
 use App\Entity\Patient\PsychiatricEvaluation;
 use App\Entity\Patient\Report;
+use App\Entity\Patient\SocialEvaluation;
 
 interface PatientServiceInterface
 {
@@ -40,5 +41,7 @@ interface PatientServiceInterface
     public function findOneContactByID($id): ?Contacts;
 
     public function deleteContact(int $id);
+
+    public function addSocialEvaluation(SocialEvaluation $socialEvaluation , Patient $patient): void;
 
 }

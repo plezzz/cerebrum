@@ -33,21 +33,28 @@ class PatientType extends AbstractType
                 'label' => false,
                 'attr' => ['placeholder' => 'ЕГН'],
             ])
-            ->add('dateOfBirth', DateType::class, [
-                'data_class' => null,
-                'widget' => 'single_text',
-                //'format' => 'dd/mm/yyyy', // Note here, it will change to default {{ year }}{{ month }}{{ day }} but dd/MM/yyyy will work
-                'input' => 'datetime',
-                'invalid_message' => 's',
-                'required' => true,
-                'model_timezone' => 'Europe/Sofia',
-                'view_timezone' => 'Europe/Sofia',
-                'attr' => [
-                    'data-date-format' => "DД MMMM YYYY"
-                ]
+//            ->add('dateOfBirth', DateType::class, [
+//                'data_class' => null,
 //                'widget' => 'single_text',
-////                'format' => 'yyyy-MM-dd',
-//                'input_format' => 'y-d-m',
+//                //'format' => 'dd/mm/yyyy', // Note here, it will change to default {{ year }}{{ month }}{{ day }} but dd/MM/yyyy will work
+//                'input' => 'datetime',
+//                'invalid_message' => 's',
+//                'required' => true,
+//                'model_timezone' => 'Europe/Sofia',
+//                'view_timezone' => 'Europe/Sofia',
+//                'attr' => [
+//                    'data-date-format' => "DД MMMM YYYY"
+//                ]
+////                'widget' => 'single_text',
+//////                'format' => 'yyyy-MM-dd',
+////                'input_format' => 'y-d-m',
+//            ])
+            ->add('dateOfBirth', DateType::class, [
+                'label' => 'Дата на раждане',
+                'widget' => 'single_text',
+                'html5' => false,
+                'attr' => ['class' => 'js-datepicker'],
+                'format' => 'dd-MM-yyyy',
             ])
             ->add('mobilePhone', TelType::class, [
                 'label' => false,

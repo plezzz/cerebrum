@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\Patient\Patient;
+use App\Entity\Patient\SocialEvaluation;
 use App\Repository\UserRepository;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -120,6 +121,11 @@ class User implements UserInterface
      */
     private $fileUploads;
 
+    /**
+     * @ORM\OneToMany(targetEntity=SocialEvaluation::class, mappedBy="editedBy")
+     */
+    private $socialEvaluations;
+
 
     public function __construct()
     {
@@ -127,6 +133,7 @@ class User implements UserInterface
         $this->createdPatients = new ArrayCollection();
         $this->editedPatients = new ArrayCollection();
         $this->fileUploads = new ArrayCollection();
+        $this->socialEvaluations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -440,6 +447,36 @@ class User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($fileUpload->getCreatedBy() === $this) {
                 $fileUpload->setCreatedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SocialEvaluation>
+     */
+    public function getSocialEvaluations(): Collection
+    {
+        return $this->socialEvaluations;
+    }
+
+    public function addSocialEvaluation(SocialEvaluation $socialEvaluation): self
+    {
+        if (!$this->socialEvaluations->contains($socialEvaluation)) {
+            $this->socialEvaluations[] = $socialEvaluation;
+            $socialEvaluation->setEditedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSocialEvaluation(SocialEvaluation $socialEvaluation): self
+    {
+        if ($this->socialEvaluations->removeElement($socialEvaluation)) {
+            // set the owning side to null (unless already changed)
+            if ($socialEvaluation->getEditedBy() === $this) {
+                $socialEvaluation->setEditedBy(null);
             }
         }
 

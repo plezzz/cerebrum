@@ -32,12 +32,12 @@
                                     <!-- Social wallpaper end -->
                                     <!-- Timeline button start -->
                                     <div class="timeline-btn">
-                                        <a href="#" data-toggle="modal" data-target="#psychiatric-evaluation-modal"
-                                           class="btn btn-primary waves-effect waves-light m-r-10">Добави психологична
-                                            оценка</a>
-                                        <a href="#"
-                                           class="btn btn-primary waves-effect waves-light m-r-10">Добави социална
-                                            оценка</a>
+                                        <a href="{{ path('patient_psychiatric_evaluation', {'id': patient.id}) }}"
+                                           class="btn btn-primary waves-effect waves-light m-r-10">Добави психиатрична оценка
+                                        </a>
+                                        <a href="{{path('patient_social_evaluation', {'id': patient.id}) }}"
+                                           class="btn btn-primary waves-effect waves-light m-r-10">Добави социална оценка
+                                        </a>
                                         <a href="#"
                                            class="btn btn-primary waves-effect waves-light m-r-10">Психиатрична
                                             оценка</a>
@@ -429,6 +429,9 @@
                                                                         <div class="text-muted social-designation">
                                                                             Създаден
                                                                             от {{ psychiatricEvaluation.getCreatedBy.firstName }} {{ psychiatricEvaluation.createdBy.lastName }} {{ psychiatricEvaluation.createdAt|date('d.m.Y H:i:s') }}
+                                                                            <br>
+                                                                            Редактиран от
+                                                                            {{ psychiatricEvaluation.editedBy.firstName }} {{ psychiatricEvaluation.editedBy.lastName }} {{ psychiatricEvaluation.editedAt|date('d.m.Y H:i:s') }}
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -597,14 +600,10 @@
                                                 </div>
                                                 <div class="col-lg-12 col-xl-6">
                                                     <div class="card">
-                                                        <div
-                                                                class="card-block post-timelines">
-                                                                                                                                    <span
-                                                                                                                                            class="dropdown-toggle addon-btn text-muted f-right service-btn"
-                                                                                                                                            data-toggle="dropdown"
-                                                                                                                                            aria-haspopup="true"
-                                                                                                                                            aria-expanded="true"
-                                                                                                                                            role="tooltip"></span>
+                                                        <div class="card-block post-timelines">
+                                                            <span class="dropdown-toggle addon-btn text-muted f-right service-btn" data-toggle="dropdown"
+                                                                  aria-haspopup="true" aria-expanded="true" role="tooltip">
+                                                            </span>
                                                             <div
                                                                     class="dropdown-menu dropdown-menu-right b-none services-list">
                                                                 <a class="dropdown-item"
@@ -958,517 +957,74 @@
                                         <!-- Social assessment tab start -->
                                         <div class="tab-pane" id="social-assessment">
                                             <div class="row">
-                                                <div class="col-lg-12 col-xl-6">
-                                                    <div class="card">
-                                                        <div
-                                                                class="card-block post-timelines">
-                                                                                                                                    <span
-                                                                                                                                            class="dropdown-toggle addon-btn text-muted f-right service-btn"
-                                                                                                                                            data-toggle="dropdown"
-                                                                                                                                            aria-haspopup="true"
-                                                                                                                                            aria-expanded="true"
-                                                                                                                                            role="tooltip"></span>
-                                                            <div
-                                                                    class="dropdown-menu dropdown-menu-right b-none services-list">
-                                                                <a class="dropdown-item"
-                                                                   href="#">Remove
-                                                                    tag</a>
-                                                                <a class="dropdown-item"
-                                                                   href="#">Report
-                                                                    Photo</a>
-                                                                <a class="dropdown-item"
-                                                                   href="#">Hide From
-                                                                    Timeline</a>
-                                                                <a class="dropdown-item"
-                                                                   href="#">Blog
-                                                                    User</a>
-                                                            </div>
-                                                            <div
-                                                                    class="media bg-white d-flex">
-                                                                <div
-                                                                        class="media-left media-middle">
-                                                                    <a href="#">
-                                                                        <img class="media-object"
-                                                                             src="{{ asset('assets/images/timeline/img2.png') }}"
-                                                                             alt="">
-                                                                    </a>
-                                                                </div>
-                                                                <div
-                                                                        class="media-body friend-elipsis">
-                                                                    <div
-                                                                            class="f-15 f-bold m-b-5">
-                                                                        Josephin Doe
-                                                                    </div>
-                                                                    <div
-                                                                            class="text-muted social-designation">
-                                                                        Software
-                                                                        Engineer
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-12 col-xl-6">
-                                                    <div class="card">
-                                                        <div
-                                                                class="card-block post-timelines">
-                                                                                                                                    <span
-                                                                                                                                            class="dropdown-toggle addon-btn text-muted f-right service-btn"
-                                                                                                                                            data-toggle="dropdown"
-                                                                                                                                            aria-haspopup="true"
-                                                                                                                                            aria-expanded="true"
-                                                                                                                                            role="tooltip"></span>
-                                                            <div
-                                                                    class="dropdown-menu dropdown-menu-right b-none services-list">
-                                                                <a class="dropdown-item"
-                                                                   href="#">Remove
-                                                                    tag</a>
-                                                                <a class="dropdown-item"
-                                                                   href="#">Report
-                                                                    Photo</a>
-                                                                <a class="dropdown-item"
-                                                                   href="#">Hide From
-                                                                    Timeline</a>
-                                                                <a class="dropdown-item"
-                                                                   href="#">Blog
-                                                                    User</a>
-                                                            </div>
-                                                            <div
-                                                                    class="media bg-white d-flex">
-                                                                <div
-                                                                        class="media-left media-middle">
-                                                                    <a href="#">
-                                                                        <img class="media-object"
-                                                                             src="{{ asset('assets/images/timeline/img2.png') }}"
-                                                                             alt="">
-                                                                    </a>
-                                                                </div>
-                                                                <div
-                                                                        class="media-body friend-elipsis">
-                                                                    <div
-                                                                            class="f-15 f-bold m-b-5">
-                                                                        Josephin Doe
-                                                                    </div>
-                                                                    <div
-                                                                            class="text-muted social-designation">
-                                                                        Software
-                                                                        Engineer
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-12 col-xl-6">
-                                                    <div class="card">
-                                                        <div
-                                                                class="card-block post-timelines">
-                                                                                                                                    <span
-                                                                                                                                            class="dropdown-toggle addon-btn text-muted f-right service-btn"
-                                                                                                                                            data-toggle="dropdown"
-                                                                                                                                            aria-haspopup="true"
-                                                                                                                                            aria-expanded="true"
-                                                                                                                                            role="tooltip"></span>
-                                                            <div
-                                                                    class="dropdown-menu dropdown-menu-right b-none services-list">
-                                                                <a class="dropdown-item"
-                                                                   href="#">Remove
-                                                                    tag</a>
-                                                                <a class="dropdown-item"
-                                                                   href="#">Report
-                                                                    Photo</a>
-                                                                <a class="dropdown-item"
-                                                                   href="#">Hide From
-                                                                    Timeline</a>
-                                                                <a class="dropdown-item"
-                                                                   href="#">Blog
-                                                                    User</a>
-                                                            </div>
-                                                            <div
-                                                                    class="media bg-white d-flex">
-                                                                <div
-                                                                        class="media-left media-middle">
-                                                                    <a href="#">
-                                                                        <img class="media-object"
-                                                                             src="{{ asset('assets/images/timeline/img2.png') }}"
-                                                                             alt="">
-                                                                    </a>
-                                                                </div>
-                                                                <div
-                                                                        class="media-body friend-elipsis">
-                                                                    <div
-                                                                            class="f-15 f-bold m-b-5">
-                                                                        Josephin Doe
-                                                                    </div>
-                                                                    <div
-                                                                            class="text-muted social-designation">
-                                                                        Software
-                                                                        Engineer
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-12 col-xl-6">
-                                                    <div class="card">
-                                                        <div
-                                                                class="card-block post-timelines">
-                                                                                                                                    <span
-                                                                                                                                            class="dropdown-toggle addon-btn text-muted f-right service-btn"
-                                                                                                                                            data-toggle="dropdown"
-                                                                                                                                            aria-haspopup="true"
-                                                                                                                                            aria-expanded="true"
-                                                                                                                                            role="tooltip"></span>
-                                                            <div
-                                                                    class="dropdown-menu dropdown-menu-right b-none services-list">
-                                                                <a class="dropdown-item"
-                                                                   href="#">Remove
-                                                                    tag</a>
-                                                                <a class="dropdown-item"
-                                                                   href="#">Report
-                                                                    Photo</a>
-                                                                <a class="dropdown-item"
-                                                                   href="#">Hide From
-                                                                    Timeline</a>
-                                                                <a class="dropdown-item"
-                                                                   href="#">Blog
-                                                                    User</a>
-                                                            </div>
-                                                            <div
-                                                                    class="media bg-white d-flex">
-                                                                <div
-                                                                        class="media-left media-middle">
-                                                                    <a href="#">
-                                                                        <img class="media-object"
-                                                                             src="{{ asset('assets/images/timeline/img2.png') }}"
-                                                                             alt="">
-                                                                    </a>
-                                                                </div>
-                                                                <div
-                                                                        class="media-body friend-elipsis">
-                                                                    <div
-                                                                            class="f-15 f-bold m-b-5">
-                                                                        Josephin Doe
-                                                                    </div>
-                                                                    <div
-                                                                            class="text-muted social-designation">
-                                                                        Software
-                                                                        Engineer
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-12 col-xl-6">
-                                                    <div class="card">
-                                                        <div
-                                                                class="card-block post-timelines">
-                                                                                                                                    <span
-                                                                                                                                            class="dropdown-toggle addon-btn text-muted f-right service-btn"
-                                                                                                                                            data-toggle="dropdown"
-                                                                                                                                            aria-haspopup="true"
-                                                                                                                                            aria-expanded="true"
-                                                                                                                                            role="tooltip"></span>
-                                                            <div
-                                                                    class="dropdown-menu dropdown-menu-right b-none services-list">
-                                                                <a class="dropdown-item"
-                                                                   href="#">Remove
-                                                                    tag</a>
-                                                                <a class="dropdown-item"
-                                                                   href="#">Report
-                                                                    Photo</a>
-                                                                <a class="dropdown-item"
-                                                                   href="#">Hide From
-                                                                    Timeline</a>
-                                                                <a class="dropdown-item"
-                                                                   href="#">Blog
-                                                                    User</a>
-                                                            </div>
-                                                            <div
-                                                                    class="media bg-white d-flex">
-                                                                <div
-                                                                        class="media-left media-middle">
-                                                                    <a href="#">
-                                                                        <img class="media-object"
-                                                                             src="{{ asset('assets/images/timeline/img2.png') }}"
-                                                                             alt="">
-                                                                    </a>
-                                                                </div>
-                                                                <div
-                                                                        class="media-body friend-elipsis">
-                                                                    <div
-                                                                            class="f-15 f-bold m-b-5">
-                                                                        Josephin Doe
-                                                                    </div>
-                                                                    <div
-                                                                            class="text-muted social-designation">
-                                                                        Software
-                                                                        Engineer
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-12 col-xl-6">
-                                                    <div class="card">
-                                                        <div
-                                                                class="card-block post-timelines">
-                                                            <span
-                                                                    class="dropdown-toggle addon-btn text-muted f-right service-btn"
-                                                                    data-toggle="dropdown"
-                                                                    aria-haspopup="true"
-                                                                    aria-expanded="true"
-                                                                    role="tooltip">
+                                                {% for socialEvaluation in patient.socialEvaluations|reverse %}
+                                                    <div class="col-lg-12 col-xl-6">
+                                                        <div class="card">
+                                                            <div class="card-block post-timelines">
+                                                            <span class="dropdown-toggle addon-btn text-muted f-right service-btn"
+                                                                  data-toggle="dropdown"
+                                                                  aria-haspopup="true"
+                                                                  aria-expanded="true"
+                                                                  role="tooltip">
                                                             </span>
-                                                            <div
-                                                                    class="dropdown-menu dropdown-menu-right b-none services-list">
-                                                                <a class="dropdown-item"
-                                                                   href="#">Remove
-                                                                    tag</a>
-                                                                <a class="dropdown-item"
-                                                                   href="#">Report
-                                                                    Photo</a>
-                                                                <a class="dropdown-item"
-                                                                   href="#">Hide From
-                                                                    Timeline</a>
-                                                                <a class="dropdown-item"
-                                                                   href="#">Blog
-                                                                    User</a>
-                                                            </div>
-                                                            <div
-                                                                    class="media bg-white d-flex">
-                                                                <div
-                                                                        class="media-left media-middle">
-                                                                    <a href="#">
-                                                                        <img class="media-object"
-                                                                             src="{{ asset('assets/images/timeline/img2.png') }}"
-                                                                             alt="">
-                                                                    </a>
+                                                                <div class="dropdown-menu dropdown-menu-right b-none services-list">
+                                                                    <a class="dropdown-item" href="#">Remove tag</a>
+                                                                    <a class="dropdown-item" href="#">Report Photo</a>
+                                                                    <a class="dropdown-item" href="#">Hide From
+                                                                        Timeline</a>
+                                                                    <a class="dropdown-item" href="#">Blog User</a>
                                                                 </div>
-                                                                <div
-                                                                        class="media-body friend-elipsis">
-                                                                    <div
-                                                                            class="f-15 f-bold m-b-5">
-                                                                        Josephin Doe
-                                                                    </div>
-                                                                    <div
-                                                                            class="text-muted social-designation">
-                                                                        Software
-                                                                        Engineer
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-12 col-xl-6">
-                                                    <div class="card">
-                                                        <div
-                                                                class="card-block post-timelines">
-                                                                                                                                    <span
-                                                                                                                                            class="dropdown-toggle addon-btn text-muted f-right service-btn"
-                                                                                                                                            data-toggle="dropdown"
-                                                                                                                                            aria-haspopup="true"
-                                                                                                                                            aria-expanded="true"
-                                                                                                                                            role="tooltip"></span>
-                                                            <div
-                                                                    class="dropdown-menu dropdown-menu-right b-none services-list">
-                                                                <a class="dropdown-item"
-                                                                   href="#">Remove
-                                                                    tag</a>
-                                                                <a class="dropdown-item"
-                                                                   href="#">Report
-                                                                    Photo</a>
-                                                                <a class="dropdown-item"
-                                                                   href="#">Hide From
-                                                                    Timeline</a>
-                                                                <a class="dropdown-item"
-                                                                   href="#">Blog
-                                                                    User</a>
-                                                            </div>
-                                                            <div
-                                                                    class="media bg-white d-flex">
-                                                                <div
-                                                                        class="media-left media-middle">
-                                                                    <a href="#">
-                                                                        <img class="media-object"
-                                                                             src="{{ asset('assets/images/timeline/img2.png') }}"
-                                                                             alt="">
-                                                                    </a>
-                                                                </div>
-                                                                <div
-                                                                        class="media-body friend-elipsis">
-                                                                    <div
-                                                                            class="f-15 f-bold m-b-5">
-                                                                        Josephin Doe
-                                                                    </div>
-                                                                    <div
-                                                                            class="text-muted social-designation">
-                                                                        Software
-                                                                        Engineer
+                                                                <div class="media bg-white d-flex">
+                                                                    {# <div class="media-left media-middle"> #}
+                                                                    {# <a href="#"> #}
+                                                                    {# <img class="media-object" src="{{ asset('assets/images/timeline/img2.png') }}" alt=""> #}
+                                                                    {# </a> #}
+                                                                    {# </div> #}
+                                                                    <div class="media-body friend-elipsis">
+                                                                        <div class="media-left f-15 f-bold m-b-5">
+                                                                            Социален статус:
+                                                                        </div>
+                                                                        <div class="text-muted social-designation">
+                                                                            {{ socialEvaluation.socialStatus }}
+                                                                        </div>
+                                                                        <div class="media-left f-15 f-bold m-b-5">
+                                                                            Социални потребности:
+                                                                        </div>
+                                                                        <div class="text-muted social-designation">
+                                                                            {{ socialEvaluation.needs }}
+                                                                        </div>
+                                                                        <div class="media-left f-15 f-bold m-b-5">
+                                                                            Социална оценка:
+                                                                        </div>
+                                                                        <div class="text-muted social-designation">
+                                                                            {{ socialEvaluation.assessment }}
+                                                                        </div>
+                                                                        <div class="media-left f-15 f-bold m-b-5">
+                                                                            Препоръка за социална интеграция:
+                                                                        </div>
+                                                                        <div class="text-muted social-designation">
+                                                                            {{ socialEvaluation.recommendation }}
+                                                                        </div>
+                                                                        <div class="media-left f-15 f-bold m-b-5">
+                                                                            Допълнителни бележки:
+                                                                        </div>
+                                                                        <div class="text-muted social-designation">
+                                                                            {{ socialEvaluation.note }}
+                                                                        </div>
+                                                                        <hr>
+                                                                        <div class="text-muted social-designation">
+                                                                            Създаден от
+                                                                            {{ socialEvaluation.createdBy.firstName }} {{ socialEvaluation.createdBy.lastName }} {{ socialEvaluation.createdAt|date('d.m.Y H:i:s') }}
+                                                                            <br>
+                                                                            Редактиран от
+                                                                            {{ socialEvaluation.editedBy.firstName }} {{ socialEvaluation.editedBy.lastName }} {{ socialEvaluation.editedAt|date('d.m.Y H:i:s') }}
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-lg-12 col-xl-6">
-                                                    <div class="card">
-                                                        <div
-                                                                class="card-block post-timelines">
-                                                                                                                                    <span
-                                                                                                                                            class="dropdown-toggle addon-btn text-muted f-right service-btn"
-                                                                                                                                            data-toggle="dropdown"
-                                                                                                                                            aria-haspopup="true"
-                                                                                                                                            aria-expanded="true"
-                                                                                                                                            role="tooltip"></span>
-                                                            <div
-                                                                    class="dropdown-menu dropdown-menu-right b-none services-list">
-                                                                <a class="dropdown-item"
-                                                                   href="#">Remove
-                                                                    tag</a>
-                                                                <a class="dropdown-item"
-                                                                   href="#">Report
-                                                                    Photo</a>
-                                                                <a class="dropdown-item"
-                                                                   href="#">Hide From
-                                                                    Timeline</a>
-                                                                <a class="dropdown-item"
-                                                                   href="#">Blog
-                                                                    User</a>
-                                                            </div>
-                                                            <div
-                                                                    class="media bg-white d-flex">
-                                                                <div
-                                                                        class="media-left media-middle">
-                                                                    <a href="#">
-                                                                        <img class="media-object"
-                                                                             src="{{ asset('assets/images/timeline/img2.png') }}"
-                                                                             alt="">
-                                                                    </a>
-                                                                </div>
-                                                                <div
-                                                                        class="media-body friend-elipsis">
-                                                                    <div
-                                                                            class="f-15 f-bold m-b-5">
-                                                                        Josephin Doe
-                                                                    </div>
-                                                                    <div
-                                                                            class="text-muted social-designation">
-                                                                        Software
-                                                                        Engineer
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-12 col-xl-6">
-                                                    <div class="card">
-                                                        <div
-                                                                class="card-block post-timelines">
-                                                                                                                                    <span
-                                                                                                                                            class="dropdown-toggle addon-btn text-muted f-right service-btn"
-                                                                                                                                            data-toggle="dropdown"
-                                                                                                                                            aria-haspopup="true"
-                                                                                                                                            aria-expanded="true"
-                                                                                                                                            role="tooltip"></span>
-                                                            <div
-                                                                    class="dropdown-menu dropdown-menu-right b-none services-list">
-                                                                <a class="dropdown-item"
-                                                                   href="#">Remove
-                                                                    tag</a>
-                                                                <a class="dropdown-item"
-                                                                   href="#">Report
-                                                                    Photo</a>
-                                                                <a class="dropdown-item"
-                                                                   href="#">Hide From
-                                                                    Timeline</a>
-                                                                <a class="dropdown-item"
-                                                                   href="#">Blog
-                                                                    User</a>
-                                                            </div>
-                                                            <div
-                                                                    class="media bg-white d-flex">
-                                                                <div
-                                                                        class="media-left media-middle">
-                                                                    <a href="#">
-                                                                        <img class="media-object"
-                                                                             src="{{ asset('assets/images/timeline/img2.png') }}"
-                                                                             alt="">
-                                                                    </a>
-                                                                </div>
-                                                                <div
-                                                                        class="media-body friend-elipsis">
-                                                                    <div
-                                                                            class="f-15 f-bold m-b-5">
-                                                                        Josephin Doe
-                                                                    </div>
-                                                                    <div
-                                                                            class="text-muted social-designation">
-                                                                        Software
-                                                                        Engineer
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-12 col-xl-6">
-                                                    <div class="card">
-                                                        <div
-                                                                class="card-block post-timelines">
-                                                                                                                                    <span
-                                                                                                                                            class="dropdown-toggle addon-btn text-muted f-right service-btn"
-                                                                                                                                            data-toggle="dropdown"
-                                                                                                                                            aria-haspopup="true"
-                                                                                                                                            aria-expanded="true"
-                                                                                                                                            role="tooltip"></span>
-                                                            <div
-                                                                    class="dropdown-menu dropdown-menu-right b-none services-list">
-                                                                <a class="dropdown-item"
-                                                                   href="#">Remove
-                                                                    tag</a>
-                                                                <a class="dropdown-item"
-                                                                   href="#">Report
-                                                                    Photo</a>
-                                                                <a class="dropdown-item"
-                                                                   href="#">Hide From
-                                                                    Timeline</a>
-                                                                <a class="dropdown-item"
-                                                                   href="#">Blog
-                                                                    User</a>
-                                                            </div>
-                                                            <div
-                                                                    class="media bg-white d-flex">
-                                                                <div
-                                                                        class="media-left media-middle">
-                                                                    <a href="#">
-                                                                        <img class="media-object"
-                                                                             src="{{ asset('assets/images/timeline/img2.png') }}"
-                                                                             alt="">
-                                                                    </a>
-                                                                </div>
-                                                                <div
-                                                                        class="media-body friend-elipsis">
-                                                                    <div
-                                                                            class="f-15 f-bold m-b-5">
-                                                                        Josephin Doe
-                                                                    </div>
-                                                                    <div
-                                                                            class="text-muted social-designation">
-                                                                        Software
-                                                                        Engineer
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                {% endfor %}
                                             </div>
                                         </div>
                                         <!-- Social assessment end -->
@@ -2565,22 +2121,7 @@
         </div>
     </div>
     <!-- Report end-->
-    <!-- Psychiatric Evaluation start-->
-    <div class="modal fade" id="psychiatric-evaluation-modal" tabindex="-1"
-         role="dialog">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Добави Психиатрична оценка</h4>
-                </div>
-                <div class="modal-body">
-                    {{ render(controller('App\\Controller\\PatientController::addPatientPsychiatricEvaluation', {'request': app.request, 'id':
-                        patient.id})) }}
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- PsychiatricEvaluation end-->
+
     <!-- Delete contact start-->
     <div class="modal fade" id="delete-contact-modal" tabindex="-1"
          role="dialog">

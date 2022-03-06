@@ -10,11 +10,13 @@ use App\Entity\Patient\IDCard;
 use App\Entity\Patient\Patient;
 use App\Entity\Patient\PsychiatricEvaluation;
 use App\Entity\Patient\Report;
+use App\Entity\Patient\SocialEvaluation;
 use App\Repository\Patient\ContactsRepository;
 use App\Repository\Patient\DetailsRepository;
 use App\Repository\Patient\IDCardRepository;
 use App\Repository\Patient\PsychiatricEvaluationRepository;
 use App\Repository\Patient\ReportRepository;
+use App\Repository\Patient\SocialEvaluationRepository;
 use App\Repository\PatientRepository;
 use App\Service\Common\DateTimeServiceInterface;
 use App\Service\User\UserServiceInterface;
@@ -36,6 +38,7 @@ class PatientService implements PatientServiceInterface
     private ContactsRepository $contactRepository;
     private ReportRepository $reportRepository;
     private PsychiatricEvaluationRepository $psychiatricEvaluationRepository;
+    private SocialEvaluationRepository $socialEvaluationRepository;
 
 //    // private RoleServiceInterface $roleService;
 
@@ -48,6 +51,7 @@ class PatientService implements PatientServiceInterface
         ContactsRepository $contactsRepository,
         ReportRepository $reportRepository,
         PsychiatricEvaluationRepository $psychiatricEvaluationRepository,
+        SocialEvaluationRepository $socialEvaluationRepository
     )
     {
         $this->userService = $userService;
@@ -58,12 +62,12 @@ class PatientService implements PatientServiceInterface
         $this->contactRepository = $contactsRepository;
         $this->reportRepository = $reportRepository;
         $this->psychiatricEvaluationRepository = $psychiatricEvaluationRepository;
+        $this->socialEvaluationRepository = $socialEvaluationRepository;
     }
 
 
     public function save(Patient $patient): string
     {
-
         $user = $this->userService->currentUser();
         $date = $this->dateTimeService->setDateTimeNow();
 
@@ -175,11 +179,21 @@ class PatientService implements PatientServiceInterface
         return $contacts->getId();
     }
 
-    public function findByEGN($EGN)
+    /**
+     * @param $EGN
+     * @return array
+     */
+    public function findByEGN($EGN): array
     {
         return $this->patientRepository->getByKeyword($EGN);
     }
 
+    /**
+     * @param Report $report
+     * @param Patient $patient
+     * @return bool
+     * @throws ORMException
+     */
     public function addReport(Report $report, Patient $patient): bool
     {
         $user = $this->userService->currentUser();
@@ -191,6 +205,12 @@ class PatientService implements PatientServiceInterface
 
     }
 
+    /**
+     * @param PsychiatricEvaluation $psychiatricEvaluation
+     * @param Patient $patient
+     * @return bool
+     * @throws ORMException
+     */
     public function addPsychiatricEvaluation(PsychiatricEvaluation $psychiatricEvaluation, Patient $patient): bool
     {
         $user = $this->userService->currentUser();
@@ -201,6 +221,24 @@ class PatientService implements PatientServiceInterface
         $psychiatricEvaluation->setEditedAt($date);
         $psychiatricEvaluation->addPatient($patient);
         return $this->psychiatricEvaluationRepository->insert($psychiatricEvaluation);
+    }
+
+    /**
+     * @param SocialEvaluation $socialEvaluation
+     * @param Patient $patient
+     * @return void
+     * @throws ORMException
+     */
+    public function addSocialEvaluation(SocialEvaluation $socialEvaluation , Patient $patient): void
+    {
+        $user = $this->userService->currentUser();
+        $date = $this->dateTimeService->setDateTimeNow();
+        $socialEvaluation->setCreatedBy($user);
+        $socialEvaluation->setCreatedAt($date);
+        $socialEvaluation->setEditedBy($user);
+        $socialEvaluation->setEditedAt($date);
+        $socialEvaluation->addPatient($patient);
+        $this->socialEvaluationRepository->add($socialEvaluation);
     }
 
     public function getTimeline($id): array

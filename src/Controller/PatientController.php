@@ -14,8 +14,12 @@ use App\Form\PatientPsychiatricEvaluationType;
 use App\Form\PatientReportType;
 use App\Form\PatientType;
 use App\Form\ProfilePictureUploadType;
+use App\Form\SocialEvaluationType;
 use App\Service\Patient\PatientServiceInterface;
 use App\Service\Patient\ProfilePictureUploadService;
+use http\Message\Body;
+use http\QueryString;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -52,7 +56,7 @@ class PatientController extends AbstractController
      * @param Request $request
      * @return Response
      */
-   // #[Route('/patient-create', name: 'patient-create',methods: ["GET"])]
+    // #[Route('/patient-create', name: 'patient-create',methods: ["GET"])]
     #[Route('/patient-create', name: 'patient-create')]
     public function patientCreate(Request $request): Response
     {
@@ -62,7 +66,6 @@ class PatientController extends AbstractController
 
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $patient = $form->getData();
             $egn = $patient->getEGN();
             $this->patientService->save($patient);
@@ -141,7 +144,7 @@ class PatientController extends AbstractController
     #[Route('/patient/contact-create', name: 'patient-contacts-create')]
     public function patientContactsCreate(Request $request): Response
     {
-        $isEdit=false;
+        $isEdit = false;
         $egn = $request->query->get('egn');
         $patient = $this->patientService->findOneByEGN($egn);
         $contacts = new Contacts();
@@ -152,7 +155,7 @@ class PatientController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $contacts = $form->getData();
-            $this->patientService->saveContacts($contacts, $patient,$isEdit);
+            $this->patientService->saveContacts($contacts, $patient, $isEdit);
 
 
             return $this->redirectToRoute('patient-contacts-create', ['egn' => $egn]);
@@ -173,7 +176,7 @@ class PatientController extends AbstractController
     #[Route('/patient/contact-edit/{id}', name: 'patient-contacts-edit')]
     public function patientContactsEdit(Request $request, $id): Response
     {
-        $isEdit=true;
+        $isEdit = true;
         $contact = $this->patientService->findOneContactByID($id);
         $patient = $this->patientService->findOneByID($contact->getPatient()->getId());
 
@@ -182,7 +185,7 @@ class PatientController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $contacts = $form->getData();
-            $this->patientService->saveContacts($contacts, $patient,$isEdit);
+            $this->patientService->saveContacts($contacts, $patient, $isEdit);
 
             return $this->redirectToRoute('patient', ['id' => $patient->getId()]);
         }
@@ -197,7 +200,6 @@ class PatientController extends AbstractController
      * @Breadcrumb({"label" = "home", "route" = "home"},{"label" = "Пациент", "route" = "patient"},{"label" = "Изтриване на пациент", "route" = "patient-contacts-delete"})
      * @param Request $request
      * @param $id
-
      */
     #[Route('/patient/contact-delete/{id}', name: 'patient-contacts-delete')]
     public function patientContactsDelete(Request $request, $id): Response
@@ -219,7 +221,7 @@ class PatientController extends AbstractController
     public function patientContactsViewAll(Request $request, $id): Response
     {
         $patient = $this->patientService->findOneByID($id);
-        if ($patient === null){
+        if ($patient === null) {
             return $this->redirectToRoute('home');
         }
         $contacts = $patient->getContacts();
@@ -250,6 +252,7 @@ class PatientController extends AbstractController
     }
 
     /**
+     * @IsGranted("ROLE_DOCTOR")
      * @param $id
      * @param Request $request
      * @param ProfilePictureUploadService $profilePictureUploadService
@@ -271,6 +274,7 @@ class PatientController extends AbstractController
 
 
     /**
+     * @IsGranted("ROLE_DOCTOR")
      * @param $id
      * @param Request $request
      * @return Response
@@ -291,22 +295,58 @@ class PatientController extends AbstractController
     }
 
     /**
-     * @param $id
+     * @IsGranted("ROLE_DOCTOR")
      * @param Request $request
      * @return Response
+     * @Breadcrumb({
+     *     {"label" = "Начало", "route" = "home"},
+     *     {"label" = "Всички пациенти", "route" = "all-patients"},
+     *     {"label" = "Психиатрична оценка"},
+     *     })
      */
-    #[Route('/patient-psychiatric-evaluation', name: 'patient_psychiatric_evaluation')]
-    public function addPatientPsychiatricEvaluation($id, Request $request): Response
+    #[Route('/patient/add/psychiatric-evaluation', name: 'patient_psychiatric_evaluation')]
+    public function addPatientPsychiatricEvaluation(Request $request): Response
     {
+        $id = $request->query->get('id');
         $patient = $this->patientService->findOneByID($id);
         $form = $this->createForm(PatientPsychiatricEvaluationType::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $formFields = $form->getData();
             $this->patientService->addPsychiatricEvaluation($formFields, $patient);
+            return $this->redirectToRoute('patient', ['id' => $patient->getId(), '_fragment' => 'psychiatric-evaluation']);
+
         }
-        return $this->render('patient/psychiatricEvaluation.html.twig', [
+        return $this->render('patient/psychiatric-evaluation.html.twig', [
             'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @IsGranted("ROLE_DOCTOR")
+     * @param Request $request
+     * @return Response
+     * @Breadcrumb({
+     *     {"label" = "Начало", "route" = "home"},
+     *     {"label" = "Всички пациенти", "route" = "all-patients"},
+     *     {"label" = "Всички пациенти"},
+     *     })
+     */
+    #[Route('/patient/add/social-evaluation', name: 'patient_social_evaluation')]
+    public function addPatientSocialEvaluation(Request $request): Response
+    {
+        $id = $request->query->get('id');
+        $patient = $this->patientService->findOneByID($id);
+        $form = $this->createForm(SocialEvaluationType::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $formFields = $form->getData();
+            $this->patientService->addSocialEvaluation($formFields, $patient);
+            return $this->redirectToRoute('patient', ['id' => $patient->getId(), '_fragment' => 'social-assessment']);
+        }
+        return $this->render('patient/social-evaluation.html.twig', [
+            'form' => $form->createView(),
+            'patient'=> $patient,
         ]);
     }
 }

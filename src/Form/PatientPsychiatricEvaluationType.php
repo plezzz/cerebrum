@@ -35,12 +35,14 @@ class PatientPsychiatricEvaluationType extends AbstractType
                 'required' => false,
             ])
             ->add('observationPeriodFrom', DateType::class, [
+                'label' => 'Период на наблюдение от',
                 'widget' => 'single_text',
                 'html5' => false,
                 'attr' => ['class' => 'js-datepicker'],
                 'format' => 'dd-MM-yyyy',
             ])
             ->add('observationPeriodTo', DateType::class, [
+                'label' => 'Период на наблюдение до',
                 'widget' => 'single_text',
                 'html5' => false,
                 'attr' => ['class' => 'js-datepicker'],
@@ -51,7 +53,7 @@ class PatientPsychiatricEvaluationType extends AbstractType
                 'required' => false,
             ])
             ->add('note', TextareaType::class, [
-                'label' => 'Друго',
+                'label' => 'Допълнителни бележки',
                 'required' => false,
             ]);
     }

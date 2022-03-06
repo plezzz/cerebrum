@@ -135,6 +135,11 @@ class Patient
      */
     private $reports;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=SocialEvaluation::class, mappedBy="patient")
+     */
+    private $socialEvaluations;
+
 
     public function __construct()
     {
@@ -142,6 +147,7 @@ class Patient
         $this->fileUploads = new ArrayCollection();
         $this->psychiatricEvaluations = new ArrayCollection();
         $this->reports = new ArrayCollection();
+        $this->socialEvaluations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -439,6 +445,33 @@ class Patient
     {
         if ($this->reports->removeElement($report)) {
             $report->removePatient($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SocialEvaluation>
+     */
+    public function getSocialEvaluations(): Collection
+    {
+        return $this->socialEvaluations;
+    }
+
+    public function addSocialEvaluation(SocialEvaluation $socialEvaluation): self
+    {
+        if (!$this->socialEvaluations->contains($socialEvaluation)) {
+            $this->socialEvaluations[] = $socialEvaluation;
+            $socialEvaluation->addPatient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSocialEvaluation(SocialEvaluation $socialEvaluation): self
+    {
+        if ($this->socialEvaluations->removeElement($socialEvaluation)) {
+            $socialEvaluation->removePatient($this);
         }
 
         return $this;

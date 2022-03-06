@@ -3,7 +3,7 @@
 {% block title %}Регистрация на пациент{% endblock %}
 {% block header %}
     <div class="d-inline">
-        <h4>Нов пациент</h4>
+        <h4>Социална оценка за {{ patient.firstName }} {{ patient.firstName }}</h4>
         {# <span>Място където може да добавяте нови работници</span> #}
     </div>
 {% endblock %}
@@ -12,12 +12,10 @@
 {% endblock %}
 
 {% block body %}
-{#    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}#}
-    {{ form_start(form ) }}
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
     {{ form_widget(form) }}
-    <button type="submit">Send</button>
+    <button type="submit">Изпрати</button>
     {{ form_end(form) }}
-
 {% endblock %}
 {% block stylesheets %}
     <link rel="stylesheet" type="text/css" href="{{ asset('bower_components/smoothness/jquery-ui.css') }}">
