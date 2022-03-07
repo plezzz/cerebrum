@@ -151,7 +151,6 @@ class PatientController extends AbstractController
         $form = $this->createForm(PatientContactType::class, $contacts);
         $form->handleRequest($request);
 
-
         if ($form->isSubmitted() && $form->isValid()) {
             $contacts = $form->getData();
             $this->patientService->saveContacts($contacts, $patient, $isEdit);
@@ -196,9 +195,11 @@ class PatientController extends AbstractController
     }
 
     /**
+     * @IsGranted("ROLE_DOCTOR")
      * @Breadcrumb({"label" = "home", "route" = "home"},{"label" = "Пациент", "route" = "patient"},{"label" = "Изтриване на пациент", "route" = "patient-contacts-delete"})
      * @param Request $request
      * @param $id
+     * @return Response
      */
     #[Route('/patient/contact-delete/{id}', name: 'patient-contacts-delete')]
     public function patientContactsDelete(Request $request, $id): Response
@@ -308,18 +309,23 @@ class PatientController extends AbstractController
     #[Route('/patient/add/psychiatric-evaluation', name: 'patient_psychiatric_evaluation')]
     public function addPatientPsychiatricEvaluation(Request $request): Response
     {
+
         $id = $request->query->get('id');
         $patient = $this->patientService->findOneByID($id);
-        $form = $this->createForm(PatientPsychiatricEvaluationType::class);
+        $isEdit = is_null($patient->getPsychiatricEvaluation());
+        $form = $this->createForm(PatientPsychiatricEvaluationType::class,$patient->getPsychiatricEvaluation());
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $formFields = $form->getData();
-            $this->patientService->addPsychiatricEvaluation($formFields, $patient);
+            $this->patientService->PsychiatricEvaluation($formFields, $patient,!$isEdit);
             return $this->redirectToRoute('patient', ['id' => $patient->getId(), '_fragment' => 'psychiatric-evaluation']);
 
         }
         return $this->render('patient/psychiatric-evaluation.html.twig', [
             'form' => $form->createView(),
+            'patient' => $patient,
+            'isEdit' => $isEdit,
         ]);
     }
 
@@ -337,17 +343,43 @@ class PatientController extends AbstractController
     public function addPatientPsychiatricEvaluationNote(Request $request): Response
     {
         $id = $request->query->get('id');
+        $noteID = $request->query->get('noteID');
         $patient = $this->patientService->findOneByID($id);
-        $form = $this->createForm(PatientPsychiatricEvaluationNoteType::class);
+        $isEdit = is_null($noteID);
+        if (!$isEdit){
+            $note = $this->patientService->getPsychiatricNote($noteID);
+            $form = $this->createForm(PatientPsychiatricEvaluationNoteType::class,$note);
+        }else{
+            $form = $this->createForm(PatientPsychiatricEvaluationNoteType::class);
+        }
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $formFields = $form->getData();
-            $this->patientService->addPsychiatricEvaluationNote($formFields, $patient);
+            $this->patientService->PsychiatricEvaluationNote($formFields, $patient,!$isEdit);
             return $this->redirectToRoute('patient', ['id' => $patient->getId(), '_fragment' => 'psychiatric-evaluation']);
         }
         return $this->render('patient/psychiatric-evaluation-note.html.twig', [
             'form' => $form->createView(),
+            'patient' =>  $patient,
+            'isEdit' => $isEdit,
         ]);
+    }
+
+    /**
+     * @IsGranted("ROLE_DOCTOR")
+     * @param Request $request
+     * @param $id
+     * @return Response
+     */
+    #[Route('/patient/delete/psychiatric-evaluation-note/{id}', name: 'patient-psychiatric-evaluation-note-delete')]
+    public function patientPatientPsychiatricEvaluationNoteDelete(Request $request, $id): Response
+    {
+        $noteID = $request->query->get('noteID');
+        $patient = $this->patientService->findOneByID($id);
+
+        $this->patientService->deletePsychiatricNote($noteID);
+
+        return $this->redirectToRoute('patient', ['id' => $patient->getId(), '_fragment' => 'psychiatric-evaluation']);
     }
 
     /**

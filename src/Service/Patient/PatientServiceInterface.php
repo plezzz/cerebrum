@@ -35,9 +35,9 @@ interface PatientServiceInterface
 
     public function addReport(Report $report, Patient $patient): bool;
 
-    public function addPsychiatricEvaluation(PsychiatricEvaluation $psychiatricEvaluation, Patient $patient): bool;
+    public function PsychiatricEvaluation(PsychiatricEvaluation $psychiatricEvaluation, Patient $patient, bool $isEdit): bool;
 
-    public function addPsychiatricEvaluationNote(PsychiatricEvaluationNote $psychiatricEvaluationNote, Patient $patient): void;
+    public function PsychiatricEvaluationNote(PsychiatricEvaluationNote $psychiatricEvaluationNote, Patient $patient, bool $isEdit): void;
 
     public function getTimeline($id): array;
 
@@ -48,5 +48,9 @@ interface PatientServiceInterface
     public function addSocialEvaluation(SocialEvaluation $socialEvaluation , Patient $patient): void;
 
     public function getPsychiatricNotes($id): array;
+
+    public function getPsychiatricNote($id): ?PsychiatricEvaluationNote;
+
+    public function deletePsychiatricNote(int $id): void;
 
 }

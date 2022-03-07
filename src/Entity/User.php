@@ -123,15 +123,25 @@ class User implements UserInterface
     private $fileUploads;
 
     /**
-     * @ORM\OneToMany(targetEntity=SocialEvaluation::class, mappedBy="editedBy")
+     * @ORM\OneToMany(targetEntity=SocialEvaluation::class, mappedBy="createdBy")
      */
     private $socialEvaluations;
+
+    /**
+     * @ORM\OneToMany(targetEntity=SocialEvaluation::class, mappedBy="editedBy")
+     */
+    private $socialEvaluationsEdit;
 
     /**
      * @ORM\OneToMany(targetEntity=PsychiatricEvaluationNote::class, mappedBy="createdBy")
      */
     private $psychiatricEvaluationNotes;
 
+
+    /**
+     * @ORM\OneToMany(targetEntity=PsychiatricEvaluationNote::class, mappedBy="editedBy")
+     */
+    private $psychiatricEvaluationNotesEdits;
 
     public function __construct()
     {
@@ -140,7 +150,9 @@ class User implements UserInterface
         $this->editedPatients = new ArrayCollection();
         $this->fileUploads = new ArrayCollection();
         $this->socialEvaluations = new ArrayCollection();
+        $this->socialEvaluationsEdit = new ArrayCollection();
         $this->psychiatricEvaluationNotes = new ArrayCollection();
+        $this->psychiatricEvaluationNotesEdits = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -518,5 +530,37 @@ class User implements UserInterface
         }
 
         return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getPsychiatricEvaluationNotesEdits(): ArrayCollection
+    {
+        return $this->psychiatricEvaluationNotesEdits;
+    }
+
+    /**
+     * @param ArrayCollection $psychiatricEvaluationNotesEdits
+     */
+    public function setPsychiatricEvaluationNotesEdits(ArrayCollection $psychiatricEvaluationNotesEdits): void
+    {
+        $this->psychiatricEvaluationNotesEdits = $psychiatricEvaluationNotesEdits;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getSocialEvaluationsEdit(): ArrayCollection
+    {
+        return $this->socialEvaluationsEdit;
+    }
+
+    /**
+     * @param ArrayCollection $socialEvaluationsEdit
+     */
+    public function setSocialEvaluationsEdit(ArrayCollection $socialEvaluationsEdit): void
+    {
+        $this->socialEvaluationsEdit = $socialEvaluationsEdit;
     }
 }

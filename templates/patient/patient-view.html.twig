@@ -357,11 +357,7 @@
                                                                   role="tooltip">
                                                             </span>
                                                                 <div class="dropdown-menu dropdown-menu-right b-none services-list">
-                                                                    <a class="dropdown-item" href="#">Remove tag</a>
-                                                                    <a class="dropdown-item" href="#">Report Photo</a>
-                                                                    <a class="dropdown-item" href="#">Hide From
-                                                                        Timeline</a>
-                                                                    <a class="dropdown-item" href="#">Blog User</a>
+                                                                    <a class="dropdown-item" href="{{ path('patient_psychiatric_evaluation', {'id': patient.id}) }}">Промяна</a>
                                                                 </div>
                                                                 <div class="media bg-white d-flex">
                                                                     {# <div class="media-left media-middle"> #}
@@ -664,8 +660,8 @@
                                                                   role="tooltip">
                                                             </span>
                                                                     <div class="dropdown-menu dropdown-menu-right b-none services-list">
-                                                                        <a class="dropdown-item" href="#">Промени</a>
-                                                                        <a class="dropdown-item" href="#">Изтрии</a>
+                                                                        <a class="dropdown-item" href="{{ path('patient_psychiatric_evaluation_note', {'id': patient.id,'noteID':note.id}) }}">Промени</a>
+                                                                        <a class="dropdown-item" href="{{ path('patient-psychiatric-evaluation-note-delete', {'id': patient.id,'noteID':note.id}) }}">Изтрии</a>
                                                                     </div>
                                                                     <div class="media bg-white d-flex">
                                                                         {# <div class="media-left media-middle"> #}

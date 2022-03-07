@@ -47,16 +47,16 @@ class PatientService implements PatientServiceInterface
 //    // private RoleServiceInterface $roleService;
 
     public function __construct(
-        UserServiceInterface $userService,
-        PatientRepository $patientRepository,
-        DateTimeServiceInterface $dateTimeService,
-        IDCardRepository $IDCardRepository,
-        DetailsRepository $detailsRepository,
-        ContactsRepository $contactsRepository,
-        ReportRepository $reportRepository,
-        PsychiatricEvaluationRepository $psychiatricEvaluationRepository,
+        UserServiceInterface                $userService,
+        PatientRepository                   $patientRepository,
+        DateTimeServiceInterface            $dateTimeService,
+        IDCardRepository                    $IDCardRepository,
+        DetailsRepository                   $detailsRepository,
+        ContactsRepository                  $contactsRepository,
+        ReportRepository                    $reportRepository,
+        PsychiatricEvaluationRepository     $psychiatricEvaluationRepository,
         PsychiatricEvaluationNoteRepository $psychiatricEvaluationNoteRepository,
-        SocialEvaluationRepository $socialEvaluationRepository
+        SocialEvaluationRepository          $socialEvaluationRepository
     )
     {
         $this->userService = $userService;
@@ -160,7 +160,7 @@ class PatientService implements PatientServiceInterface
     {
         $user = $this->userService->currentUser();
         $date = $this->dateTimeService->setDateTimeNow();
-        if (!$isEdit){
+        if (!$isEdit) {
             $contacts->setCreatedBy($user);
             $contacts->setCreatedAt($date);
         }
@@ -217,12 +217,14 @@ class PatientService implements PatientServiceInterface
      * @return bool
      * @throws ORMException
      */
-    public function addPsychiatricEvaluation(PsychiatricEvaluation $psychiatricEvaluation, Patient $patient): bool
+    public function PsychiatricEvaluation(PsychiatricEvaluation $psychiatricEvaluation, Patient $patient, bool $isEdit): bool
     {
         $user = $this->userService->currentUser();
         $date = $this->dateTimeService->setDateTimeNow();
-        $psychiatricEvaluation->setCreatedBy($user);
-        $psychiatricEvaluation->setCreatedAt($date);
+        if (!$isEdit) {
+            $psychiatricEvaluation->setCreatedBy($user);
+            $psychiatricEvaluation->setCreatedAt($date);
+        }
         $psychiatricEvaluation->setEditedBy($user);
         $psychiatricEvaluation->setEditedAt($date);
         $psychiatricEvaluation->setPatient($patient);
@@ -236,13 +238,15 @@ class PatientService implements PatientServiceInterface
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function addPsychiatricEvaluationNote(PsychiatricEvaluationNote $psychiatricEvaluationNote, Patient $patient): void
+    public function PsychiatricEvaluationNote(PsychiatricEvaluationNote $psychiatricEvaluationNote, Patient $patient, bool $isEdit): void
     {
         $user = $this->userService->currentUser();
         $date = $this->dateTimeService->setDateTimeNow();
         $immutableDate = $this->dateTimeService->dateTimeToImmutableDateTime($date);
-        $psychiatricEvaluationNote->setCreatedBy($user);
-        $psychiatricEvaluationNote->setCreatedAt($immutableDate);
+        if (!$isEdit) {
+            $psychiatricEvaluationNote->setCreatedBy($user);
+            $psychiatricEvaluationNote->setCreatedAt($immutableDate);
+        }
         $psychiatricEvaluationNote->setEditedBy($user);
         $psychiatricEvaluationNote->setEditedAt($immutableDate);
         $psychiatricEvaluationNote->setPatient($patient);
@@ -255,7 +259,7 @@ class PatientService implements PatientServiceInterface
      * @return void
      * @throws ORMException
      */
-    public function addSocialEvaluation(SocialEvaluation $socialEvaluation , Patient $patient): void
+    public function addSocialEvaluation(SocialEvaluation $socialEvaluation, Patient $patient): void
     {
         $user = $this->userService->currentUser();
         $date = $this->dateTimeService->setDateTimeNow();
@@ -271,7 +275,6 @@ class PatientService implements PatientServiceInterface
     {
         return $this->reportRepository->timeline($id);
     }
-
 
     /**
      * @param $id
@@ -292,13 +295,31 @@ class PatientService implements PatientServiceInterface
         return $this->contactRepository->delete($contact);
     }
 
-
     /**
      * @param $id
      * @return array
      */
     public function getPsychiatricNotes($id): array
     {
-        return $this->psychiatricEvaluationNoteRepository->findBy(['patient'=>$id], ['createdAt' => 'ASC']);
+        return $this->psychiatricEvaluationNoteRepository->findBy(['patient' => $id], ['createdAt' => 'ASC']);
+    }
+
+    /**
+     * @param $id
+     * @return PsychiatricEvaluationNote|null
+     */
+    public function getPsychiatricNote($id): ?PsychiatricEvaluationNote
+    {
+        return $this->psychiatricEvaluationNoteRepository->findOneBy(['id' => $id]);
+    }
+
+    /**
+     * @param int $id
+     * @return void
+     */
+    public function deletePsychiatricNote(int $id): void
+    {
+        $evaluationNote = $this->psychiatricEvaluationNoteRepository->find($id);
+        $this->psychiatricEvaluationNoteRepository->remove($evaluationNote);
     }
 }

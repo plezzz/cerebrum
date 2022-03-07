@@ -30,7 +30,7 @@ class PsychiatricEvaluationNote
     private $createdBy;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="psychiatricEvaluationNotes")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="psychiatricEvaluationNotesEdits")
      */
     private $editedBy;
 

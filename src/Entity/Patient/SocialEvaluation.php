@@ -46,14 +46,14 @@ class SocialEvaluation
     private $note;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="socialEvaluations")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="socialEvaluationsEdit")
      */
     private $editedBy;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="socialEvaluations")
      */
-    private $cretedBy;
+    private $createdBy;
 
     /**
      * @ORM\Column(type="datetime")
@@ -154,12 +154,12 @@ class SocialEvaluation
 
     public function getCreatedBy(): ?User
     {
-        return $this->cretedBy;
+        return $this->createdBy;
     }
 
     public function setCreatedBy(?User $cretedBy): self
     {
-        $this->cretedBy = $cretedBy;
+        $this->createdBy = $cretedBy;
 
         return $this;
     }

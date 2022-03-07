@@ -1,9 +1,23 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Регистрация на пациент{% endblock %}
+{% block title %}
+    {% if isEdit %}
+        Добавяне
+    {% else %}
+        Редактиране
+    {% endif %}
+    на допълнителна психиатрична бележка за {{ patient.firstName }} {{ patient.firstName }}
+{% endblock %}
 {% block header %}
     <div class="d-inline">
-        <h4>Нов пациент</h4>
+        <h4>
+            {% if isEdit %}
+                Добавяне
+            {% else %}
+                Редактиране
+            {% endif %}
+            на допълнителна психиатрична бележка за {{ patient.firstName }} {{ patient.firstName }}
+        </h4>
         {# <span>Място където може да добавяте нови работници</span> #}
     </div>
 {% endblock %}
