@@ -13,9 +13,10 @@ use App\Form\PatientDetailsType;
 use App\Form\PatientPsychiatricEvaluationNoteType;
 use App\Form\PatientPsychiatricEvaluationType;
 use App\Form\PatientReportType;
+use App\Form\PatientSocialEvaluationNoteType;
+use App\Form\PatientSocialEvaluationType;
 use App\Form\PatientType;
 use App\Form\ProfilePictureUploadType;
-use App\Form\SocialEvaluationType;
 use App\Service\Patient\PatientServiceInterface;
 use App\Service\Patient\ProfilePictureUploadService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -35,7 +36,7 @@ class PatientController extends AbstractController
     }
 
     /**
-     * @Breadcrumb({"label" = "home", "route" = "home"},{"label" = "Всички пациенти", "route" = "all-patients"})
+     * @Breadcrumb({"label" = "Начало", "route" = "home"},{"label" = "Всички пациенти", "route" = "all-patients"})
      * @param Request $request
      * @return Response
      */
@@ -51,7 +52,7 @@ class PatientController extends AbstractController
 
 
     /**
-     * @Breadcrumb({"label" = "home", "route" = "home"},{"label" = "Създаване на пациент", "route" = "patient-create"})
+     * @Breadcrumb({"label" = "Начало", "route" = "home"},{"label" = "Създаване на пациент", "route" = "patient-create"})
      * @param Request $request
      * @return Response
      */
@@ -78,7 +79,7 @@ class PatientController extends AbstractController
     }
 
     /**
-     * @Breadcrumb({"label" = "home", "route" = "home"},{"label" = "Пациент", "route" = "patient-create"},{"label" = "Регистрация на лична карта", "route" = "patient-id-card-create"})
+     * @Breadcrumb({"label" = "Начало", "route" = "home"},{"label" = "Пациент", "route" = "patient-create"},{"label" = "Регистрация на лична карта", "route" = "patient-id-card-create"})
      * @param Request $request
      * @return Response
      */
@@ -106,7 +107,7 @@ class PatientController extends AbstractController
     }
 
     /**
-     * @Breadcrumb({"label" = "home", "route" = "home"},{"label" = "Пациент", "route" = "patient-create"},{"label" = "Лична информация", "route" = "patient-personal-info-create"})
+     * @Breadcrumb({"label" = "Начало", "route" = "home"},{"label" = "Пациент", "route" = "patient-create"},{"label" = "Лична информация", "route" = "patient-personal-info-create"})
      * @param Request $request
      * @return Response
      */
@@ -136,7 +137,7 @@ class PatientController extends AbstractController
     }
 
     /**
-     * @Breadcrumb({"label" = "home", "route" = "home"},{"label" = "Пациент", "route" = "patient-create"},{"label" = "Контакти на пацеинта", "route" = "patient-contacts-create"})
+     * @Breadcrumb({"label" = "Начало", "route" = "home"},{"label" = "Пациент", "route" = "patient-create"},{"label" = "Контакти на пацеинта", "route" = "patient-contacts-create"})
      * @param Request $request
      * @return Response
      */
@@ -166,7 +167,7 @@ class PatientController extends AbstractController
     }
 
     /**
-     * @Breadcrumb({"label" = "home", "route" = "home"},{"label" = "Пациент", "route" = "patient-create"},{"label" = "Контакти на пацеинта", "route" = "patient-contacts-edit"})
+     * @Breadcrumb({"label" = "Начало", "route" = "home"},{"label" = "Пациент", "route" = "patient-create"},{"label" = "Контакти на пацеинта", "route" = "patient-contacts-edit"})
      * @param Request $request
      * @param $id
      * @return Response
@@ -196,7 +197,7 @@ class PatientController extends AbstractController
 
     /**
      * @IsGranted("ROLE_DOCTOR")
-     * @Breadcrumb({"label" = "home", "route" = "home"},{"label" = "Пациент", "route" = "patient"},{"label" = "Изтриване на пациент", "route" = "patient-contacts-delete"})
+     * @Breadcrumb({"label" = "Начало", "route" = "home"},{"label" = "Пациент", "route" = "patient"},{"label" = "Изтриване на пациент", "route" = "patient-contacts-delete"})
      * @param Request $request
      * @param $id
      * @return Response
@@ -212,7 +213,7 @@ class PatientController extends AbstractController
     }
 
     /**
-     * @Breadcrumb({"label" = "home", "route" = "home"},{"label" = "Пациент", "route" = "patient"},{"label" = "Контакти на пацеинта", "route" = "patient-contacts-view-all"})
+     * @Breadcrumb({"label" = "Начало", "route" = "home"},{"label" = "Пациент", "route" = "patient"},{"label" = "Контакти на пацеинта", "route" = "patient-contacts-view-all"})
      * @param Request $request
      * @param $id
      * @return Response
@@ -226,7 +227,6 @@ class PatientController extends AbstractController
         }
         $contacts = $patient->getContacts();
 
-
         return $this->render('patient/patient-contacts-view-all.html.twig', [
             'patient' => $patient,
             'contacts' => $contacts
@@ -235,7 +235,7 @@ class PatientController extends AbstractController
 
 
     /**
-     * @Breadcrumb({"label" = "home", "route" = "home"},{"label" = "Всички пациенти", "route" = "all-patients"})
+     * @Breadcrumb({"label" = "Начало", "route" = "home"},{"label" = "Всички пациенти", "route" = "all-patients"})
      * @param Request $request
      * @param $id
      * @return Response
@@ -245,11 +245,13 @@ class PatientController extends AbstractController
     {
         $patient = $this->patientService->findOneByID($id);
         $psychiatricNotes = $this->patientService->getPsychiatricNotes($patient->getId());
+        $socialNotes = $this->patientService->getSocialNotes($patient->getId());
         $timeline = $this->patientService->getTimeline($id);
         return $this->render('patient/patient-view.html.twig', [
             'patient' => $patient,
             'timeline' => $timeline,
             'psychiatricNotes' => $psychiatricNotes,
+            'socialNotes' => $socialNotes,
         ]);
     }
 
@@ -336,7 +338,7 @@ class PatientController extends AbstractController
      * @Breadcrumb({
      *     {"label" = "Начало", "route" = "home"},
      *     {"label" = "Всички пациенти", "route" = "all-patients"},
-     *     {"label" = "Психиатрична блежка"},
+     *     {"label" = "Психиатрична бележка"},
      *     })
      */
     #[Route('/patient/add/psychiatric-evaluation-note', name: 'patient_psychiatric_evaluation_note')]
@@ -389,24 +391,84 @@ class PatientController extends AbstractController
      * @Breadcrumb({
      *     {"label" = "Начало", "route" = "home"},
      *     {"label" = "Всички пациенти", "route" = "all-patients"},
-     *     {"label" = "Всички пациенти"},
+     *     {"label" = "Социална оценка"},
      *     })
      */
     #[Route('/patient/add/social-evaluation', name: 'patient_social_evaluation')]
     public function addPatientSocialEvaluation(Request $request): Response
     {
+
         $id = $request->query->get('id');
         $patient = $this->patientService->findOneByID($id);
-        $form = $this->createForm(SocialEvaluationType::class);
+        $isEdit = is_null($patient->getSocialEvaluation());
+        $form = $this->createForm(PatientSocialEvaluationType::class,$patient->getSocialEvaluation());
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $formFields = $form->getData();
-            $this->patientService->addSocialEvaluation($formFields, $patient);
-            return $this->redirectToRoute('patient', ['id' => $patient->getId(), '_fragment' => 'social-assessment']);
+            $this->patientService->SocialEvaluation($formFields, $patient,!$isEdit);
+            return $this->redirectToRoute('patient', ['id' => $patient->getId(), '_fragment' => 'social-evaluation']);
+
         }
         return $this->render('patient/social-evaluation.html.twig', [
             'form' => $form->createView(),
             'patient' => $patient,
+            'isEdit' => $isEdit,
         ]);
     }
+
+    /**
+     * @IsGranted("ROLE_DOCTOR")
+     * @param Request $request
+     * @return Response
+     * @Breadcrumb({
+     *     {"label" = "Начало", "route" = "home"},
+     *     {"label" = "Всички пациенти", "route" = "all-patients"},
+     *     {"label" = "Социална бележка"},
+     *     })
+     */
+    #[Route('/patient/add/social-evaluation-note', name: 'patient_social_evaluation_note')]
+    public function addPatientSocialEvaluationNote(Request $request): Response
+    {
+        $id = $request->query->get('id');
+        $noteID = $request->query->get('noteID');
+        $patient = $this->patientService->findOneByID($id);
+        $isEdit = is_null($noteID);
+        if (!$isEdit){
+            $note = $this->patientService->getSocialNote($noteID);
+            $form = $this->createForm(PatientSocialEvaluationNoteType::class,$note);
+        }else{
+            $form = $this->createForm(PatientSocialEvaluationNoteType::class);
+        }
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $formFields = $form->getData();
+            $this->patientService->SocialEvaluationNote($formFields, $patient,!$isEdit);
+            return $this->redirectToRoute('patient', ['id' => $patient->getId(), '_fragment' => 'social-evaluation']);
+        }
+        return $this->render('patient/social-evaluation-note.html.twig', [
+            'form' => $form->createView(),
+            'patient' =>  $patient,
+            'isEdit' => $isEdit,
+        ]);
+    }
+
+    /**
+     * @IsGranted("ROLE_DOCTOR")
+     * @param Request $request
+     * @param $id
+     * @return Response
+     */
+    #[Route('/patient/delete/social-evaluation-note/{id}', name: 'patient-social-evaluation-note-delete')]
+    public function patientPatientSocialEvaluationNoteDelete(Request $request, $id): Response
+    {
+        $noteID = $request->query->get('noteID');
+        $patient = $this->patientService->findOneByID($id);
+
+        $this->patientService->deletePsychiatricNote($noteID);
+
+        return $this->redirectToRoute('patient', ['id' => $patient->getId(), '_fragment' => 'psychiatric-evaluation']);
+    }
+
+
 }

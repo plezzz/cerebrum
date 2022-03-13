@@ -5,34 +5,28 @@ namespace App\Form;
 use App\Entity\Patient\SocialEvaluation;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class SocialEvaluationType extends AbstractType
+class PatientSocialEvaluationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('socialStatus', TextType::class, [
+            ->add('socialStatus', TextareaType::class, [
                 'label' => 'Социален статус',
-                'required' => false,
             ])
-            ->add('needs', TextType::class, [
+            ->add('socialNeeds', TextareaType::class, [
                 'label' => 'Социални потребности',
-                'required' => false,
             ])
-            ->add('assessment', TextType::class, [
+            ->add('socialAssessment', TextareaType::class, [
                 'label' => 'Социална оценка',
-                'required' => false,
             ])
-            ->add('recommendation', TextType::class, [
+            ->add('socialIntegration', TextareaType::class, [
                 'label' => 'Препоръка за социална интеграция',
-                'required' => false,
             ])
-            ->add('note', TextType::class, [
-                'label' => 'Допълнителни бележки',
-                'required' => false,
+            ->add('note', TextareaType::class, [
+                'label' => 'Допълнителна бележка',
             ])
         ;
     }

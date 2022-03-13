@@ -4,8 +4,6 @@ namespace App\Entity\Patient;
 
 use App\Entity\User;
 use App\Repository\Patient\SocialEvaluationRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -21,59 +19,55 @@ class SocialEvaluation
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="text", nullable=true)
      */
-    private $socialStatus;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $needs;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $assessment;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $recommendation;
+    private ?string $socialStatus;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $note;
+    private ?string $socialNeeds;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="socialEvaluationsEdit")
+     * @ORM\Column(type="text", nullable=true)
      */
-    private $editedBy;
+    private ?string $socialAssessment;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private ?string $socialIntegration;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private ?string $note;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Patient::class, inversedBy="socialEvaluation", cascade={"persist", "remove"})
+     */
+    private ?Patient $patient;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="socialEvaluations")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $createdBy;
+    private ?User $createdBy;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\ManyToOne(targetEntity=User::class)
      */
-    private $createdAt;
+    private ?User $editedBy;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime_immutable")
+     */
+    private ?\DateTimeImmutable $createdAt;
+
+    /**
+     * @ORM\Column(type="datetime_immutable")
      */
     private $editedAt;
-
-    /**
-     * @ORM\ManyToMany(targetEntity=Patient::class, inversedBy="socialEvaluations")
-     */
-    private $patient;
-
-    public function __construct()
-    {
-        $this->patient = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -92,38 +86,38 @@ class SocialEvaluation
         return $this;
     }
 
-    public function getNeeds(): ?string
+    public function getSocialNeeds(): ?string
     {
-        return $this->needs;
+        return $this->socialNeeds;
     }
 
-    public function setNeeds(?string $needs): self
+    public function setSocialNeeds(?string $socialNeeds): self
     {
-        $this->needs = $needs;
+        $this->socialNeeds = $socialNeeds;
 
         return $this;
     }
 
-    public function getAssessment(): ?string
+    public function getSocialAssessment(): ?string
     {
-        return $this->assessment;
+        return $this->socialAssessment;
     }
 
-    public function setAssessment(?string $assessment): self
+    public function setSocialAssessment(?string $socialAssessment): self
     {
-        $this->assessment = $assessment;
+        $this->socialAssessment = $socialAssessment;
 
         return $this;
     }
 
-    public function getRecommendation(): ?string
+    public function getSocialIntegration(): ?string
     {
-        return $this->recommendation;
+        return $this->socialIntegration;
     }
 
-    public function setRecommendation(?string $recommendation): self
+    public function setSocialIntegration(?string $socialIntegration): self
     {
-        $this->recommendation = $recommendation;
+        $this->socialIntegration = $socialIntegration;
 
         return $this;
     }
@@ -140,6 +134,30 @@ class SocialEvaluation
         return $this;
     }
 
+    public function getPatient(): ?Patient
+    {
+        return $this->patient;
+    }
+
+    public function setPatient(?Patient $patient): self
+    {
+        $this->patient = $patient;
+
+        return $this;
+    }
+
+    public function getCreatedBy(): ?User
+    {
+        return $this->createdBy;
+    }
+
+    public function setCreatedBy(?User $createdBy): self
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
     public function getEditedBy(): ?User
     {
         return $this->editedBy;
@@ -152,62 +170,26 @@ class SocialEvaluation
         return $this;
     }
 
-    public function getCreatedBy(): ?User
-    {
-        return $this->createdBy;
-    }
-
-    public function setCreatedBy(?User $cretedBy): self
-    {
-        $this->createdBy = $cretedBy;
-
-        return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getEditedAt(): ?\DateTimeInterface
+    public function getEditedAt(): ?\DateTimeImmutable
     {
         return $this->editedAt;
     }
 
-    public function setEditedAt(\DateTimeInterface $editedAt): self
+    public function setEditedAt(\DateTimeImmutable $editedAt): self
     {
         $this->editedAt = $editedAt;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Patient>
-     */
-    public function getPatient(): Collection
-    {
-        return $this->patient;
-    }
-
-    public function addPatient(Patient $patient): self
-    {
-        if (!$this->patient->contains($patient)) {
-            $this->patient[] = $patient;
-        }
-
-        return $this;
-    }
-
-    public function removePatient(Patient $patient): self
-    {
-        $this->patient->removeElement($patient);
 
         return $this;
     }

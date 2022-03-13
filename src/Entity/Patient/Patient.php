@@ -77,43 +77,39 @@ class Patient
     /**
      * @ORM\Column(type="datetime")
      */
-    private $createdAt;
+    private ?DateTimeInterface $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $editedAt;
+    private ?DateTimeInterface $editedAt;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="createdPatients")
      */
-    private $createdBy;
+    private ?User $createdBy;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="editedPatients")
      */
-    private $editedBy;
+    private ?User $editedBy;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $isInHospital;
 
     /**
      * @Assert\NotBlank(message = "Полето не може да бъде празно")
      * @ORM\Column(type="date")
      */
-    private $dateOfBirth;
+    private ?DateTimeInterface $dateOfBirth;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $mobilePhone;
+    private ?string $mobilePhone;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $email;
+    private ?string $email;
 
     /**
      * @ORM\OneToMany(targetEntity=FileUpload::class, mappedBy="patient")
@@ -123,7 +119,7 @@ class Patient
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $profilePicture;
+    private ?string $profilePicture;
 
 
     /**
@@ -131,10 +127,6 @@ class Patient
      */
     private $reports;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=SocialEvaluation::class, mappedBy="patient")
-     */
-    private $socialEvaluations;
 
     /**
      * @ORM\OneToMany(targetEntity=PsychiatricEvaluationNote::class, mappedBy="patient")
@@ -144,7 +136,17 @@ class Patient
     /**
      * @ORM\OneToOne(targetEntity=PsychiatricEvaluation::class, mappedBy="patient", cascade={"persist", "remove"})
      */
-    private $psychiatricEvaluation;
+    private ?PsychiatricEvaluation $psychiatricEvaluation;
+
+    /**
+     * @ORM\OneToOne(targetEntity=SocialEvaluation::class, mappedBy="patient", cascade={"persist", "remove"})
+     */
+    private ?SocialEvaluation $socialEvaluation;
+
+    /**
+     * @ORM\OneToMany(targetEntity=SocialEvaluationNote::class, mappedBy="patient")
+     */
+    private $socialEvaluationNotes;
 
 
     public function __construct()
@@ -152,8 +154,8 @@ class Patient
         $this->Contacts = new ArrayCollection();
         $this->fileUploads = new ArrayCollection();
         $this->reports = new ArrayCollection();
-        $this->socialEvaluations = new ArrayCollection();
         $this->psychiatricEvaluationNotes = new ArrayCollection();
+        $this->socialEvaluationNotes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -430,32 +432,6 @@ class Patient
         return $this;
     }
 
-    /**
-     * @return Collection<int, SocialEvaluation>
-     */
-    public function getSocialEvaluations(): Collection
-    {
-        return $this->socialEvaluations;
-    }
-
-    public function addSocialEvaluation(SocialEvaluation $socialEvaluation): self
-    {
-        if (!$this->socialEvaluations->contains($socialEvaluation)) {
-            $this->socialEvaluations[] = $socialEvaluation;
-            $socialEvaluation->addPatient($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSocialEvaluation(SocialEvaluation $socialEvaluation): self
-    {
-        if ($this->socialEvaluations->removeElement($socialEvaluation)) {
-            $socialEvaluation->removePatient($this);
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, PsychiatricEvaluationNote>
@@ -507,6 +483,52 @@ class Patient
         $this->psychiatricEvaluation = $psychiatricEvaluation;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, SocialEvaluationNote>
+     */
+    public function getSocialEvaluationNotes(): Collection
+    {
+        return $this->socialEvaluationNotes;
+    }
+
+    public function addSocialEvaluationNote(SocialEvaluationNote $socialEvaluationNote): self
+    {
+        if (!$this->socialEvaluationNotes->contains($socialEvaluationNote)) {
+            $this->socialEvaluationNotes[] = $socialEvaluationNote;
+            $socialEvaluationNote->setPatient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSocialEvaluationNote(SocialEvaluationNote $socialEvaluationNote): self
+    {
+        if ($this->socialEvaluationNotes->removeElement($socialEvaluationNote)) {
+            // set the owning side to null (unless already changed)
+            if ($socialEvaluationNote->getPatient() === $this) {
+                $socialEvaluationNote->setPatient(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSocialEvaluation()
+    {
+        return $this->socialEvaluation;
+    }
+
+    /**
+     * @param mixed $socialEvaluation
+     */
+    public function setSocialEvaluation($socialEvaluation): void
+    {
+        $this->socialEvaluation = $socialEvaluation;
     }
 
 }

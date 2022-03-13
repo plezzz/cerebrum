@@ -63,13 +63,15 @@ class PatientType extends AbstractType
             ->add('email', EmailType::class, [
                 'label' => false,
                 'attr' => ['placeholder' => 'Имейл'],
+                'required' => false
 //                'help' => 'The ZIP/Postal code for your credit card\'s billing address.'
             ])
-            ->add('isInHospital', CheckboxType::class, [
-                'label' => 'Пациента в болница ли е?',
-                'value' => false,
-                'required' => false
-            ]);
+//            ->add('isInHospital', CheckboxType::class, [
+//                'label' => 'Пациента в болница ли е?',
+//                'value' => false,
+//                'required' => false
+//            ]);
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)

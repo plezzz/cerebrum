@@ -11,6 +11,7 @@ use App\Entity\Patient\PsychiatricEvaluation;
 use App\Entity\Patient\PsychiatricEvaluationNote;
 use App\Entity\Patient\Report;
 use App\Entity\Patient\SocialEvaluation;
+use App\Entity\Patient\SocialEvaluationNote;
 
 interface PatientServiceInterface
 {
@@ -35,22 +36,30 @@ interface PatientServiceInterface
 
     public function addReport(Report $report, Patient $patient): bool;
 
-    public function PsychiatricEvaluation(PsychiatricEvaluation $psychiatricEvaluation, Patient $patient, bool $isEdit): bool;
-
-    public function PsychiatricEvaluationNote(PsychiatricEvaluationNote $psychiatricEvaluationNote, Patient $patient, bool $isEdit): void;
-
     public function getTimeline($id): array;
 
     public function findOneContactByID($id): ?Contacts;
 
     public function deleteContact(int $id);
 
-    public function addSocialEvaluation(SocialEvaluation $socialEvaluation , Patient $patient): void;
+    public function PsychiatricEvaluation(PsychiatricEvaluation $psychiatricEvaluation, Patient $patient, bool $isEdit): bool;
+
+    public function PsychiatricEvaluationNote(PsychiatricEvaluationNote $psychiatricEvaluationNote, Patient $patient, bool $isEdit): void;
 
     public function getPsychiatricNotes($id): array;
 
     public function getPsychiatricNote($id): ?PsychiatricEvaluationNote;
 
     public function deletePsychiatricNote(int $id): void;
+
+    public function SocialEvaluation(SocialEvaluation $socialEvaluation, Patient $patient, bool $isEdit): void;
+
+    public function SocialEvaluationNote(SocialEvaluationNote $socialEvaluationNote, Patient $patient, bool $isEdit): void;
+
+    public function getSocialNotes($id): array;
+
+    public function getSocialNote($id): ?SocialEvaluationNote;
+
+    public function deleteSocialNote(int $id): void;
 
 }

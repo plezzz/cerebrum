@@ -34,7 +34,7 @@ class PatientContactType extends AbstractType
                 'attr' => ['placeholder' => 'Местоживеене'],
             ])
             ->add('typeOfContact', ChoiceType::class, [
-                'label' => 'Семеен статус:',
+                'label' => 'Семеен статус',
                 'choices' => [
                     'Роднина' => 'Роднина',
                     'Лекар' => 'Лекар',

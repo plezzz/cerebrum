@@ -12,12 +12,14 @@ use App\Entity\Patient\PsychiatricEvaluation;
 use App\Entity\Patient\PsychiatricEvaluationNote;
 use App\Entity\Patient\Report;
 use App\Entity\Patient\SocialEvaluation;
+use App\Entity\Patient\SocialEvaluationNote;
 use App\Repository\Patient\ContactsRepository;
 use App\Repository\Patient\DetailsRepository;
 use App\Repository\Patient\IDCardRepository;
 use App\Repository\Patient\PsychiatricEvaluationNoteRepository;
 use App\Repository\Patient\PsychiatricEvaluationRepository;
 use App\Repository\Patient\ReportRepository;
+use App\Repository\Patient\SocialEvaluationNoteRepository;
 use App\Repository\Patient\SocialEvaluationRepository;
 use App\Repository\PatientRepository;
 use App\Service\Common\DateTimeServiceInterface;
@@ -43,8 +45,7 @@ class PatientService implements PatientServiceInterface
     private PsychiatricEvaluationRepository $psychiatricEvaluationRepository;
     private PsychiatricEvaluationNoteRepository $psychiatricEvaluationNoteRepository;
     private SocialEvaluationRepository $socialEvaluationRepository;
-
-//    // private RoleServiceInterface $roleService;
+    private SocialEvaluationNoteRepository $socialEvaluationNoteRepository;
 
     public function __construct(
         UserServiceInterface                $userService,
@@ -56,7 +57,8 @@ class PatientService implements PatientServiceInterface
         ReportRepository                    $reportRepository,
         PsychiatricEvaluationRepository     $psychiatricEvaluationRepository,
         PsychiatricEvaluationNoteRepository $psychiatricEvaluationNoteRepository,
-        SocialEvaluationRepository          $socialEvaluationRepository
+        SocialEvaluationRepository     $socialEvaluationRepository,
+        SocialEvaluationNoteRepository $socialEvaluationNoteRepository,
     )
     {
         $this->userService = $userService;
@@ -69,6 +71,7 @@ class PatientService implements PatientServiceInterface
         $this->psychiatricEvaluationRepository = $psychiatricEvaluationRepository;
         $this->psychiatricEvaluationNoteRepository = $psychiatricEvaluationNoteRepository;
         $this->socialEvaluationRepository = $socialEvaluationRepository;
+        $this->socialEvaluationNoteRepository = $socialEvaluationNoteRepository;
     }
 
 
@@ -214,6 +217,7 @@ class PatientService implements PatientServiceInterface
     /**
      * @param PsychiatricEvaluation $psychiatricEvaluation
      * @param Patient $patient
+     * @param bool $isEdit
      * @return bool
      * @throws ORMException
      */
@@ -234,6 +238,7 @@ class PatientService implements PatientServiceInterface
     /**
      * @param PsychiatricEvaluationNote $psychiatricEvaluationNote
      * @param Patient $patient
+     * @param bool $isEdit
      * @return void
      * @throws ORMException
      * @throws OptimisticLockException
@@ -253,23 +258,6 @@ class PatientService implements PatientServiceInterface
         $this->psychiatricEvaluationNoteRepository->add($psychiatricEvaluationNote);
     }
 
-    /**
-     * @param SocialEvaluation $socialEvaluation
-     * @param Patient $patient
-     * @return void
-     * @throws ORMException
-     */
-    public function addSocialEvaluation(SocialEvaluation $socialEvaluation, Patient $patient): void
-    {
-        $user = $this->userService->currentUser();
-        $date = $this->dateTimeService->setDateTimeNow();
-        $socialEvaluation->setCreatedBy($user);
-        $socialEvaluation->setCreatedAt($date);
-        $socialEvaluation->setEditedBy($user);
-        $socialEvaluation->setEditedAt($date);
-        $socialEvaluation->addPatient($patient);
-        $this->socialEvaluationRepository->add($socialEvaluation);
-    }
 
     public function getTimeline($id): array
     {
@@ -322,4 +310,80 @@ class PatientService implements PatientServiceInterface
         $evaluationNote = $this->psychiatricEvaluationNoteRepository->find($id);
         $this->psychiatricEvaluationNoteRepository->remove($evaluationNote);
     }
+
+    /**
+     * @param SocialEvaluation $socialEvaluation
+     * @param Patient $patient
+     * @param bool $isEdit
+     * @return void
+     * @throws ORMException
+     */
+    public function SocialEvaluation(SocialEvaluation $socialEvaluation, Patient $patient, bool $isEdit): void
+    {
+        $user = $this->userService->currentUser();
+        $date = $this->dateTimeService->setDateTimeNow();
+        $immutableDate = $this->dateTimeService->dateTimeToImmutableDateTime($date);
+        if (!$isEdit) {
+            $socialEvaluation->setCreatedBy($user);
+            $socialEvaluation->setCreatedAt($immutableDate);
+        }
+        $socialEvaluation->setEditedBy($user);
+        $socialEvaluation->setEditedAt($immutableDate);
+        $socialEvaluation->setPatient($patient);
+        $this->socialEvaluationRepository->add($socialEvaluation);
+    }
+
+    /**
+     * @param SocialEvaluationNote $psychiatricEvaluationNote
+     * @param Patient $patient
+     * @param bool $isEdit
+     * @return void
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function SocialEvaluationNote(SocialEvaluationNote $socialEvaluationNote, Patient $patient, bool $isEdit): void
+    {
+        $user = $this->userService->currentUser();
+        $date = $this->dateTimeService->setDateTimeNow();
+        $immutableDate = $this->dateTimeService->dateTimeToImmutableDateTime($date);
+        if (!$isEdit) {
+            $socialEvaluationNote->setCreatedBy($user);
+            $socialEvaluationNote->setCreatedAt($immutableDate);
+        }
+        $socialEvaluationNote->setEditedBy($user);
+        $socialEvaluationNote->setEditedAt($immutableDate);
+        $socialEvaluationNote->setPatient($patient);
+        $this->socialEvaluationNoteRepository->add($socialEvaluationNote);
+    }
+
+    /**
+     * @param $id
+     * @return array
+     */
+    public function getSocialNotes($id): array
+    {
+        return $this->socialEvaluationNoteRepository->findBy(['patient' => $id], ['createdAt' => 'ASC']);
+    }
+
+    /**
+     * @param $id
+     * @return SocialEvaluationNote|null
+     */
+    public function getSocialNote($id): ?SocialEvaluationNote
+    {
+        return $this->socialEvaluationNoteRepository->findOneBy(['id' => $id]);
+    }
+
+    /**
+     * @param int $id
+     * @return void
+     */
+    public function deleteSocialNote(int $id): void
+    {
+        $evaluationNote = $this->socialEvaluationNoteRepository->find($id);
+        $this->socialEvaluationNoteRepository->remove($evaluationNote);
+    }
+
+
+
 }

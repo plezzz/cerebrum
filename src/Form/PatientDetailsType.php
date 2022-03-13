@@ -38,7 +38,7 @@ class PatientDetailsType extends AbstractType
                 'attr' => ['placeholder' => 'Цвят на очите'],
             ])
             ->add('maritalStatus', ChoiceType::class, [
-                'label' => 'Семеен статус:',
+                'label' => 'Семеен статус',
                 'choices' => [
                     'Неженен/Неомъжена' => 'Неженен/Неомъжена',
                     'Женен/Омъжена' => 'Женен/Омъжена',

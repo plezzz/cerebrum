@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Entity\Patient\Patient;
 use App\Entity\Patient\PsychiatricEvaluationNote;
 use App\Entity\Patient\SocialEvaluation;
+use App\Entity\Patient\SocialEvaluationNote;
 use App\Repository\UserRepository;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -123,16 +124,6 @@ class User implements UserInterface
     private $fileUploads;
 
     /**
-     * @ORM\OneToMany(targetEntity=SocialEvaluation::class, mappedBy="createdBy")
-     */
-    private $socialEvaluations;
-
-    /**
-     * @ORM\OneToMany(targetEntity=SocialEvaluation::class, mappedBy="editedBy")
-     */
-    private $socialEvaluationsEdit;
-
-    /**
      * @ORM\OneToMany(targetEntity=PsychiatricEvaluationNote::class, mappedBy="createdBy")
      */
     private $psychiatricEvaluationNotes;
@@ -143,16 +134,26 @@ class User implements UserInterface
      */
     private $psychiatricEvaluationNotesEdits;
 
+    /**
+     * @ORM\OneToMany(targetEntity=SocialEvaluation::class, mappedBy="createdBy")
+     */
+    private $socialEvaluations;
+
+    /**
+     * @ORM\OneToMany(targetEntity=SocialEvaluationNote::class, mappedBy="createdBy")
+     */
+    private $socialEvaluationNotes;
+
     public function __construct()
     {
         $this->roles = new ArrayCollection();
         $this->createdPatients = new ArrayCollection();
         $this->editedPatients = new ArrayCollection();
         $this->fileUploads = new ArrayCollection();
-        $this->socialEvaluations = new ArrayCollection();
-        $this->socialEvaluationsEdit = new ArrayCollection();
         $this->psychiatricEvaluationNotes = new ArrayCollection();
         $this->psychiatricEvaluationNotesEdits = new ArrayCollection();
+        $this->socialEvaluations = new ArrayCollection();
+        $this->socialEvaluationNotes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -472,35 +473,6 @@ class User implements UserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, SocialEvaluation>
-     */
-    public function getSocialEvaluations(): Collection
-    {
-        return $this->socialEvaluations;
-    }
-
-    public function addSocialEvaluation(SocialEvaluation $socialEvaluation): self
-    {
-        if (!$this->socialEvaluations->contains($socialEvaluation)) {
-            $this->socialEvaluations[] = $socialEvaluation;
-            $socialEvaluation->setEditedBy($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSocialEvaluation(SocialEvaluation $socialEvaluation): self
-    {
-        if ($this->socialEvaluations->removeElement($socialEvaluation)) {
-            // set the owning side to null (unless already changed)
-            if ($socialEvaluation->getEditedBy() === $this) {
-                $socialEvaluation->setEditedBy(null);
-            }
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, PsychiatricEvaluationNote>
@@ -549,18 +521,63 @@ class User implements UserInterface
     }
 
     /**
-     * @return ArrayCollection
+     * @return Collection<int, SocialEvaluation>
      */
-    public function getSocialEvaluationsEdit(): ArrayCollection
+    public function getSocialEvaluations(): Collection
     {
-        return $this->socialEvaluationsEdit;
+        return $this->socialEvaluations;
+    }
+
+    public function addSocialEvaluation(SocialEvaluation $socialEvaluation): self
+    {
+        if (!$this->socialEvaluations->contains($socialEvaluation)) {
+            $this->socialEvaluations[] = $socialEvaluation;
+            $socialEvaluation->setCreatedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSocialEvaluation(SocialEvaluation $socialEvaluation): self
+    {
+        if ($this->socialEvaluations->removeElement($socialEvaluation)) {
+            // set the owning side to null (unless already changed)
+            if ($socialEvaluation->getCreatedBy() === $this) {
+                $socialEvaluation->setCreatedBy(null);
+            }
+        }
+
+        return $this;
     }
 
     /**
-     * @param ArrayCollection $socialEvaluationsEdit
+     * @return Collection<int, SocialEvaluationNote>
      */
-    public function setSocialEvaluationsEdit(ArrayCollection $socialEvaluationsEdit): void
+    public function getSocialEvaluationNotes(): Collection
     {
-        $this->socialEvaluationsEdit = $socialEvaluationsEdit;
+        return $this->socialEvaluationNotes;
     }
+
+    public function addSocialEvaluationNote(SocialEvaluationNote $socialEvaluationNote): self
+    {
+        if (!$this->socialEvaluationNotes->contains($socialEvaluationNote)) {
+            $this->socialEvaluationNotes[] = $socialEvaluationNote;
+            $socialEvaluationNote->setCreatedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSocialEvaluationNote(SocialEvaluationNote $socialEvaluationNote): self
+    {
+        if ($this->socialEvaluationNotes->removeElement($socialEvaluationNote)) {
+            // set the owning side to null (unless already changed)
+            if ($socialEvaluationNote->getCreatedBy() === $this) {
+                $socialEvaluationNote->setCreatedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
 }
