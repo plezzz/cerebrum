@@ -112,6 +112,11 @@ class Patient
     private ?string $email;
 
     /**
+     * @ORM\Column(type="string", length=7)
+     */
+    private ?string $patientID;
+
+    /**
      * @ORM\OneToMany(targetEntity=FileUpload::class, mappedBy="patient")
      */
     private $fileUploads;
@@ -148,6 +153,16 @@ class Patient
      */
     private $socialEvaluationNotes;
 
+    /**
+     * @ORM\OneToMany(targetEntity=PsychologicalEvaluationNote::class, mappedBy="patient")
+     */
+    private $psychologicalEvaluationNotes;
+
+    /**
+     * @ORM\OneToOne(targetEntity=PsychologicalEvaluation::class, mappedBy="patient", cascade={"persist", "remove"})
+     */
+    private $psychologicalEvaluation;
+
 
     public function __construct()
     {
@@ -156,6 +171,7 @@ class Patient
         $this->reports = new ArrayCollection();
         $this->psychiatricEvaluationNotes = new ArrayCollection();
         $this->socialEvaluationNotes = new ArrayCollection();
+        $this->psychologicalEvaluationNotes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -529,6 +545,74 @@ class Patient
     public function setSocialEvaluation($socialEvaluation): void
     {
         $this->socialEvaluation = $socialEvaluation;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPatientID(): ?string
+    {
+        return $this->patientID;
+    }
+
+    /**
+     * @param string|null $patientID
+     */
+    public function setPatientID(?string $patientID): void
+    {
+        $this->patientID = $patientID;
+    }
+
+    /**
+     * @return Collection<int, PsychologicalEvaluationNote>
+     */
+    public function getPsychologicalEvaluationNotes(): Collection
+    {
+        return $this->psychologicalEvaluationNotes;
+    }
+
+    public function addPsychologicalEvaluationNote(PsychologicalEvaluationNote $psychologicalEvaluationNote): self
+    {
+        if (!$this->psychologicalEvaluationNotes->contains($psychologicalEvaluationNote)) {
+            $this->psychologicalEvaluationNotes[] = $psychologicalEvaluationNote;
+            $psychologicalEvaluationNote->setPatient($this);
+        }
+
+        return $this;
+    }
+
+    public function removePsychologicalEvaluationNote(PsychologicalEvaluationNote $psychologicalEvaluationNote): self
+    {
+        if ($this->psychologicalEvaluationNotes->removeElement($psychologicalEvaluationNote)) {
+            // set the owning side to null (unless already changed)
+            if ($psychologicalEvaluationNote->getPatient() === $this) {
+                $psychologicalEvaluationNote->setPatient(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getPsychologicalEvaluation(): ?PsychologicalEvaluation
+    {
+        return $this->psychologicalEvaluation;
+    }
+
+    public function setPsychologicalEvaluation(?PsychologicalEvaluation $psychologicalEvaluation): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($psychologicalEvaluation === null && $this->psychologicalEvaluation !== null) {
+            $this->psychologicalEvaluation->setPatient(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($psychologicalEvaluation !== null && $psychologicalEvaluation->getPatient() !== $this) {
+            $psychologicalEvaluation->setPatient($this);
+        }
+
+        $this->psychologicalEvaluation = $psychologicalEvaluation;
+
+        return $this;
     }
 
 }

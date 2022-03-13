@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Entity\Patient\Patient;
 use App\Entity\Patient\PsychiatricEvaluationNote;
+use App\Entity\Patient\PsychologicalEvaluation;
+use App\Entity\Patient\PsychologicalEvaluationNote;
 use App\Entity\Patient\SocialEvaluation;
 use App\Entity\Patient\SocialEvaluationNote;
 use App\Repository\UserRepository;
@@ -144,6 +146,16 @@ class User implements UserInterface
      */
     private $socialEvaluationNotes;
 
+    /**
+     * @ORM\OneToMany(targetEntity=PsychologicalEvaluation::class, mappedBy="createdBy")
+     */
+    private $psychologicalEvaluations;
+
+    /**
+     * @ORM\OneToMany(targetEntity=PsychologicalEvaluationNote::class, mappedBy="createdBy")
+     */
+    private $psychologicalEvaluationNotes;
+
     public function __construct()
     {
         $this->roles = new ArrayCollection();
@@ -154,6 +166,8 @@ class User implements UserInterface
         $this->psychiatricEvaluationNotesEdits = new ArrayCollection();
         $this->socialEvaluations = new ArrayCollection();
         $this->socialEvaluationNotes = new ArrayCollection();
+        $this->psychologicalEvaluations = new ArrayCollection();
+        $this->psychologicalEvaluationNotes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -574,6 +588,66 @@ class User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($socialEvaluationNote->getCreatedBy() === $this) {
                 $socialEvaluationNote->setCreatedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PsychologicalEvaluation>
+     */
+    public function getPsychologicalEvaluations(): Collection
+    {
+        return $this->psychologicalEvaluations;
+    }
+
+    public function addPsychologicalEvaluation(PsychologicalEvaluation $psychologicalEvaluation): self
+    {
+        if (!$this->psychologicalEvaluations->contains($psychologicalEvaluation)) {
+            $this->psychologicalEvaluations[] = $psychologicalEvaluation;
+            $psychologicalEvaluation->setCreatedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removePsychologicalEvaluation(PsychologicalEvaluation $psychologicalEvaluation): self
+    {
+        if ($this->psychologicalEvaluations->removeElement($psychologicalEvaluation)) {
+            // set the owning side to null (unless already changed)
+            if ($psychologicalEvaluation->getCreatedBy() === $this) {
+                $psychologicalEvaluation->setCreatedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PsychologicalEvaluationNote>
+     */
+    public function getPsychologicalEvaluationNotes(): Collection
+    {
+        return $this->psychologicalEvaluationNotes;
+    }
+
+    public function addPsychologicalEvaluationNote(PsychologicalEvaluationNote $psychologicalEvaluationNote): self
+    {
+        if (!$this->psychologicalEvaluationNotes->contains($psychologicalEvaluationNote)) {
+            $this->psychologicalEvaluationNotes[] = $psychologicalEvaluationNote;
+            $psychologicalEvaluationNote->setCreatedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removePsychologicalEvaluationNote(PsychologicalEvaluationNote $psychologicalEvaluationNote): self
+    {
+        if ($this->psychologicalEvaluationNotes->removeElement($psychologicalEvaluationNote)) {
+            // set the owning side to null (unless already changed)
+            if ($psychologicalEvaluationNote->getCreatedBy() === $this) {
+                $psychologicalEvaluationNote->setCreatedBy(null);
             }
         }
 

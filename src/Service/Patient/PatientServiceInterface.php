@@ -9,6 +9,8 @@ use App\Entity\Patient\IDCard;
 use App\Entity\Patient\Patient;
 use App\Entity\Patient\PsychiatricEvaluation;
 use App\Entity\Patient\PsychiatricEvaluationNote;
+use App\Entity\Patient\PsychologicalEvaluation;
+use App\Entity\Patient\PsychologicalEvaluationNote;
 use App\Entity\Patient\Report;
 use App\Entity\Patient\SocialEvaluation;
 use App\Entity\Patient\SocialEvaluationNote;
@@ -61,5 +63,15 @@ interface PatientServiceInterface
     public function getSocialNote($id): ?SocialEvaluationNote;
 
     public function deleteSocialNote(int $id): void;
+
+    public function PsychologicalEvaluation(PsychologicalEvaluation $socialEvaluation, Patient $patient, bool $isEdit): void;
+
+    public function PsychologicalEvaluationNote(PsychologicalEvaluationNote $socialEvaluationNote, Patient $patient, bool $isEdit): void;
+
+    public function getPsychologicalNotes($id): array;
+
+    public function getPsychologicalNote($id): ?PsychologicalEvaluationNote;
+
+    public function deletePsychologicalNote(int $id): void;
 
 }

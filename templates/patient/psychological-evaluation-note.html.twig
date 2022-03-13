@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {% if isEdit %}
+        Добавяне
+    {% else %}
+        Редактиране
+    {% endif %}
+    на допълнителна психиатрична бележка за {{ patient.firstName }} {{ patient.firstName }}
+{% endblock %}
+{% block header %}
+    <div class="d-inline">
+        <h4>
+            {% if isEdit %}
+                Добавяне
+            {% else %}
+                Редактиране
+            {% endif %}
+            на допълнителна психиатрична бележка за {{ patient.firstName }} {{ patient.firstName }}
+        </h4>
+        {# <span>Място където може да добавяте нови работници</span> #}
+    </div>
+{% endblock %}
+{% block breadcrumb %}
+    {{ slope_it_breadcrumb() }}
+{% endblock %}
+
+{% block body %}
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+    {{ form_widget(form) }}
+    <button type="submit">Изпрати</button>
+    {{ form_end(form) }}
+{% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ asset('bower_components/smoothness/jquery-ui.css') }}">
+{% endblock %}
+{% block javascriptend %}
+    <script src="{{ asset('assets/js/calendar-settings.js') }}" type="text/javascript"></script>
+{% endblock %}

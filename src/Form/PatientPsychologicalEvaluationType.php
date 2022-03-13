@@ -2,28 +2,28 @@
 
 namespace App\Form;
 
-use App\Entity\Patient\SocialEvaluation;
+use App\Entity\Patient\PsychologicalEvaluation;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class PatientSocialEvaluationType extends AbstractType
+class PatientPsychologicalEvaluationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('socialStatus', TextareaType::class, [
-                'label' => 'Социален статус',
+            ->add('familyHistory', TextareaType::class, [
+                'label' => 'Лична история',
             ])
-            ->add('socialNeeds', TextareaType::class, [
-                'label' => 'Социални потребности',
+            ->add('personalHistory', TextareaType::class, [
+                'label' => 'Семейна история',
             ])
-            ->add('socialAssessment', TextareaType::class, [
-                'label' => 'Социална оценка',
+            ->add('psychologicalProfile', TextareaType::class, [
+                'label' => 'Психологичен профил',
             ])
-            ->add('socialIntegration', TextareaType::class, [
-                'label' => 'Препоръка за социална интеграция',
+            ->add('therapeuticPlan', TextareaType::class, [
+                'label' => 'Терапевтичен план',
             ])
             ->add('note', TextareaType::class, [
                 'label' => 'Допълнителна информация',
@@ -34,7 +34,7 @@ class PatientSocialEvaluationType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => SocialEvaluation::class,
+            'data_class' => PsychologicalEvaluation::class,
         ]);
     }
 }

@@ -2,20 +2,19 @@
 
 namespace App\Form;
 
-use App\Entity\Patient\SocialEvaluationNote;
+use App\Entity\Patient\PsychologicalEvaluationNote;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class PatientSocialEvaluationNoteType extends AbstractType
+class PatientPsychologicalEvaluationNoteType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('note', TextareaType::class, [
-                'label' => 'Допълнителна бележка:',
-                'required' => true,
+                'label' => 'Допълнителна бележка',
             ])
         ;
     }
@@ -23,7 +22,7 @@ class PatientSocialEvaluationNoteType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => SocialEvaluationNote::class,
+            'data_class' => PsychologicalEvaluationNote::class,
         ]);
     }
 }

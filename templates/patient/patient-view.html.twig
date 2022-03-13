@@ -32,14 +32,10 @@
                                     <!-- Social wallpaper end -->
                                     <!-- Timeline button start -->
                                     <div class="timeline-btn">
-
                                         {# <a href="{{ path('patient_social_evaluation', {'id': patient.id}) }}" #}
                                         {# class="btn btn-primary waves-effect waves-light m-r-10">Добави социална #}
                                         {# оценка #}
                                         {# </a> #}
-                                        <a href="#"
-                                           class="btn btn-primary waves-effect waves-light m-r-10">Психиатрична
-                                            оценка</a>
                                         <a href="#" data-toggle="modal" data-target="#report-modal"
                                            class="btn btn-primary waves-effect waves-light m-r-10">Рапорт</a>
                                         <a href="#" data-toggle="modal" data-target="#file-upload-modal"
@@ -697,94 +693,140 @@
                                         <!-- Psychiatric evaluation tab end -->
                                         <!-- Psychological evaluation tab start -->
                                         <div class="tab-pane" id="psychological-evaluation">
-                                            <div class="row">
-                                                <div class="col-lg-12 col-xl-6">
-                                                    <div class="card">
-                                                        <div class="card-block post-timelines">
+                                            {% if patient.psychologicalEvaluation %}
+                                                <div class="row">
+                                                    <div class="col-lg-12 col-xl-12">
+                                                        <div class="card">
+                                                            <div class="card-block post-timelines">
+                                                            <span class="dropdown-toggle addon-btn text-muted f-right service-btn"
+                                                                  data-toggle="dropdown"
+                                                                  aria-haspopup="true" aria-expanded="true"
+                                                                  role="tooltip">
+                                                            </span>
+                                                                <div class="dropdown-menu dropdown-menu-right b-none services-list">
+                                                                    <a class="dropdown-item"
+                                                                       href="{{ path('patient_psychological_evaluation', {'id': patient.id}) }}">Промяна</a>
+                                                                </div>
+                                                                <div class="media bg-white d-flex">
+                                                                    {# <div class="media-left media-middle"> #}
+                                                                    {# <a href="#"> #}
+                                                                    {# <img class="media-object" src="{{ asset('assets/images/timeline/img2.png') }}" alt=""> #}
+                                                                    {# </a> #}
+                                                                    {# </div> #}
+                                                                    <div class="media-body friend-elipsis">
+                                                                        <div class="media-left f-15 f-bold m-b-5">
+                                                                            Лична история:
+                                                                        </div>
+                                                                        <div class="text-muted social-designation">
+                                                                            {{ patient.psychologicalEvaluation.familyHistory }}
+                                                                        </div>
+                                                                        <br>
+                                                                        <div class="media-left f-15 f-bold m-b-5">
+                                                                            Семейна история:
+                                                                        </div>
+                                                                        <div class="text-muted social-designation">
+                                                                            {{ patient.psychologicalEvaluation.personalHistory }}
+                                                                        </div>
+                                                                        <br>
+                                                                        <div class="media-left f-15 f-bold m-b-5">
+                                                                            Психологичен профил:
+                                                                        </div>
+                                                                        <div class="text-muted social-designation">
+                                                                            {{ patient.psychologicalEvaluation.psychologicalProfile }}
+                                                                        </div>
+                                                                        <br>
+                                                                        <div class="media-left f-15 f-bold m-b-5">
+                                                                            Терапевтичен план:
+                                                                        </div>
+                                                                        <div class="text-muted social-designation">
+                                                                            {{ patient.psychologicalEvaluation.therapeuticPlan }}
+                                                                        </div>
+                                                                        <br>
+                                                                        <hr>
+                                                                        <div class="media-left f-15 f-bold m-b-5">
+                                                                            Допълнителна информация:
+                                                                        </div>
+                                                                        <div class="text-muted social-designation">
+                                                                            {{ patient.psychologicalEvaluation.note }}
+                                                                        </div>
+                                                                        <hr>
+                                                                        <div class="media bg-white d-flex">
+                                                                            <div class="media-left text-muted social-designation">
+                                                                                Създаден
+                                                                                от {{ patient.psychologicalEvaluation.getCreatedBy.firstName }} {{ patient.psychologicalEvaluation.createdBy.lastName }} {{ patient.psychologicalEvaluation.createdAt|date('d.m.Y H:i:s') }}
+                                                                                <br>
+                                                                                Редактиран от
+                                                                                {{ patient.psychologicalEvaluation.editedBy.firstName }} {{ patient.psychologicalEvaluation.editedBy.lastName }} {{ patient.psychologicalEvaluation.editedAt|date('d.m.Y H:i:s') }}
+                                                                            </div>
+                                                                            <div class="media-right">
+                                                                                <a href="{{ path('patient_psychological_evaluation_note', {'id': patient.id}) }}"
+                                                                                   class="btn btn-primary waves-effect waves-light m-r-10">
+                                                                                    Добавете допълнителна бележка
+                                                                                </a>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% else %}
+                                                <div class="text-center">
+                                                    <p>За този пациент няма добавена психиатрична оценка</p>
+                                                    <a href="{{ path('patient_psychological_evaluation', {'id': patient.id}) }}"
+                                                       class="btn btn-primary waves-effect waves-light m-r-10">Добавете
+                                                        психиатрична
+                                                        оценка
+                                                    </a>
+                                                </div>
+                                            {% endif %}
+                                            {% if socialNotes %}
+                                                <div class="row">
+                                                    {% for note in psychologicalNotes %}
+                                                        <div class="col-lg-12 col-xl-6">
+                                                            <div class="card">
+                                                                <div class="card-block post-timelines">
                                                             <span class="dropdown-toggle addon-btn text-muted f-right service-btn"
                                                                   data-toggle="dropdown" aria-haspopup="true"
                                                                   aria-expanded="true" role="tooltip">
                                                             </span>
-                                                            <div class="dropdown-menu dropdown-menu-right b-none services-list">
-                                                                <a class="dropdown-item" href="#">Remove tag</a>
-                                                                <a class="dropdown-item" href="#">Report Photo</a>
-                                                                <a class="dropdown-item" href="#">Hide From Timeline</a>
-                                                                <a class="dropdown-item" href="#">Blog User</a>
-                                                            </div>
-                                                            <div class="media bg-white d-flex">
-                                                                <div class="media-left media-middle">
-                                                                    <a href="#">
-                                                                        <img class="media-object"
-                                                                             src="{{ asset('assets/images/timeline/img2.png') }}"
-                                                                             alt="">
-                                                                    </a>
-                                                                </div>
-                                                                <div class="media-body friend-elipsis">
-                                                                    <div class="f-15 f-bold m-b-5">
-                                                                        Josephin Doe
+                                                                    <div class="dropdown-menu dropdown-menu-right b-none services-list">
+                                                                        <a class="dropdown-item"
+                                                                           href="{{ path('patient_psychological_evaluation_note', {'id': patient.id,'noteID':note.id}) }}">Промени</a>
+                                                                        <a class="dropdown-item"
+                                                                           href="{{ path('patient-psychological-evaluation-note-delete', {'id': patient.id,'noteID':note.id}) }}">Изтрии</a>
                                                                     </div>
-                                                                    <div
-                                                                            class="text-muted social-designation">
-                                                                        Software
-                                                                        Engineer
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-12 col-xl-6">
-                                                    <div class="card">
-                                                        <div
-                                                                class="card-block post-timelines">
-                                                                                                                                    <span
-                                                                                                                                            class="dropdown-toggle addon-btn text-muted f-right service-btn"
-                                                                                                                                            data-toggle="dropdown"
-                                                                                                                                            aria-haspopup="true"
-                                                                                                                                            aria-expanded="true"
-                                                                                                                                            role="tooltip"></span>
-                                                            <div
-                                                                    class="dropdown-menu dropdown-menu-right b-none services-list">
-                                                                <a class="dropdown-item"
-                                                                   href="#">Remove
-                                                                    tag</a>
-                                                                <a class="dropdown-item"
-                                                                   href="#">Report
-                                                                    Photo</a>
-                                                                <a class="dropdown-item"
-                                                                   href="#">Hide From
-                                                                    Timeline</a>
-                                                                <a class="dropdown-item"
-                                                                   href="#">Blog
-                                                                    User</a>
-                                                            </div>
-                                                            <div
-                                                                    class="media bg-white d-flex">
-                                                                <div
-                                                                        class="media-left media-middle">
-                                                                    <a href="#">
-                                                                        <img class="media-object"
-                                                                             src="{{ asset('assets/images/timeline/img2.png') }}"
-                                                                             alt="">
-                                                                    </a>
-                                                                </div>
-                                                                <div
-                                                                        class="media-body friend-elipsis">
-                                                                    <div
-                                                                            class="f-15 f-bold m-b-5">
-                                                                        Josephin Doe
-                                                                    </div>
-                                                                    <div
-                                                                            class="text-muted social-designation">
-                                                                        Software
-                                                                        Engineer
+                                                                    <div class="media bg-white d-flex">
+                                                                        {# <div class="media-left media-middle"> #}
+                                                                        {# <a href="#"> #}
+                                                                        {# <img class="media-object" src="{{ asset('assets/images/timeline/img2.png') }}" alt=""> #}
+                                                                        {# </a> #}
+                                                                        {# </div> #}
+                                                                        <div class="media-body friend-elipsis">
+                                                                            <div class="media-left f-15 f-bold m-b-5">
+                                                                                Бележка
+                                                                                от {{ note.getCreatedBy.firstName }} {{ note.createdBy.lastName }}
+                                                                            </div>
+                                                                            <hr>
+                                                                            <div class="text-muted social-designation">
+                                                                                {{ note.note }}
+                                                                            </div>
+                                                                            <hr>
+                                                                            <div class="text-muted social-designation">
+                                                                                Създаден {{ note.createdAt|date('d.m.Y H:i:s') }}
+                                                                                <br>
+                                                                                Редактиран от
+                                                                                {{ note.editedBy.firstName }} {{ note.editedBy.lastName }} {{ note.editedAt|date('d.m.Y H:i:s') }}
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    {% endfor %}
                                                 </div>
-                                            </div>
+                                            {% endif %}
                                         </div>
                                         <!-- Psychological evaluation tab end -->
                                         <!-- Social evaluation tab start -->

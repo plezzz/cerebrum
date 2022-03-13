@@ -75,6 +75,21 @@ class Details
      */
     private $editedAt;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $gender;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $bloodType;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $externalSigns;
+
 
     public function getId(): ?int
     {
@@ -219,6 +234,42 @@ class Details
     public function setEditedAt(\DateTimeInterface $editedAt): self
     {
         $this->editedAt = $editedAt;
+
+        return $this;
+    }
+
+    public function getGender(): ?string
+    {
+        return $this->gender;
+    }
+
+    public function setGender(?string $gender): self
+    {
+        $this->gender = $gender;
+
+        return $this;
+    }
+
+    public function getBloodType(): ?string
+    {
+        return $this->bloodType;
+    }
+
+    public function setBloodType(string $bloodType): self
+    {
+        $this->bloodType = $bloodType;
+
+        return $this;
+    }
+
+    public function getExternalSigns(): ?string
+    {
+        return $this->externalSigns;
+    }
+
+    public function setExternalSigns(?string $externalSigns): self
+    {
+        $this->externalSigns = $externalSigns;
 
         return $this;
     }

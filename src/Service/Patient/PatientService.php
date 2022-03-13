@@ -10,6 +10,8 @@ use App\Entity\Patient\IDCard;
 use App\Entity\Patient\Patient;
 use App\Entity\Patient\PsychiatricEvaluation;
 use App\Entity\Patient\PsychiatricEvaluationNote;
+use App\Entity\Patient\PsychologicalEvaluation;
+use App\Entity\Patient\PsychologicalEvaluationNote;
 use App\Entity\Patient\Report;
 use App\Entity\Patient\SocialEvaluation;
 use App\Entity\Patient\SocialEvaluationNote;
@@ -18,14 +20,16 @@ use App\Repository\Patient\DetailsRepository;
 use App\Repository\Patient\IDCardRepository;
 use App\Repository\Patient\PsychiatricEvaluationNoteRepository;
 use App\Repository\Patient\PsychiatricEvaluationRepository;
+use App\Repository\Patient\PsychologicalEvaluationRepository;
+use App\Repository\Patient\PsychologicalEvaluationNoteRepository;
 use App\Repository\Patient\ReportRepository;
 use App\Repository\Patient\SocialEvaluationNoteRepository;
 use App\Repository\Patient\SocialEvaluationRepository;
 use App\Repository\PatientRepository;
 use App\Service\Common\DateTimeServiceInterface;
 use App\Service\User\UserServiceInterface;
+use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
 
 
 /**
@@ -46,19 +50,24 @@ class PatientService implements PatientServiceInterface
     private PsychiatricEvaluationNoteRepository $psychiatricEvaluationNoteRepository;
     private SocialEvaluationRepository $socialEvaluationRepository;
     private SocialEvaluationNoteRepository $socialEvaluationNoteRepository;
+    private PsychologicalEvaluationRepository $psychologicalEvaluationRepository;
+    private PsychologicalEvaluationNoteRepository $psychologicalEvaluationNoteRepository;
 
     public function __construct(
-        UserServiceInterface                $userService,
-        PatientRepository                   $patientRepository,
-        DateTimeServiceInterface            $dateTimeService,
-        IDCardRepository                    $IDCardRepository,
-        DetailsRepository                   $detailsRepository,
-        ContactsRepository                  $contactsRepository,
-        ReportRepository                    $reportRepository,
-        PsychiatricEvaluationRepository     $psychiatricEvaluationRepository,
-        PsychiatricEvaluationNoteRepository $psychiatricEvaluationNoteRepository,
-        SocialEvaluationRepository     $socialEvaluationRepository,
-        SocialEvaluationNoteRepository $socialEvaluationNoteRepository,
+        UserServiceInterface                  $userService,
+        PatientRepository                     $patientRepository,
+        DateTimeServiceInterface              $dateTimeService,
+        IDCardRepository                      $IDCardRepository,
+        DetailsRepository                     $detailsRepository,
+        ContactsRepository                    $contactsRepository,
+        ReportRepository                      $reportRepository,
+        PsychiatricEvaluationRepository       $psychiatricEvaluationRepository,
+        PsychiatricEvaluationNoteRepository   $psychiatricEvaluationNoteRepository,
+        SocialEvaluationRepository            $socialEvaluationRepository,
+        SocialEvaluationNoteRepository        $socialEvaluationNoteRepository,
+        PsychologicalEvaluationRepository     $psychologicalEvaluationRepository,
+        PsychologicalEvaluationNoteRepository $psychologicalEvaluationNoteRepository,
+
     )
     {
         $this->userService = $userService;
@@ -72,6 +81,8 @@ class PatientService implements PatientServiceInterface
         $this->psychiatricEvaluationNoteRepository = $psychiatricEvaluationNoteRepository;
         $this->socialEvaluationRepository = $socialEvaluationRepository;
         $this->socialEvaluationNoteRepository = $socialEvaluationNoteRepository;
+        $this->psychologicalEvaluationRepository = $psychologicalEvaluationRepository;
+        $this->psychologicalEvaluationNoteRepository = $psychologicalEvaluationNoteRepository;
     }
 
 
@@ -85,6 +96,7 @@ class PatientService implements PatientServiceInterface
         $patient->setCreatedAt($date);
         $patient->setEditedAt($date);
         $patient->setProfilePicture('uni.png');
+        $patient->setPatientID($this->generateID($patient));
         $egn = $patient->getEGN();
         $this->patientRepository->insert($patient);
         return $egn;
@@ -316,7 +328,7 @@ class PatientService implements PatientServiceInterface
      * @param Patient $patient
      * @param bool $isEdit
      * @return void
-     * @throws ORMException
+     * @throws ORMException|\Doctrine\ORM\ORMException
      */
     public function SocialEvaluation(SocialEvaluation $socialEvaluation, Patient $patient, bool $isEdit): void
     {
@@ -334,12 +346,12 @@ class PatientService implements PatientServiceInterface
     }
 
     /**
-     * @param SocialEvaluationNote $psychiatricEvaluationNote
+     * @param SocialEvaluationNote $socialEvaluationNote
      * @param Patient $patient
      * @param bool $isEdit
      * @return void
-     * @throws ORMException
      * @throws OptimisticLockException
+     * @throws \Doctrine\ORM\ORMException
      */
     public function SocialEvaluationNote(SocialEvaluationNote $socialEvaluationNote, Patient $patient, bool $isEdit): void
     {
@@ -384,6 +396,92 @@ class PatientService implements PatientServiceInterface
         $this->socialEvaluationNoteRepository->remove($evaluationNote);
     }
 
+    /**
+     * Generate patient ID from full name and first 4 digits form EGN
+     * @param $patient
+     * @return string
+     */
+    function generateID($patient): string
+    {
+        $first = mb_substr($patient->getFirstName(), 0, 1, "utf-8");
+        $second = mb_substr($patient->getLastName(), 0, 1, "utf-8");
+        $third = mb_substr($patient->getMiddleName(), 0, 1, "utf-8");
+        $fourth = mb_substr($patient->getEGN(), 0, 4, "utf-8");
+        return $first . $second . $third . $fourth;
+    }
 
+    /**
+     * @param PsychologicalEvaluation $psychologicalEvaluation
+     * @param Patient $patient
+     * @param bool $isEdit
+     * @return void
+     * @throws OptimisticLockException
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function PsychologicalEvaluation(PsychologicalEvaluation $psychologicalEvaluation, Patient $patient, bool $isEdit): void
+    {
+        $user = $this->userService->currentUser();
+        $date = $this->dateTimeService->setDateTimeNow();
+        $immutableDate = $this->dateTimeService->dateTimeToImmutableDateTime($date);
+        if (!$isEdit) {
+            $psychologicalEvaluation->setCreatedBy($user);
+            $psychologicalEvaluation->setCreatedAt($immutableDate);
+        }
+        $psychologicalEvaluation->setEditedBy($user);
+        $psychologicalEvaluation->setEditedAt($immutableDate);
+        $psychologicalEvaluation->setPatient($patient);
+        $this->psychologicalEvaluationRepository->add($psychologicalEvaluation);
+    }
+
+    /**
+     * @param PsychologicalEvaluationNote $psychologicalEvaluationNote
+     * @param Patient $patient
+     * @param bool $isEdit
+     * @return void
+     * @throws OptimisticLockException
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function PsychologicalEvaluationNote(PsychologicalEvaluationNote $psychologicalEvaluationNote, Patient $patient, bool $isEdit): void
+    {
+        $user = $this->userService->currentUser();
+        $date = $this->dateTimeService->setDateTimeNow();
+        $immutableDate = $this->dateTimeService->dateTimeToImmutableDateTime($date);
+        if (!$isEdit) {
+            $psychologicalEvaluationNote->setCreatedBy($user);
+            $psychologicalEvaluationNote->setCreatedAt($immutableDate);
+        }
+        $psychologicalEvaluationNote->setEditedBy($user);
+        $psychologicalEvaluationNote->setEditedAt($immutableDate);
+        $psychologicalEvaluationNote->setPatient($patient);
+        $this->psychologicalEvaluationNoteRepository->add($psychologicalEvaluationNote);
+    }
+
+    /**
+     * @param $id
+     * @return array
+     */
+    public function getPsychologicalNotes($id): array
+    {
+        return $this->psychologicalEvaluationNoteRepository->findBy(['patient' => $id], ['createdAt' => 'ASC']);
+    }
+
+    /**
+     * @param $id
+     * @return PsychologicalEvaluationNote|null
+     */
+    public function getPsychologicalNote($id): ?PsychologicalEvaluationNote
+    {
+        return $this->psychologicalEvaluationNoteRepository->findOneBy(['id' => $id]);
+    }
+
+    /**
+     * @param int $id
+     * @return void
+     */
+    public function deletePsychologicalNote(int $id): void
+    {
+        $evaluationNote = $this->psychologicalEvaluationNoteRepository->find($id);
+        $this->psychologicalEvaluationNoteRepository->remove($evaluationNote);
+    }
 
 }

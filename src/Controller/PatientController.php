@@ -12,6 +12,8 @@ use App\Form\PatientContactType;
 use App\Form\PatientDetailsType;
 use App\Form\PatientPsychiatricEvaluationNoteType;
 use App\Form\PatientPsychiatricEvaluationType;
+use App\Form\PatientPsychologicalEvaluationNoteType;
+use App\Form\PatientPsychologicalEvaluationType;
 use App\Form\PatientReportType;
 use App\Form\PatientSocialEvaluationNoteType;
 use App\Form\PatientSocialEvaluationType;
@@ -246,12 +248,14 @@ class PatientController extends AbstractController
         $patient = $this->patientService->findOneByID($id);
         $psychiatricNotes = $this->patientService->getPsychiatricNotes($patient->getId());
         $socialNotes = $this->patientService->getSocialNotes($patient->getId());
+        $psychologicalNotes = $this->patientService->getPsychologicalNotes($patient->getId());
         $timeline = $this->patientService->getTimeline($id);
         return $this->render('patient/patient-view.html.twig', [
             'patient' => $patient,
             'timeline' => $timeline,
             'psychiatricNotes' => $psychiatricNotes,
             'socialNotes' => $socialNotes,
+            'psychologicalNotes' => $psychologicalNotes,
         ]);
     }
 
@@ -465,10 +469,94 @@ class PatientController extends AbstractController
         $noteID = $request->query->get('noteID');
         $patient = $this->patientService->findOneByID($id);
 
-        $this->patientService->deletePsychiatricNote($noteID);
+        $this->patientService->deleteSocialNote($noteID);
 
-        return $this->redirectToRoute('patient', ['id' => $patient->getId(), '_fragment' => 'psychiatric-evaluation']);
+        return $this->redirectToRoute('patient', ['id' => $patient->getId(), '_fragment' => 'social-evaluation']);
     }
 
+    /**
+     * @IsGranted("ROLE_DOCTOR")
+     * @param Request $request
+     * @return Response
+     * @Breadcrumb({
+     *     {"label" = "Начало", "route" = "home"},
+     *     {"label" = "Всички пациенти", "route" = "all-patients"},
+     *     {"label" = "Психологическа оценка"},
+     *     })
+     */
+    #[Route('/patient/add/psychological-evaluation', name: 'patient_psychological_evaluation')]
+    public function addPsychologicalSocialEvaluation(Request $request): Response
+    {
+        $id = $request->query->get('id');
+        $patient = $this->patientService->findOneByID($id);
+        $isEdit = is_null($patient->getPsychologicalEvaluation());
+        $form = $this->createForm(PatientPsychologicalEvaluationType::class,$patient->getPsychologicalEvaluation());
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $formFields = $form->getData();
+            $this->patientService->PsychologicalEvaluation($formFields, $patient,!$isEdit);
+            return $this->redirectToRoute('patient', ['id' => $patient->getId(), '_fragment' => 'psychological-evaluation']);
+
+        }
+        return $this->render('patient/psychological-evaluation.html.twig', [
+            'form' => $form->createView(),
+            'patient' => $patient,
+            'isEdit' => $isEdit,
+        ]);
+    }
+
+    /**
+     * @IsGranted("ROLE_DOCTOR")
+     * @param Request $request
+     * @return Response
+     * @Breadcrumb({
+     *     {"label" = "Начало", "route" = "home"},
+     *     {"label" = "Всички пациенти", "route" = "all-patients"},
+     *     {"label" = "Психологическа бележка"},
+     *     })
+     */
+    #[Route('/patient/add/psychological-evaluation-note', name: 'patient_psychological_evaluation_note')]
+    public function addPatientPsychologicalEvaluationNote(Request $request): Response
+    {
+        $id = $request->query->get('id');
+        $noteID = $request->query->get('noteID');
+        $patient = $this->patientService->findOneByID($id);
+        $isEdit = is_null($noteID);
+        if (!$isEdit){
+            $note = $this->patientService->getPsychologicalNote($noteID);
+            $form = $this->createForm(PatientPsychologicalEvaluationNoteType::class,$note);
+        }else{
+            $form = $this->createForm(PatientPsychologicalEvaluationNoteType::class);
+        }
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $formFields = $form->getData();
+            $this->patientService->PsychologicalEvaluationNote($formFields, $patient,!$isEdit);
+            return $this->redirectToRoute('patient', ['id' => $patient->getId(), '_fragment' => 'psychological-evaluation']);
+        }
+        return $this->render('patient/psychological-evaluation-note.html.twig', [
+            'form' => $form->createView(),
+            'patient' =>  $patient,
+            'isEdit' => $isEdit,
+        ]);
+    }
+
+    /**
+     * @IsGranted("ROLE_DOCTOR")
+     * @param Request $request
+     * @param $id
+     * @return Response
+     */
+    #[Route('/patient/delete/psychological-evaluation-note/{id}', name: 'patient-psychological-evaluation-note-delete')]
+    public function patientPatientPsychologicalEvaluationNoteDelete(Request $request, $id): Response
+    {
+        $noteID = $request->query->get('noteID');
+        $patient = $this->patientService->findOneByID($id);
+
+        $this->patientService->deletePsychologicalNote($noteID);
+
+        return $this->redirectToRoute('patient', ['id' => $patient->getId(), '_fragment' => 'psychological-evaluation']);
+    }
 
 }
