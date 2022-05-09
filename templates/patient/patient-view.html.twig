@@ -61,7 +61,6 @@
                                                     {# class="btn btn-primary waves-effect waves-light">Качи документ</a> #}
                                                     <i class="icofont icofont-ui-edit p-r-10" data-toggle="modal"
                                                        data-target="#profile-picture-upload-modal">
-
                                                     </i>
                                                     <i class="icofont icofont-ui-delete"></i>
                                                 </div>
@@ -69,39 +68,6 @@
                                             <div class="card-block social-follower">
                                                 <h4>{{ patient.firstName }} {{ patient.lastName }}</h4>
                                                 <h5>Състояние</h5>
-                                                <div class="row follower-counter">
-                                                    <div class="col-4">
-                                                        <button
-                                                                class="btn btn-primary btn-icon"
-                                                                data-toggle="tooltip"
-                                                                data-placement="top"
-                                                                title="485"><i
-                                                                    class="icofont icofont-user-alt-3"></i></button>
-                                                    </div>
-                                                    <div class="col-4">
-                                                        <button
-                                                                class="btn btn-danger btn-icon"
-                                                                data-toggle="tooltip"
-                                                                data-placement="top"
-                                                                title="2k"><i
-                                                                    class="icofont icofont-like"></i></button>
-                                                    </div>
-                                                    <div class="col-4">
-                                                        <button
-                                                                class="btn btn-success btn-icon"
-                                                                data-toggle="tooltip"
-                                                                data-placement="top"
-                                                                title="90"><i
-                                                                    class="icofont icofont-eye-alt"></i></button>
-                                                    </div>
-                                                </div>
-                                                <div class="">
-                                                    <button type="button"
-                                                            class="btn btn-outline-primary waves-effect btn-block"><i
-                                                                class="icofont icofont-ui-user m-r-10"></i>
-                                                        Add as Friend
-                                                    </button>
-                                                </div>
                                             </div>
                                         </div>
                                         <!-- social-profile card end -->
@@ -176,7 +142,6 @@
                                                     <a href="/patient/contact-view-all/{{ patient.id }}">Виж всички</a>
                                                 </span>
                                                 <span class="label label-primary f-right">
-
                                                     <a href="/patient/contact-create?egn={{ patient.eGN }}">Добави нов</a>
                                                 </span>
                                             </div>
@@ -268,7 +233,8 @@
                                             </li>
                                             <li class="nav-item">
                                                 <a class="nav-link" data-toggle="tab"
-                                                   href="#tests" role="tab">Тестове</a>
+                                                   href="#tests" role="tab" disabled><dfn data-info="Очаквайте скоро">Тестове
+                                                        <i class="ti-info-alt"></i></dfn></a>
                                                 <div class="slide"></div>
                                             </li>
                                             <li class="nav-item">
@@ -281,6 +247,12 @@
                                                 <a class="nav-link" data-toggle="tab"
                                                    href="#report"
                                                    role="tab">Рапорти</a>
+                                                <div class="slide"></div>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" data-toggle="tab"
+                                                   href="#temperature-line"
+                                                   role="tab">Температурна линия</a>
                                                 <div class="slide"></div>
                                             </li>
                                         </ul>
@@ -781,7 +753,7 @@
                                                     </a>
                                                 </div>
                                             {% endif %}
-                                            {% if socialNotes %}
+                                            {% if psychologicalNotes %}
                                                 <div class="row">
                                                     {% for note in psychologicalNotes %}
                                                         <div class="col-lg-12 col-xl-6">
@@ -793,9 +765,11 @@
                                                             </span>
                                                                     <div class="dropdown-menu dropdown-menu-right b-none services-list">
                                                                         <a class="dropdown-item"
-                                                                           href="{{ path('patient_psychological_evaluation_note', {'id': patient.id,'noteID':note.id}) }}">Промени</a>
+                                                                           href="{{ path('patient_psychological_evaluation_note', {'id': patient.id,'noteID':note.id}) }}">Промени
+                                                                        </a>
                                                                         <a class="dropdown-item"
-                                                                           href="{{ path('patient-psychological-evaluation-note-delete', {'id': patient.id,'noteID':note.id}) }}">Изтрии</a>
+                                                                           href="{{ path('patient-psychological-evaluation-note-delete', {'id': patient.id,'noteID':note.id}) }}">Изтрии
+                                                                        </a>
                                                                     </div>
                                                                     <div class="media bg-white d-flex">
                                                                         {# <div class="media-left media-middle"> #}
@@ -979,33 +953,27 @@
                                                             <button id="edit-btn"
                                                                     type="button"
                                                                     class="btn btn-primary waves-effect waves-light f-right">
-                                                                <i
-                                                                        class="icofont icofont-edit"></i>
+                                                                <i class="icofont icofont-edit"></i>
                                                             </button>
                                                         </div>
                                                         <div class="card-block">
                                                             <div id="view-info" class="row">
-                                                                <div class="col-lg-6 col-md-12">
+                                                                <div class="col-lg-12 col-md-12">
                                                                     <form>
-                                                                        <table
-                                                                                class="table table-responsive m-b-0">
+                                                                        <table class="table table-responsive m-b-0">
                                                                             <tr>
-                                                                                <th
-                                                                                        class="social-label b-none p-t-0">
+                                                                                <th class="social-label b-none p-t-0">
                                                                                     Пълно име
                                                                                 </th>
-                                                                                <td
-                                                                                        class="social-user-name b-none p-t-0 text-muted">
+                                                                                <td class="social-user-name b-none p-t-0 text-muted">
                                                                                     {{ patient.firstName }} {{ patient.middleName }} {{ patient.lastName }}
                                                                                 </td>
                                                                             </tr>
                                                                             <tr>
-                                                                                <th
-                                                                                        class="social-label b-none">
+                                                                                <th class="social-label b-none">
                                                                                     Пол
                                                                                 </th>
-                                                                                <td
-                                                                                        class="social-user-name b-none text-muted">
+                                                                                <td class="social-user-name b-none text-muted">
                                                                                     {% if patient.details != null %}
                                                                                         {{ patient.details.sex }}
                                                                                     {% else %}
@@ -1014,22 +982,18 @@
                                                                                 </td>
                                                                             </tr>
                                                                             <tr>
-                                                                                <th
-                                                                                        class="social-label b-none">
+                                                                                <th class="social-label b-none">
                                                                                     Дата на раждане
                                                                                 </th>
-                                                                                <td
-                                                                                        class="social-user-name b-none text-muted">
-                                                                                    {{ patient.dateOfBirth|date('d-m-Y') }}
+                                                                                <td class="social-user-name b-none text-muted">
+                                                                                    {{ patient.dateOfBirth|date('d.m.Y') }}
                                                                                 </td>
                                                                             </tr>
                                                                             <tr>
-                                                                                <th
-                                                                                        class="social-label b-none">
+                                                                                <th class="social-label b-none">
                                                                                     Семенн статус
                                                                                 </th>
-                                                                                <td
-                                                                                        class="social-user-name b-none text-muted">
+                                                                                <td class="social-user-name b-none text-muted">
                                                                                     {% if patient.details != null %}
                                                                                         {{ patient.details.maritalStatus }}
                                                                                     {% else %}
@@ -1038,97 +1002,91 @@
                                                                                 </td>
                                                                             </tr>
                                                                             <tr>
-                                                                                <th
-                                                                                        class="social-label b-none p-b-0">
-                                                                                    Location
+                                                                                <th class="social-label b-none">
+                                                                                    ЕГН
                                                                                 </th>
-                                                                                <td
-                                                                                        class="social-user-name b-none p-b-0 text-muted">
-                                                                                    New
-                                                                                    York,
-                                                                                    USA
+                                                                                <td class="social-user-name b-none text-muted">
+                                                                                    {{ patient.eGN }}
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <th class="social-label b-none">
+                                                                                    Цвят на очите
+                                                                                </th>
+                                                                                <td class="social-user-name b-none text-muted">
+                                                                                    {{ patient.details.eyeColor | default("Не е посочено") }}
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <th class="social-label b-none">
+                                                                                    Цвят на косата
+                                                                                </th>
+                                                                                <td class="social-user-name b-none text-muted">
+                                                                                    {{ patient.details.hairColor | default("Не е посочено") }}
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <th class="social-label b-none">
+                                                                                    Тегло
+                                                                                </th>
+                                                                                <td class="social-user-name b-none text-muted">
+                                                                                    {{ patient.details.weight | default("Не е посочено") }}
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <th class="social-label b-none">
+                                                                                    Кръвна група
+                                                                                </th>
+                                                                                <td class="social-user-name b-none text-muted">
+                                                                                    {{ patient.details.bloodType | default("Не е посочено") }}
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <th class="social-label b-none">
+                                                                                    Отличителни белези
+                                                                                </th>
+                                                                                <td class="social-user-name b-none text-muted">
+                                                                                    {{ patient.details.externalSigns | default("Не е посочено") }}
                                                                                 </td>
                                                                             </tr>
                                                                         </table>
                                                                     </form>
                                                                 </div>
                                                             </div>
-                                                            <div id="edit-info" class="row">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12">
+                                                    <div class="card">
+                                                        <div class="card-header">
+                                                            <h5 class="card-header-text">
+                                                                Контакти</h5>
+                                                            <button id="edit-Contact" type="button"
+                                                                    class="btn btn-primary waves-effect waves-light f-right">
+                                                                <i class="icofont icofont-edit"></i>
+                                                            </button>
+                                                        </div>
+                                                        <div class="card-block">
+                                                            <div id="contact-info" class="row">
                                                                 <div class="col-lg-12 col-md-12">
-                                                                    <form>
-                                                                        <div class="input-group">
-                                                                            <label>
-                                                                                <input type="text"
-                                                                                       class="form-control"
-                                                                                       placeholder="Full Name">
-                                                                            </label>
-                                                                        </div>
-                                                                        <div class="input-group">
-                                                                            <div class="form-radio">
-                                                                                <div class="form-radio">
-                                                                                    <label class="md-check p-0">Gender</label>
-                                                                                    <div class="radio radio-inline">
-                                                                                        <label>
-                                                                                            <input type="radio"
-                                                                                                   name="radio"
-                                                                                                   checked="checked">
-                                                                                            <i class="helper"></i>Male
-                                                                                        </label>
-                                                                                    </div>
-                                                                                    <div class="radio radio-inline">
-                                                                                        <label>
-                                                                                            <input type="radio"
-                                                                                                   name="radio">
-                                                                                            <i class="helper"></i>Female
-                                                                                        </label>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div
-                                                                                class="input-group">
-                                                                            <label for="dropper-default"></label><input
-                                                                                    id="dropper-default"
-                                                                                    class="form-control"
-                                                                                    type="text"
-                                                                                    placeholder="Birth Date"/>
-                                                                        </div>
-                                                                        <div
-                                                                                class="input-group">
-                                                                            <label for="hello-single"></label><select
-                                                                                    id="hello-single"
-                                                                                    class="form-control">
-                                                                                <option
-                                                                                        value="">
-                                                                                    ----
-                                                                                    Marital
-                                                                                    Status
-                                                                                    ----
-                                                                                </option>
-                                                                                <option
-                                                                                        value="married">
-                                                                                    Married
-                                                                                </option>
-                                                                                <option
-                                                                                        value="unmarried">
-                                                                                    Unmarried
-                                                                                </option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="md-group-add-on">
-                                                                            <textarea rows="5" cols="5"
-                                                                                      class="form-control"
-                                                                                      placeholder="Address..."></textarea>
-                                                                        </div>
-                                                                        <div class="text-center m-t-20">
-                                                                            <a href="javascript:;"
-                                                                               id="edit-save"
-                                                                               class="btn btn-primary waves-effect waves-light m-r-20">Save</a>
-                                                                            <a href="javascript:;"
-                                                                               id="edit-cancel"
-                                                                               class="btn btn-default waves-effect waves-light">Cancel</a>
-                                                                        </div>
-                                                                    </form>
+                                                                    <table class="table table-responsive m-b-0">
+                                                                        <tr>
+                                                                            <th class="social-label b-none p-t-0">
+                                                                                Телефон
+                                                                            </th>
+                                                                            <td class="social-user-name b-none p-t-0 text-muted">
+                                                                                {{ patient.mobilePhone }}
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <th class="social-label b-none">
+                                                                                Имейл
+                                                                            </th>
+                                                                            <td class="social-user-name b-none text-muted">
+                                                                                {{ patient.email }}
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1137,114 +1095,60 @@
                                                 <div class="col-sm-12">
                                                     <div class="card">
                                                         <div class="card-header">
-                                                            <h5
-                                                                    class="card-header-text">
-                                                                Contact Information</h5>
-                                                            <button id="edit-Contact"
-                                                                    type="button"
+                                                            <h5 class="card-header-text">
+                                                                Лична карта
+                                                            </h5>
+                                                            <button id="edit-work" type="button"
                                                                     class="btn btn-primary waves-effect waves-light f-right">
-                                                                <i
-                                                                        class="icofont icofont-edit"></i>
+                                                                <i class="icofont icofont-edit"></i>
                                                             </button>
                                                         </div>
                                                         <div class="card-block">
-                                                            <div id="contact-info"
-                                                                 class="row">
-                                                                <div
-                                                                        class="col-lg-6 col-md-12">
-                                                                    <table
-                                                                            class="table table-responsive m-b-0">
+                                                            <div id="work-info" class="row">
+                                                                <div class="col-lg-12 col-md-12">
+                                                                    <table class="table table-responsive m-b-0">
                                                                         <tr>
-                                                                            <th
-                                                                                    class="social-label b-none p-t-0">
-                                                                                Mobile
-                                                                                Number
+                                                                            <th class="social-label b-none p-t-0">
+                                                                                Номер
                                                                             </th>
-                                                                            <td
-                                                                                    class="social-user-name b-none p-t-0 text-muted">
-                                                                                eg.
-                                                                                (0123) -
-                                                                                4567891
+                                                                            <td class="social-user-name b-none p-t-0 text-muted">
+                                                                                {{ patient.iDCard.iDNumber | default("Не е посочено") }}
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
-                                                                            <th
-                                                                                    class="social-label b-none">
-                                                                                Email
-                                                                                Address
+                                                                            <th class="social-label b-none p-t-0">
+                                                                                Адрес по лична карта
                                                                             </th>
-                                                                            <td
-                                                                                    class="social-user-name b-none text-muted">
-                                                                                test@gmail.com
+                                                                            <td class="social-user-name b-none p-t-0 text-muted">
+                                                                                {{ patient.iDCard.placeOfResidenceByID | default("Не е посочено") }}
+
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
-                                                                            <th
-                                                                                    class="social-label b-none">
-                                                                                Twitter
+                                                                            <th class="social-label b-none p-t-0">
+                                                                                Адрес на местожвеене
                                                                             </th>
-                                                                            <td
-                                                                                    class="social-user-name b-none text-muted">
-                                                                                @phonixcoded
+                                                                            <td class="social-user-name b-none p-t-0 text-muted">
+                                                                                {{ patient.iDCard.placeOfResidenceByCurrentLocation | default("Не е посочено") }}
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
-                                                                            <th
-                                                                                    class="social-label b-none p-b-0">
-                                                                                Skype
+                                                                            <th class="social-label b-none p-t-0">
+                                                                                Издадена от
                                                                             </th>
-                                                                            <td
-                                                                                    class="social-user-name b-none p-b-0 text-muted">
-                                                                                @phonixcoded
-                                                                                demo
+                                                                            <td class="social-user-name b-none p-t-0 text-muted">
+                                                                                {{ patient.iDCard.publishedBy | default("Не е посочено") }}
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <th class="social-label b-none p-t-0">
+                                                                                Валидна до
+                                                                            </th>
+                                                                            <td class="social-user-name b-none p-t-0 text-muted">
+                                                                                {{ patient.iDCard is null ? "Не е посочено" : patient.iDCard.validity|date('d.m.Y') }}
                                                                             </td>
                                                                         </tr>
                                                                     </table>
-                                                                </div>
-                                                            </div>
-                                                            <div id="edit-contact-info"
-                                                                 class="row">
-                                                                <div
-                                                                        class="col-lg-12 col-md-12">
-                                                                    <form>
-                                                                        <div
-                                                                                class="input-group">
-                                                                            <input
-                                                                                    type="text"
-                                                                                    class="form-control"
-                                                                                    placeholder="Mobile number">
-                                                                        </div>
-                                                                        <div
-                                                                                class="input-group">
-                                                                            <input
-                                                                                    type="text"
-                                                                                    class="form-control"
-                                                                                    placeholder="Email address">
-                                                                        </div>
-                                                                        <div
-                                                                                class="input-group">
-                                                                            <input
-                                                                                    type="text"
-                                                                                    class="form-control"
-                                                                                    placeholder="Twitter id">
-                                                                        </div>
-                                                                        <div
-                                                                                class="input-group">
-                                                                            <input
-                                                                                    type="text"
-                                                                                    class="form-control"
-                                                                                    placeholder="Skype id">
-                                                                        </div>
-                                                                        <div
-                                                                                class="text-center m-t-20">
-                                                                            <a href="javascript:;"
-                                                                               id="contact-save"
-                                                                               class="btn btn-primary waves-effect waves-light m-r-20">Save</a>
-                                                                            <a href="javascript:;"
-                                                                               id="contact-cancel"
-                                                                               class="btn btn-default waves-effect waves-light">Cancel</a>
-                                                                        </div>
-                                                                    </form>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1253,136 +1157,93 @@
                                                 <div class="col-sm-12">
                                                     <div class="card">
                                                         <div class="card-header">
-                                                            <h5
-                                                                    class="card-header-text">
-                                                                Work</h5>
-                                                            <button id="edit-work"
-                                                                    type="button"
-                                                                    class="btn btn-primary waves-effect waves-light f-right">
-                                                                <i
-                                                                        class="icofont icofont-edit"></i>
-                                                            </button>
+                                                            <h5 class="card-header-text">
+                                                                Вредни навици
+                                                            </h5>
+                                                            <a href="{{ path('patient-create') }}">
+                                                                <button id="edit-work" type="button"
+                                                                        class="btn btn-primary waves-effect waves-light f-right">
+                                                                    <i class="icofont icofont-edit"></i>
+                                                                </button>
+                                                            </a>
                                                         </div>
                                                         <div class="card-block">
-                                                            <div id="work-info"
-                                                                 class="row">
-                                                                <div
-                                                                        class="col-lg-6 col-md-12">
-                                                                    <table
-                                                                            class="table table-responsive m-b-0">
+                                                            <div id="work-info" class="row">
+                                                                <div class="col-lg-12 col-md-12">
+                                                                    <table class="table table-responsive m-b-0">
                                                                         <tr>
-                                                                            <th
-                                                                                    class="social-label b-none p-t-0">
-                                                                                Occupation
+                                                                            <th class="social-label b-none p-t-0">
+                                                                                Пушач ли е
                                                                             </th>
-                                                                            <td
-                                                                                    class="social-user-name b-none p-t-0 text-muted">
-                                                                                Developer
+                                                                            <td class="social-user-name b-none p-t-0 text-muted">
+                                                                                {{ patient.habits ? patient.habits.smoking ? 'Да' : 'Не' : 'Липсват данни' }}
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
-                                                                            <th
-                                                                                    class="social-label b-none">
-                                                                                Skills
+                                                                            <th class="social-label b-none p-t-0">
+                                                                                Цигари на ден
                                                                             </th>
-                                                                            <td
-                                                                                    class="social-user-name b-none text-muted">
-                                                                                C#,
-                                                                                Javascript,
-                                                                                Anguler
+                                                                            <td class="social-user-name b-none p-t-0 text-muted">
+                                                                                {{ patient.habits ? patient.habits.amountOfCigarettesPerDay : 'Липсват данни' }}
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
-                                                                            <th
-                                                                                    class="social-label b-none">
-                                                                                Jobs
+                                                                            <th class="social-label b-none p-t-0">
+                                                                                Употребява ли алкохол
                                                                             </th>
-                                                                            <td
-                                                                                    class="social-user-name b-none p-b-0 text-muted">
-                                                                                #
+                                                                            <td class="social-user-name b-none p-t-0 text-muted">
+                                                                                {{ patient.habits ? patient.habits.alcohol ? 'Да' : 'Не' : 'Липсват данни' }}
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <th class="social-label b-none p-t-0">
+                                                                                Средно количество в мл.
+                                                                            </th>
+                                                                            <td class="social-user-name b-none p-t-0 text-muted">
+                                                                                {{ patient.habits ? patient.habits.amountOfAlcoholPerDay : 'Липсват данни' }}
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <th class="social-label b-none p-t-0">
+                                                                                Употреба на алкохол
+                                                                            </th>
+                                                                            <td class="social-user-name b-none p-t-0 text-muted">
+                                                                                {{ patient.habits ? patient.habits.howOftenHeConsumesAlcohol : 'Липсват данни' }}
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <th class="social-label b-none p-t-0">
+                                                                                Взима ли наркотици
+                                                                            </th>
+                                                                            <td class="social-user-name b-none p-t-0 text-muted">
+                                                                                {{ patient.habits ? patient.habits.narcotics ? 'Да' : 'Не' : 'Липсват данни' }}
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <th class="social-label b-none p-t-0">
+                                                                                Употреба на наркотици
+                                                                            </th>
+                                                                            <td class="social-user-name b-none p-t-0 text-muted">
+                                                                                {{ patient.habits ? patient.habits.howOftenHeUsesDrugs : 'Липсват данни' }}
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <th class="social-label b-none p-t-0">
+                                                                                Тип на наркотиците
+                                                                            </th>
+                                                                            <td class="social-user-name b-none p-t-0 text-muted">
+                                                                                {{ patient.habits ? patient.habits.whatTypeOfDrugUses : 'Липсват данни' }}
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <th class="social-label b-none p-t-0">
+                                                                                Употребява ли в момента
+                                                                            </th>
+                                                                            <td class="social-user-name b-none p-t-0 text-muted">
+                                                                                {{ patient.habits ? patient.habits.useInTheMomentNarcotics ? 'Да' : 'Не' : 'Липсват данни' }}
                                                                             </td>
                                                                         </tr>
                                                                     </table>
-                                                                </div>
-                                                            </div>
-                                                            <div id="edit-contact-work"
-                                                                 class="row">
-                                                                <div
-                                                                        class="col-lg-12 col-md-12">
-                                                                    <form>
-                                                                        <div
-                                                                                class="input-group">
-                                                                            <select
-                                                                                    id="occupation"
-                                                                                    class="form-control">
-                                                                                <option
-                                                                                        value="">
-                                                                                    Select
-                                                                                    occupation
-                                                                                </option>
-                                                                                <option
-                                                                                        value="married">
-                                                                                    Developer
-                                                                                </option>
-                                                                                <option
-                                                                                        value="unmarried">
-                                                                                    Web
-                                                                                    Design
-                                                                                </option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div
-                                                                                class="input-group">
-                                                                            <select
-                                                                                    id="skill"
-                                                                                    class="form-control">
-                                                                                <option
-                                                                                        value="">
-                                                                                    Select
-                                                                                    Skills
-                                                                                </option>
-                                                                                <option
-                                                                                        value="married">
-                                                                                    C#
-                                                                                    &amp;
-                                                                                    .net
-                                                                                </option>
-                                                                                <option
-                                                                                        value="unmarried">
-                                                                                    Angular
-                                                                                </option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div
-                                                                                class="input-group">
-                                                                            <select
-                                                                                    id="job"
-                                                                                    class="form-control">
-                                                                                <option
-                                                                                        value="">
-                                                                                    Select
-                                                                                    Job
-                                                                                </option>
-                                                                                <option
-                                                                                        value="married">
-                                                                                    #
-                                                                                </option>
-                                                                                <option
-                                                                                        value="unmarried">
-                                                                                    Other
-                                                                                </option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div
-                                                                                class="text-center m-t-20">
-                                                                            <a href="javascript:;"
-                                                                               id="work-save"
-                                                                               class="btn btn-primary waves-effect waves-light m-r-20">Save</a>
-                                                                            <a href="javascript:;"
-                                                                               id="work-cancel"
-                                                                               class="btn btn-default waves-effect waves-light">Cancel</a>
-                                                                        </div>
-                                                                    </form>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1393,499 +1254,9 @@
                                         <!-- About tab end -->
                                         <!-- Tests tab start -->
                                         <div class="tab-pane" id="tests">
-                                            <div class="card">
-                                                <!-- Row start -->
-                                                <div class="row">
-                                                    <div class="col-lg-12 col-xl-6">
-                                                        <div class="card">
-                                                            <div
-                                                                    class="card-block post-timelines">
-                                                                                                                                    <span
-                                                                                                                                            class="dropdown-toggle addon-btn text-muted f-right service-btn"
-                                                                                                                                            data-toggle="dropdown"
-                                                                                                                                            aria-haspopup="true"
-                                                                                                                                            aria-expanded="true"
-                                                                                                                                            role="tooltip"></span>
-                                                                <div
-                                                                        class="dropdown-menu dropdown-menu-right b-none services-list">
-                                                                    <a class="dropdown-item"
-                                                                       href="#">Remove
-                                                                        tag</a>
-                                                                    <a class="dropdown-item"
-                                                                       href="#">Report
-                                                                        Photo</a>
-                                                                    <a class="dropdown-item"
-                                                                       href="#">Hide From
-                                                                        Timeline</a>
-                                                                    <a class="dropdown-item"
-                                                                       href="#">Blog
-                                                                        User</a>
-                                                                </div>
-                                                                <div
-                                                                        class="media bg-white d-flex">
-                                                                    <div
-                                                                            class="media-left media-middle">
-                                                                        <a href="#">
-                                                                            <img class="media-object"
-                                                                                 src="{{ asset('assets/images/timeline/img2.png') }}"
-                                                                                 alt="">
-                                                                        </a>
-                                                                    </div>
-                                                                    <div
-                                                                            class="media-body friend-elipsis">
-                                                                        <div
-                                                                                class="f-15 f-bold m-b-5">
-                                                                            Josephin Doe
-                                                                        </div>
-                                                                        <div
-                                                                                class="text-muted social-designation">
-                                                                            Software
-                                                                            Engineer
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-12 col-xl-6">
-                                                        <div class="card">
-                                                            <div
-                                                                    class="card-block post-timelines">
-                                                                                                                                    <span
-                                                                                                                                            class="dropdown-toggle addon-btn text-muted f-right service-btn"
-                                                                                                                                            data-toggle="dropdown"
-                                                                                                                                            aria-haspopup="true"
-                                                                                                                                            aria-expanded="true"
-                                                                                                                                            role="tooltip"></span>
-                                                                <div
-                                                                        class="dropdown-menu dropdown-menu-right b-none services-list">
-                                                                    <a class="dropdown-item"
-                                                                       href="#">Remove
-                                                                        tag</a>
-                                                                    <a class="dropdown-item"
-                                                                       href="#">Report
-                                                                        Photo</a>
-                                                                    <a class="dropdown-item"
-                                                                       href="#">Hide From
-                                                                        Timeline</a>
-                                                                    <a class="dropdown-item"
-                                                                       href="#">Blog
-                                                                        User</a>
-                                                                </div>
-                                                                <div
-                                                                        class="media bg-white d-flex">
-                                                                    <div
-                                                                            class="media-left media-middle">
-                                                                        <a href="#">
-                                                                            <img class="media-object"
-                                                                                 src="{{ asset('assets/images/timeline/img2.png') }}"
-                                                                                 alt="">
-                                                                        </a>
-                                                                    </div>
-                                                                    <div
-                                                                            class="media-body friend-elipsis">
-                                                                        <div
-                                                                                class="f-15 f-bold m-b-5">
-                                                                            Josephin Doe
-                                                                        </div>
-                                                                        <div
-                                                                                class="text-muted social-designation">
-                                                                            Software
-                                                                            Engineer
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-12 col-xl-6">
-                                                        <div class="card">
-                                                            <div
-                                                                    class="card-block post-timelines">
-                                                                                                                                    <span
-                                                                                                                                            class="dropdown-toggle addon-btn text-muted f-right service-btn"
-                                                                                                                                            data-toggle="dropdown"
-                                                                                                                                            aria-haspopup="true"
-                                                                                                                                            aria-expanded="true"
-                                                                                                                                            role="tooltip"></span>
-                                                                <div
-                                                                        class="dropdown-menu dropdown-menu-right b-none services-list">
-                                                                    <a class="dropdown-item"
-                                                                       href="#">Remove
-                                                                        tag</a>
-                                                                    <a class="dropdown-item"
-                                                                       href="#">Report
-                                                                        Photo</a>
-                                                                    <a class="dropdown-item"
-                                                                       href="#">Hide From
-                                                                        Timeline</a>
-                                                                    <a class="dropdown-item"
-                                                                       href="#">Blog
-                                                                        User</a>
-                                                                </div>
-                                                                <div
-                                                                        class="media bg-white d-flex">
-                                                                    <div
-                                                                            class="media-left media-middle">
-                                                                        <a href="#">
-                                                                            <img class="media-object"
-                                                                                 src="{{ asset('assets/images/timeline/img2.png') }}"
-                                                                                 alt="">
-                                                                        </a>
-                                                                    </div>
-                                                                    <div
-                                                                            class="media-body friend-elipsis">
-                                                                        <div
-                                                                                class="f-15 f-bold m-b-5">
-                                                                            Josephin Doe
-                                                                        </div>
-                                                                        <div
-                                                                                class="text-muted social-designation">
-                                                                            Software
-                                                                            Engineer
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-12 col-xl-6">
-                                                        <div class="card">
-                                                            <div
-                                                                    class="card-block post-timelines">
-                                                                                                                                    <span
-                                                                                                                                            class="dropdown-toggle addon-btn text-muted f-right service-btn"
-                                                                                                                                            data-toggle="dropdown"
-                                                                                                                                            aria-haspopup="true"
-                                                                                                                                            aria-expanded="true"
-                                                                                                                                            role="tooltip"></span>
-                                                                <div
-                                                                        class="dropdown-menu dropdown-menu-right b-none services-list">
-                                                                    <a class="dropdown-item"
-                                                                       href="#">Remove
-                                                                        tag</a>
-                                                                    <a class="dropdown-item"
-                                                                       href="#">Report
-                                                                        Photo</a>
-                                                                    <a class="dropdown-item"
-                                                                       href="#">Hide From
-                                                                        Timeline</a>
-                                                                    <a class="dropdown-item"
-                                                                       href="#">Blog
-                                                                        User</a>
-                                                                </div>
-                                                                <div
-                                                                        class="media bg-white d-flex">
-                                                                    <div
-                                                                            class="media-left media-middle">
-                                                                        <a href="#">
-                                                                            <img class="media-object"
-                                                                                 src="{{ asset('assets/images/timeline/img2.png') }}"
-                                                                                 alt="">
-                                                                        </a>
-                                                                    </div>
-                                                                    <div
-                                                                            class="media-body friend-elipsis">
-                                                                        <div
-                                                                                class="f-15 f-bold m-b-5">
-                                                                            Josephin Doe
-                                                                        </div>
-                                                                        <div
-                                                                                class="text-muted social-designation">
-                                                                            Software
-                                                                            Engineer
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-12 col-xl-6">
-                                                        <div class="card">
-                                                            <div
-                                                                    class="card-block post-timelines">
-                                                                                                                                    <span
-                                                                                                                                            class="dropdown-toggle addon-btn text-muted f-right service-btn"
-                                                                                                                                            data-toggle="dropdown"
-                                                                                                                                            aria-haspopup="true"
-                                                                                                                                            aria-expanded="true"
-                                                                                                                                            role="tooltip"></span>
-                                                                <div
-                                                                        class="dropdown-menu dropdown-menu-right b-none services-list">
-                                                                    <a class="dropdown-item"
-                                                                       href="#">Remove
-                                                                        tag</a>
-                                                                    <a class="dropdown-item"
-                                                                       href="#">Report
-                                                                        Photo</a>
-                                                                    <a class="dropdown-item"
-                                                                       href="#">Hide From
-                                                                        Timeline</a>
-                                                                    <a class="dropdown-item"
-                                                                       href="#">Blog
-                                                                        User</a>
-                                                                </div>
-                                                                <div
-                                                                        class="media bg-white d-flex">
-                                                                    <div
-                                                                            class="media-left media-middle">
-                                                                        <a href="#">
-                                                                            <img class="media-object"
-                                                                                 src="{{ asset('assets/images/timeline/img2.png') }}"
-                                                                                 alt="">
-                                                                        </a>
-                                                                    </div>
-                                                                    <div
-                                                                            class="media-body friend-elipsis">
-                                                                        <div
-                                                                                class="f-15 f-bold m-b-5">
-                                                                            Josephin Doe
-                                                                        </div>
-                                                                        <div
-                                                                                class="text-muted social-designation">
-                                                                            Software
-                                                                            Engineer
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-12 col-xl-6">
-                                                        <div class="card">
-                                                            <div
-                                                                    class="card-block post-timelines">
-                                                                                                                                    <span
-                                                                                                                                            class="dropdown-toggle addon-btn text-muted f-right service-btn"
-                                                                                                                                            data-toggle="dropdown"
-                                                                                                                                            aria-haspopup="true"
-                                                                                                                                            aria-expanded="true"
-                                                                                                                                            role="tooltip"></span>
-                                                                <div
-                                                                        class="dropdown-menu dropdown-menu-right b-none services-list">
-                                                                    <a class="dropdown-item"
-                                                                       href="#">Remove
-                                                                        tag</a>
-                                                                    <a class="dropdown-item"
-                                                                       href="#">Report
-                                                                        Photo</a>
-                                                                    <a class="dropdown-item"
-                                                                       href="#">Hide From
-                                                                        Timeline</a>
-                                                                    <a class="dropdown-item"
-                                                                       href="#">Blog
-                                                                        User</a>
-                                                                </div>
-                                                                <div
-                                                                        class="media bg-white d-flex">
-                                                                    <div
-                                                                            class="media-left media-middle">
-                                                                        <a href="#">
-                                                                            <img class="media-object"
-                                                                                 src="{{ asset('assets/images/timeline/img2.png') }}"
-                                                                                 alt="">
-                                                                        </a>
-                                                                    </div>
-                                                                    <div
-                                                                            class="media-body friend-elipsis">
-                                                                        <div
-                                                                                class="f-15 f-bold m-b-5">
-                                                                            Josephin Doe
-                                                                        </div>
-                                                                        <div
-                                                                                class="text-muted social-designation">
-                                                                            Software
-                                                                            Engineer
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-12 col-xl-6">
-                                                        <div class="card">
-                                                            <div
-                                                                    class="card-block post-timelines">
-                                                                                                                                    <span
-                                                                                                                                            class="dropdown-toggle addon-btn text-muted f-right service-btn"
-                                                                                                                                            data-toggle="dropdown"
-                                                                                                                                            aria-haspopup="true"
-                                                                                                                                            aria-expanded="true"
-                                                                                                                                            role="tooltip"></span>
-                                                                <div
-                                                                        class="dropdown-menu dropdown-menu-right b-none services-list">
-                                                                    <a class="dropdown-item"
-                                                                       href="#">Remove
-                                                                        tag</a>
-                                                                    <a class="dropdown-item"
-                                                                       href="#">Report
-                                                                        Photo</a>
-                                                                    <a class="dropdown-item"
-                                                                       href="#">Hide From
-                                                                        Timeline</a>
-                                                                    <a class="dropdown-item"
-                                                                       href="#">Blog
-                                                                        User</a>
-                                                                </div>
-                                                                <div
-                                                                        class="media bg-white d-flex">
-                                                                    <div
-                                                                            class="media-left media-middle">
-                                                                        <a href="#">
-                                                                            <img class="media-object"
-                                                                                 src="{{ asset('assets/images/timeline/img2.png') }}"
-                                                                                 alt="">
-                                                                        </a>
-                                                                    </div>
-                                                                    <div
-                                                                            class="media-body friend-elipsis">
-                                                                        <div
-                                                                                class="f-15 f-bold m-b-5">
-                                                                            Josephin Doe
-                                                                        </div>
-                                                                        <div
-                                                                                class="text-muted social-designation">
-                                                                            Software
-                                                                            Engineer
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-12 col-xl-6">
-                                                        <div class="card">
-                                                            <div class="card-block post-timelines">
-                                                                                                            <span class="dropdown-toggle addon-btn text-muted f-right service-btn"
-                                                                                                                  data-toggle="dropdown"
-                                                                                                                  aria-haspopup="true"
-                                                                                                                  aria-expanded="true"
-                                                                                                                  role="tooltip"></span>
-                                                                <div
-                                                                        class="dropdown-menu dropdown-menu-right b-none services-list">
-                                                                    <a class="dropdown-item"
-                                                                       href="#">Remove
-                                                                        tag</a>
-                                                                    <a class="dropdown-item"
-                                                                       href="#">Report
-                                                                        Photo</a>
-                                                                    <a class="dropdown-item"
-                                                                       href="#">Hide From
-                                                                        Timeline</a>
-                                                                    <a class="dropdown-item"
-                                                                       href="#">Blog
-                                                                        User</a>
-                                                                </div>
-                                                                <div class="media bg-white d-flex">
-                                                                    <div class="media-left media-middle">
-                                                                        <a href="#">
-                                                                            <img class="media-object"
-                                                                                 src="{{ asset('assets/images/timeline/img2.png') }}"
-                                                                                 alt="">
-                                                                        </a>
-                                                                    </div>
-                                                                    <div class="media-body friend-elipsis">
-                                                                        <div class="f-15 f-bold m-b-5">
-                                                                            Josephin Doe
-                                                                        </div>
-                                                                        <div
-                                                                                class="text-muted social-designation">
-                                                                            Software
-                                                                            Engineer
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-12 col-xl-6">
-                                                        <div class="card">
-                                                            <div class="card-block post-timelines">
-                                                                                                            <span class="dropdown-toggle addon-btn text-muted f-right service-btn"
-                                                                                                                  data-toggle="dropdown"
-                                                                                                                  aria-haspopup="true"
-                                                                                                                  aria-expanded="true"
-                                                                                                                  role="tooltip"></span>
-                                                                <div class="dropdown-menu dropdown-menu-right b-none services-list">
-                                                                    <a class="dropdown-item"
-                                                                       href="#">Remove
-                                                                        tag</a>
-                                                                    <a class="dropdown-item"
-                                                                       href="#">Report
-                                                                        Photo</a>
-                                                                    <a class="dropdown-item"
-                                                                       href="#">Hide From
-                                                                        Timeline</a>
-                                                                    <a class="dropdown-item"
-                                                                       href="#">Blog
-                                                                        User</a>
-                                                                </div>
-                                                                <div class="media bg-white d-flex">
-                                                                    <div class="media-left media-middle">
-                                                                        <a href="#">
-                                                                            <img class="media-object"
-                                                                                 src="{{ asset('assets/images/timeline/img2.png') }}"
-                                                                                 alt="">
-                                                                        </a>
-                                                                    </div>
-                                                                    <div class="media-body friend-elipsis">
-                                                                        <div class="f-15 f-bold m-b-5">
-                                                                            Josephin Doe
-                                                                        </div>
-                                                                        <div class="text-muted social-designation">
-                                                                            Software
-                                                                            Engineer
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-12 col-xl-6">
-                                                        <div class="card">
-                                                            <div class="card-block post-timelines">
-                                                                <span class="dropdown-toggle addon-btn text-muted f-right service-btn"
-                                                                      data-toggle="dropdown"
-                                                                      aria-haspopup="true"
-                                                                      aria-expanded="true"
-                                                                      role="tooltip">
-                                                                </span>
-                                                                <div class="dropdown-menu dropdown-menu-right b-none services-list">
-                                                                    <a class="dropdown-item"
-                                                                       href="#">Remove
-                                                                        tag</a>
-                                                                    <a class="dropdown-item"
-                                                                       href="#">Report
-                                                                        Photo</a>
-                                                                    <a class="dropdown-item"
-                                                                       href="#">Hide From
-                                                                        Timeline</a>
-                                                                    <a class="dropdown-item"
-                                                                       href="#">Blog
-                                                                        User</a>
-                                                                </div>
-                                                                <div class="media bg-white d-flex">
-                                                                    <div class="media-left media-middle">
-                                                                        <a href="#">
-                                                                            <img class="media-object"
-                                                                                 src="{{ asset('assets/images/timeline/img2.png') }}"
-                                                                                 alt="">
-                                                                        </a>
-                                                                    </div>
-                                                                    <div class="media-body friend-elipsis">
-                                                                        <div class="f-15 f-bold m-b-5">
-                                                                            Josephin Doe
-                                                                        </div>
-                                                                        <div class="text-muted social-designation">
-                                                                            Software
-                                                                            Engineer
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                            <div class="text-center">
+                                                <p>За този пациент няма добавени тестове</p>
+                                                <p>Очаквайте скоро тази функционалност</p>
                                             </div>
                                         </div>
                                         <!-- Tests tab end -->
@@ -1997,6 +1368,14 @@
                                             </div>
                                         </div>
                                         <!-- Report tab end -->
+                                        <!-- Temperature line tab start -->
+                                        <div class="tab-pane" id="temperature-line">
+                                            <div class="text-center">
+                                                <p>За този пациент няма температурна линия</p>
+                                                <p>Очаквайте скоро тази функционалност</p>
+                                            </div>
+                                        </div>
+                                        <!-- Temperature line tab end -->
                                     </div>
                                     <!-- Row end -->
                                 </div>

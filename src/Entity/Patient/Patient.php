@@ -163,6 +163,11 @@ class Patient
      */
     private $psychologicalEvaluation;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Habits::class, mappedBy="patient", cascade={"persist", "remove"})
+     */
+    private $habits;
+
 
     public function __construct()
     {
@@ -611,6 +616,23 @@ class Patient
         }
 
         $this->psychologicalEvaluation = $psychologicalEvaluation;
+
+        return $this;
+    }
+
+    public function getHabits(): ?Habits
+    {
+        return $this->habits;
+    }
+
+    public function setHabits(Habits $habits): self
+    {
+        // set the owning side of the relation if necessary
+        if ($habits->getPatient() !== $this) {
+            $habits->setPatient($this);
+        }
+
+        $this->habits = $habits;
 
         return $this;
     }

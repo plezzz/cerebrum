@@ -55,6 +55,8 @@ class PatientType extends AbstractType
                 'html5' => false,
                 'attr' => ['class' => 'js-datepicker'],
                 'format' => 'dd-MM-yyyy',
+                'empty_data' => '0000-00-00'
+
             ])
             ->add('mobilePhone', TelType::class, [
                 'label' => false,

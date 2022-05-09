@@ -18,6 +18,7 @@ class PatientDetailsType extends AbstractType
             ->add('sex', ChoiceType::class, [
                 'label' => 'Биологичен пол',
                 'choices' => [
+                    'Не е посочено' => 'Не е посочено',
                     'Мъж' => 'Мъж',
                     'Жена' => 'Жена',
                 ],
@@ -66,6 +67,7 @@ class PatientDetailsType extends AbstractType
             ->add('maritalStatus', ChoiceType::class, [
                 'label' => 'Семеен статус',
                 'choices' => [
+                    'Не е посочено' => 'Не е посочено',
                     'Неженен/Неомъжена' => 'Неженен/Неомъжена',
                     'Женен/Омъжена' => 'Женен/Омъжена',
                     'Разведен/Разведена' => 'Разведен/Разведена',

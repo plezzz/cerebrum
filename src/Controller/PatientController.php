@@ -5,8 +5,10 @@ namespace App\Controller;
 
 use App\Entity\Patient\Contacts;
 use App\Entity\Patient\Details;
+use App\Entity\Patient\Habits;
 use App\Entity\Patient\IDCard;
 use App\Entity\Patient\Patient;
+use App\Form\HabitsType;
 use App\Form\IDCardType;
 use App\Form\PatientContactType;
 use App\Form\PatientDetailsType;
@@ -129,11 +131,41 @@ class PatientController extends AbstractController
             $personalInfo = $form->getData();
             $this->patientService->savePersonalDetails($personalInfo, $patient);
 
+            return $this->redirectToRoute('patient-habits-create', ['egn' => $egn]);
+        }
+
+        return $this->render('patient/personal-info-create.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Breadcrumb(
+     *     {"label" = "Начало", "route" = "home"},
+     *     {"label" = "Пациент", "route" = "patient-create"},
+     *     {"label" = "Навици на пациента"})
+     * @param Request $request
+     * @return Response
+     */
+    #[Route('/patient/habits-create', name: 'patient-habits-create')]
+    public function habitsCreate(Request $request): Response
+    {
+        $isEdit = false;
+        $egn = $request->query->get('egn');
+        $patient = $this->patientService->findOneByEGN($egn);
+//        $habits = new Habits();
+//        //$idCard->setPatient($patient);
+        $form = $this->createForm(HabitsType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $habits = $form->getData();
+            $this->patientService->saveHabits($habits,$patient, $isEdit);
 
             return $this->redirectToRoute('patient-contacts-create', ['egn' => $egn]);
         }
 
-        return $this->render('patient/personal-info-create.html.twig', [
+        return $this->render('patient/habits-create.html.twig', [
             'form' => $form->createView()
         ]);
     }
@@ -157,7 +189,6 @@ class PatientController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $contacts = $form->getData();
             $this->patientService->saveContacts($contacts, $patient, $isEdit);
-
 
             return $this->redirectToRoute('patient-contacts-create', ['egn' => $egn]);
         }
@@ -558,5 +589,7 @@ class PatientController extends AbstractController
 
         return $this->redirectToRoute('patient', ['id' => $patient->getId(), '_fragment' => 'psychological-evaluation']);
     }
+
+
 
 }

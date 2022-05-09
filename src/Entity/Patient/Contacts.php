@@ -5,6 +5,7 @@ namespace App\Entity\Patient;
 use App\Entity\User;
 use App\Repository\Patient\ContactsRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ContactsRepository::class)
@@ -19,17 +20,20 @@ class Contacts
     private ?int $id;
 
     /**
+     * @Assert\NotBlank(message = "Полето не може да бъде празно")
      * @ORM\Column(type="string", length=255)
      */
     private ?string $firstName;
 
     /**
+     * @Assert\NotBlank(message = "Полето не може да бъде празно")
      * @ORM\Column(type="string", length=255)
      */
     private ?string $lastName;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message = "Полето не може да бъде празно")
+     * @ORM\Column(type="string", length=255)
      */
     private ?string $mobilePhone;
 

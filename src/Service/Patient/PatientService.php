@@ -6,6 +6,7 @@ namespace App\Service\Patient;
 
 use App\Entity\Patient\Contacts;
 use App\Entity\Patient\Details;
+use App\Entity\Patient\Habits;
 use App\Entity\Patient\IDCard;
 use App\Entity\Patient\Patient;
 use App\Entity\Patient\PsychiatricEvaluation;
@@ -17,6 +18,7 @@ use App\Entity\Patient\SocialEvaluation;
 use App\Entity\Patient\SocialEvaluationNote;
 use App\Repository\Patient\ContactsRepository;
 use App\Repository\Patient\DetailsRepository;
+use App\Repository\Patient\HabitsRepository;
 use App\Repository\Patient\IDCardRepository;
 use App\Repository\Patient\PsychiatricEvaluationNoteRepository;
 use App\Repository\Patient\PsychiatricEvaluationRepository;
@@ -38,6 +40,7 @@ use Doctrine\ORM\OptimisticLockException;
 class PatientService implements PatientServiceInterface
 {
 
+    public $user;
 
     private PatientRepository $patientRepository;
     private DateTimeServiceInterface $dateTimeService;
@@ -52,6 +55,7 @@ class PatientService implements PatientServiceInterface
     private SocialEvaluationNoteRepository $socialEvaluationNoteRepository;
     private PsychologicalEvaluationRepository $psychologicalEvaluationRepository;
     private PsychologicalEvaluationNoteRepository $psychologicalEvaluationNoteRepository;
+    private HabitsRepository $habitsRepository;
 
     public function __construct(
         UserServiceInterface                  $userService,
@@ -67,7 +71,7 @@ class PatientService implements PatientServiceInterface
         SocialEvaluationNoteRepository        $socialEvaluationNoteRepository,
         PsychologicalEvaluationRepository     $psychologicalEvaluationRepository,
         PsychologicalEvaluationNoteRepository $psychologicalEvaluationNoteRepository,
-
+        HabitsRepository                      $habitsRepository,
     )
     {
         $this->userService = $userService;
@@ -83,6 +87,8 @@ class PatientService implements PatientServiceInterface
         $this->socialEvaluationNoteRepository = $socialEvaluationNoteRepository;
         $this->psychologicalEvaluationRepository = $psychologicalEvaluationRepository;
         $this->psychologicalEvaluationNoteRepository = $psychologicalEvaluationNoteRepository;
+        $this->habitsRepository = $habitsRepository;
+        $this->user = $this->userService->currentUser();
     }
 
 
@@ -90,7 +96,11 @@ class PatientService implements PatientServiceInterface
     {
         $user = $this->userService->currentUser();
         $date = $this->dateTimeService->setDateTimeNow();
-
+        // return 'sss';
+//        if ($patient->getDateOfBirth() === null){
+//            $patient->setDateOfBirth($date);
+//          return 'sss';
+        //   }
         $patient->setCreatedBy($user);
         $patient->setEditedBy($user);
         $patient->setCreatedAt($date);
@@ -482,6 +492,35 @@ class PatientService implements PatientServiceInterface
     {
         $evaluationNote = $this->psychologicalEvaluationNoteRepository->find($id);
         $this->psychologicalEvaluationNoteRepository->remove($evaluationNote);
+    }
+
+    /**
+     * @throws OptimisticLockException
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function saveHabits(Habits $habits, Patient $patient, $isEdit): ?int
+    {
+        $user = $this->userService->currentUser();
+        $date = $this->dateTimeService->setDateTimeNow();
+
+        $immutableDate = $this->dateTimeService->dateTimeToImmutableDateTime($date);
+
+        if (!$isEdit) {
+            $habits->setCreatedBy($user);
+            $habits->setCreatedAt($immutableDate);
+        }
+
+        $habits->setEditedBy($user);
+        $habits->setEditedAt($immutableDate);
+        $habits->setPatient($patient);
+
+
+        $this->habitsRepository->add($habits);
+        $patient->setHabits($habits);
+        $patient->setEditedBy($this->user);
+        $patient->setEditedAt($date);
+        $this->patientRepository->insert($patient);
+        return $habits->getId();
     }
 
 }

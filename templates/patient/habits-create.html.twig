@@ -1,0 +1,110 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Регистрация на пациент Навици{% endblock %}
+{% block header %}
+    <div class="d-inline">
+        <h4>Навици на пациента</h4>
+        {# <span>Място където може да добавяте нови работници</span> #}
+    </div>
+{% endblock %}
+{% block breadcrumb %}
+    {{ slope_it_breadcrumb() }}
+{% endblock %}
+{% block body %}
+    {# <div class="col-sm-12 col-xl-4 m-b-30"> #}
+    {# <div> #}
+    {# <label for="form_validity">Age</label> #}
+    {# <ul> #}
+    {# <li>This field is required</li> #}
+    {# </ul> #}
+    {# <input class="form-control" type="date" id="form_validity" name="form[validity]"/> #}
+    {# </div> #}
+    {# </div> #}
+    {# {{ form_row(, {'attr': {'class':"form-control",'type': 'month'}}) }} #}
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+    {{ form_widget(form) }}
+    <button type="submit">Запис</button>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+{% block javascriptend %}
+    <script>
+       let smoker =  document.querySelector("#habits_smoking");
+       let alcohol = document.querySelector("#habits_alcohol");
+       let narcotics = document.querySelector("#habits_narcotics")
+       let inputSmoke = document.querySelector("#habits_amountOfCigarettesPerDay");
+       let labelSmoke = document.querySelector("#habits > div:nth-child(2) > label");
+       let labelAlcoholAmount = document.querySelector("#habits > div:nth-child(4) > label");
+       let inputAlcoholAmount = document.querySelector("#habits_amountOfAlcoholPerDay");
+       let labelAlcoholConsumes = document.querySelector("#habits > div:nth-child(5) > label");
+       let inputAlcoholConsumes = document.querySelector("#habits_howOftenHeConsumesAlcohol");
+       let labelNarcoticsAmount = document.querySelector("#habits > div:nth-child(7) > label");
+       let inputNarcoticsAmount = document.querySelector("#habits_howOftenHeUsesDrugs");
+       let inputNarcoticsType = document.querySelector("#habits_whatTypeOfDrugUses");
+       let labelNarcoticsUsesInMoment =document.querySelector("#habits > div:nth-child(9) > div > label");
+       let inputNarcoticsUsesInMoment = document.querySelector("#habits_useInTheMomentNarcotics");
+
+
+       hideSmoke()
+       hideAlcohol()
+       hideNarcotics()
+
+       alcohol.addEventListener('change', (event) => {
+           if (event.currentTarget.checked) {
+               showAlcohol()
+           } else {
+               hideAlcohol()
+           }})
+
+       smoker.addEventListener('change', (event) => {
+           if (event.currentTarget.checked) {
+               showSmoke()
+           } else {
+              hideSmoke()
+           }})
+
+       narcotics.addEventListener('change', (event) => {
+           if (event.currentTarget.checked) {
+               showNarcotics()
+           } else {
+              hideNarcotics()
+           }})
+
+       function showSmoke(){
+           inputSmoke.style.display = "inline-block";
+           labelSmoke.style.display = "inline-block";
+       }
+       function hideSmoke(){
+           inputSmoke.style.display = "none";
+           labelSmoke.style.display = "none";
+       }
+       function showAlcohol(){
+           inputAlcoholConsumes.style.display = "inline-block";
+           inputAlcoholAmount.style.display = "inline-block";
+           labelAlcoholConsumes.style.display = "inline-block";
+           labelAlcoholAmount.style.display = "inline-block";
+       }
+       function hideAlcohol(){
+           inputAlcoholConsumes.style.display = "none";
+           inputAlcoholAmount.style.display = "none";
+           labelAlcoholConsumes.style.display = "none";
+           labelAlcoholAmount.style.display = "none";
+       }
+       function  showNarcotics(){
+           labelNarcoticsAmount.style.display = "inline-block";
+           inputNarcoticsAmount.style.display = "inline-block";
+           inputNarcoticsType.style.display = "inline-block";
+           labelNarcoticsUsesInMoment.style.display = "inline-block";
+           inputNarcoticsUsesInMoment.style.display = "inline-block";
+       }
+       function  hideNarcotics(){
+           labelNarcoticsAmount.style.display = "none";
+           inputNarcoticsAmount.style.display = "none";
+           inputNarcoticsType.style.display = "none";
+           labelNarcoticsUsesInMoment.style.display = "none";
+           inputNarcoticsUsesInMoment.style.display = "none";
+       }
+    </script>
+{% endblock %}
