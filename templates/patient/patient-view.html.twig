@@ -991,18 +991,6 @@
                                                                             </tr>
                                                                             <tr>
                                                                                 <th class="social-label b-none">
-                                                                                    Семенн статус
-                                                                                </th>
-                                                                                <td class="social-user-name b-none text-muted">
-                                                                                    {% if patient.details != null %}
-                                                                                        {{ patient.details.maritalStatus }}
-                                                                                    {% else %}
-                                                                                        Не е посочено
-                                                                                    {% endif %}
-                                                                                </td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <th class="social-label b-none">
                                                                                     ЕГН
                                                                                 </th>
                                                                                 <td class="social-user-name b-none text-muted">
@@ -1241,6 +1229,61 @@
                                                                             </th>
                                                                             <td class="social-user-name b-none p-t-0 text-muted">
                                                                                 {{ patient.habits ? patient.habits.useInTheMomentNarcotics ? 'Да' : 'Не' : 'Липсват данни' }}
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12">
+                                                    <div class="card">
+                                                        <div class="card-header">
+                                                            <h5 class="card-header-text">
+                                                                Семейно положение
+                                                            </h5>
+                                                            <a href="{{ path('patient-create') }}">
+                                                                <button id="edit-work" type="button"
+                                                                        class="btn btn-primary waves-effect waves-light f-right">
+                                                                    <i class="icofont icofont-edit"></i>
+                                                                </button>
+                                                            </a>
+                                                        </div>
+                                                        <div class="card-block">
+                                                            <div id="work-info" class="row">
+                                                                <div class="col-lg-12 col-md-12">
+                                                                    <table class="table table-responsive m-b-0">
+                                                                        <tr>
+                                                                            <th class="social-label b-none p-t-0">
+                                                                                Семен статус
+                                                                            </th>
+                                                                            <td class="social-user-name b-none p-t-0 text-muted">
+                                                                                {{ patient.family ? patient.family.maritalStatus : 'Липсват данни' }}
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <th class="social-label b-none p-t-0">
+                                                                                Има ли деца
+                                                                            </th>
+                                                                            <td class="social-user-name b-none p-t-0 text-muted">
+                                                                                {{ patient.family ? patient.family.haveKids ? 'Да' : 'Не' : 'Липсват данни' }}
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <th class="social-label b-none p-t-0">
+                                                                                Брой момчета
+                                                                            </th>
+                                                                            <td class="social-user-name b-none p-t-0 text-muted">
+                                                                                {{ patient.family ? patient.family.amountOfBoys : 'Липсват данни' }}
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <th class="social-label b-none p-t-0">
+                                                                                Брой момичета
+                                                                            </th>
+                                                                            <td class="social-user-name b-none p-t-0 text-muted">
+                                                                                {{ patient.family ? patient.family.amountOfGirls : 'Липсват данни' }}
                                                                             </td>
                                                                         </tr>
                                                                     </table>

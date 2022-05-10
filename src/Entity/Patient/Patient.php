@@ -168,6 +168,11 @@ class Patient
      */
     private $habits;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Family::class, mappedBy="patient", cascade={"persist", "remove"})
+     */
+    private $family;
+
 
     public function __construct()
     {
@@ -633,6 +638,23 @@ class Patient
         }
 
         $this->habits = $habits;
+
+        return $this;
+    }
+
+    public function getFamily(): ?Family
+    {
+        return $this->family;
+    }
+
+    public function setFamily(Family $family): self
+    {
+        // set the owning side of the relation if necessary
+        if ($family->getPatient() !== $this) {
+            $family->setPatient($this);
+        }
+
+        $this->family = $family;
 
         return $this;
     }

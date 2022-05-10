@@ -11,16 +11,6 @@
     {{ slope_it_breadcrumb() }}
 {% endblock %}
 {% block body %}
-    {# <div class="col-sm-12 col-xl-4 m-b-30"> #}
-    {# <div> #}
-    {# <label for="form_validity">Age</label> #}
-    {# <ul> #}
-    {# <li>This field is required</li> #}
-    {# </ul> #}
-    {# <input class="form-control" type="date" id="form_validity" name="form[validity]"/> #}
-    {# </div> #}
-    {# </div> #}
-    {# {{ form_row(, {'attr': {'class':"form-control",'type': 'month'}}) }} #}
     {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
     {{ form_widget(form) }}
     <button type="submit">Запис</button>

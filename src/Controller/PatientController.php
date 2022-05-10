@@ -8,6 +8,7 @@ use App\Entity\Patient\Details;
 use App\Entity\Patient\Habits;
 use App\Entity\Patient\IDCard;
 use App\Entity\Patient\Patient;
+use App\Form\FamilyType;
 use App\Form\HabitsType;
 use App\Form\IDCardType;
 use App\Form\PatientContactType;
@@ -162,10 +163,39 @@ class PatientController extends AbstractController
             $habits = $form->getData();
             $this->patientService->saveHabits($habits,$patient, $isEdit);
 
-            return $this->redirectToRoute('patient-contacts-create', ['egn' => $egn]);
+            return $this->redirectToRoute('patient-family-create', ['egn' => $egn]);
         }
 
         return $this->render('patient/habits-create.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Breadcrumb(
+     *     {"label" = "Начало", "route" = "home"},
+     *     {"label" = "Пациент", "route" = "patient-create"},
+     *     {"label" = "Семейство на пациента"})
+     * @param Request $request
+     * @return Response
+     */
+    #[Route('/patient/family-create', name: 'patient-family-create')]
+    public function familyCreate(Request $request): Response
+    {
+        $isEdit = false;
+        $egn = $request->query->get('egn');
+        $patient = $this->patientService->findOneByEGN($egn);
+        $form = $this->createForm(FamilyType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $family = $form->getData();
+            $this->patientService->saveFamily($family,$patient, $isEdit);
+
+            return $this->redirectToRoute('patient-contacts-create', ['egn' => $egn]);
+        }
+
+        return $this->render('patient/family-create.html.twig', [
             'form' => $form->createView()
         ]);
     }

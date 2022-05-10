@@ -14,4 +14,6 @@ interface DateTimeServiceInterface
     public function setDateTimeBlank(): DateTime;
 
     public function dateTimeToImmutableDateTime($date): DateTimeImmutable;
+
+    public function immutableDateTime(): DateTimeImmutable;
 }

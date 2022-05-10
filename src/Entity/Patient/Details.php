@@ -44,11 +44,6 @@ class Details
     private $eyeColor;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $maritalStatus;
-
-    /**
      * @ORM\OneToOne(targetEntity=Patient::class, mappedBy="Details", cascade={"persist", "remove"})
      */
     private $patient;
@@ -152,18 +147,6 @@ class Details
     public function setEyeColor(string $eyeColor): self
     {
         $this->eyeColor = $eyeColor;
-
-        return $this;
-    }
-
-    public function getMaritalStatus(): ?string
-    {
-        return $this->maritalStatus;
-    }
-
-    public function setMaritalStatus(string $maritalStatus): self
-    {
-        $this->maritalStatus = $maritalStatus;
 
         return $this;
     }

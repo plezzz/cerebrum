@@ -30,9 +30,12 @@ class DateTimeService implements DateTimeServiceInterface
         return date("dmY");
     }
 
+    /**
+     * @throws Exception
+     */
     public function __toString(): string
     {
-        return $this->setDateTimeNow();
+        return strval( $this->setDateTimeNow() ) ;
     }
 
     /**
@@ -49,6 +52,14 @@ class DateTimeService implements DateTimeServiceInterface
 
     public function dateTimeToImmutableDateTime($date): DateTimeImmutable
     {
-        return DateTimeImmutable::createFromMutable( $date );
+        return DateTimeImmutable::createFromMutable($date);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function immutableDateTime(): DateTimeImmutable
+    {
+        return DateTimeImmutable::createFromMutable($this->setDateTimeNow());
     }
 }

@@ -5,6 +5,7 @@ namespace App\Service\Patient;
 
 use App\Entity\Patient\Contacts;
 use App\Entity\Patient\Details;
+use App\Entity\Patient\Family;
 use App\Entity\Patient\Habits;
 use App\Entity\Patient\IDCard;
 use App\Entity\Patient\Patient;
@@ -76,5 +77,8 @@ interface PatientServiceInterface
     public function deletePsychologicalNote(int $id): void;
 
     public function saveHabits(Habits $habits, Patient $patient, $isEdit): ?int;
+
+    public function saveFamily(Family $family, Patient $patient, $isEdit): ?int;
+
 
 }

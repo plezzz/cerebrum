@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Регистрация на пациент Семейство{% endblock %}
+{% block header %}
+    <div class="d-inline">
+        <h4>Семейство на пациента</h4>
+        {# <span>Място където може да добавяте нови работници</span> #}
+    </div>
+{% endblock %}
+{% block breadcrumb %}
+    {{ slope_it_breadcrumb() }}
+{% endblock %}
+{% block body %}
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+    {{ form_widget(form) }}
+    <button type="submit">Запис</button>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+{% block javascriptend %}
+    <script>
+        let haveKids = document.querySelector("#family_haveKids");
+        let boys = document.querySelector("#family > div:nth-child(3)")
+        let girls = document.querySelector("#family > div:nth-child(4)");
+
+
+        haveKids.addEventListener('change', (event) => {
+            if (event.currentTarget.checked) {
+                showKids()
+            } else {
+                hideKids()
+            }
+        })
+
+        function showKids() {
+        boys.classList.remove("d-none")
+        girls.classList.remove("d-none")
+        }
+
+        function hideKids() {
+            boys.classList.add("d-none")
+            girls.classList.add("d-none")
+        }
+    </script>
+{% endblock %}

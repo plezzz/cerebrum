@@ -64,16 +64,7 @@ class PatientDetailsType extends AbstractType
                     '0-' => '0-',
                 ],
             ])
-            ->add('maritalStatus', ChoiceType::class, [
-                'label' => 'Семеен статус',
-                'choices' => [
-                    'Не е посочено' => 'Не е посочено',
-                    'Неженен/Неомъжена' => 'Неженен/Неомъжена',
-                    'Женен/Омъжена' => 'Женен/Омъжена',
-                    'Разведен/Разведена' => 'Разведен/Разведена',
-                    'Вдовец/Вдовица' => 'Вдовец/Вдовица',
-                ],
-            ]);
+           ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
