@@ -169,8 +169,10 @@ class PatientService implements PatientServiceInterface
     {
         if ($details->getSex() === 'Жена') {
             $profilePicture = 'female.png';
-        } else {
+        } elseif($details->getSex() === 'Мъж') {
             $profilePicture = 'male.png';
+        }else{
+            $profilePicture = 'uni.png';
         }
 
         $details->setCreatedBy($this->user);
@@ -412,8 +414,8 @@ class PatientService implements PatientServiceInterface
     function generateID($patient): string
     {
         $first = mb_substr($patient->getFirstName(), 0, 1, "utf-8");
-        $second = mb_substr($patient->getLastName(), 0, 1, "utf-8");
-        $third = mb_substr($patient->getMiddleName(), 0, 1, "utf-8");
+        $second = mb_substr($patient->getMiddleName(), 0, 1, "utf-8");
+        $third = mb_substr($patient->getLastName(), 0, 1, "utf-8");
         $fourth = mb_substr($patient->getEGN(), 0, 4, "utf-8");
         return $first . $second . $third . $fourth;
     }
