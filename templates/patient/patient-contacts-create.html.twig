@@ -13,13 +13,9 @@
 {% block body %}
     {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
     {{ form_widget(form) }}
-    <button type="submit">Запази</button>
 
 
-    {{ form_end(form) }}
-    <a href="/patient/{{ patient.id }}">
-        <button>Виж Пациента</button>
-    </a>
+
 {% endblock %}
 
 {% block stylesheets %}

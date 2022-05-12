@@ -216,11 +216,16 @@ class PatientController extends AbstractController
         $form = $this->createForm(PatientContactType::class, $contacts);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid() ) {
             $contacts = $form->getData();
             $this->patientService->saveContacts($contacts, $patient, $isEdit);
 
-            return $this->redirectToRoute('patient-contacts-create', ['egn' => $egn]);
+
+            if ( 'saveAndAdd' === $form->getClickedButton()->getName()) {
+                return $this->redirectToRoute('patient-contacts-create', ['egn' => $egn]);
+            } else if('saveAndView' === $form->getClickedButton()->getName()){
+                return $this->redirectToRoute('patient', ['id' => $patient->getId()]);
+            }
         }
 
         return $this->render('patient/patient-contacts-create.html.twig', [

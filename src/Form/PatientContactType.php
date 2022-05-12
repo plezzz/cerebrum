@@ -6,6 +6,7 @@ use App\Entity\Patient\Contacts;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -51,7 +52,10 @@ class PatientContactType extends AbstractType
             ])
             ->add('note', TextareaType::class, [
                 'label' => 'Допълнителна информация',
-            ]);
+            ])
+            ->add('saveAndAdd', SubmitType::class, ['label' => 'Запази и Добави Нов'])
+            ->add('saveAndView', SubmitType::class, ['label' => 'Запази и Виж Пациента']);
+
     }
 
     public function configureOptions(OptionsResolver $resolver)
