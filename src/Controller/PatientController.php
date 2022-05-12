@@ -340,6 +340,9 @@ class PatientController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $fileData = $form['upload_file']->getData();
             $profilePictureUploadService->upload($fileData, $id);
+
+            $message = 'test';
+            return $this->json(array('username' => $message));
         }
         return $this->render('patient/profilePictureUpload.html.twig', [
             'form' => $form->createView(),

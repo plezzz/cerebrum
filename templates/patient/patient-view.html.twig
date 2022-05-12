@@ -1542,4 +1542,11 @@
                 })
             }
         </script>
+
+        <script>
+            let el = document.querySelector("#profile-picture-upload-modal > div > div > div.modal-body");
+            if (el.textContent.trim() == '{"username":"test"}'){
+                location.reload();
+            }
+        </script>
     {% endblock %}
