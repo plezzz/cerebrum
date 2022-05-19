@@ -1412,10 +1412,75 @@
                                         <!-- Report tab end -->
                                         <!-- Temperature line tab start -->
                                         <div class="tab-pane" id="temperature-line">
-                                            <div class="text-center">
-                                                <p>За този пациент няма температурна линия</p>
-                                                <p>Очаквайте скоро тази функционалност</p>
-                                            </div>
+                                            {% if patient.temperatureLists %}
+                                                <div class="text-center mb-4">
+                                                    <a href="{{ path('patient_temperature_list', {'id': patient.id}) }}"
+                                                       class="btn btn-primary waves-effect waves-light m-r-10">Добавете
+                                                        запис в температурния лист
+                                                    </a>
+                                                </div>
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                    </div>
+                                                    <div class="card-block">
+                                                        <div class="dt-responsive table-responsive">
+                                                            <table class="table table-striped table-bordered  display nowrap"
+                                                                   id="example" style="width:100%">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th>Оплаквания на болния, обективни данни протичане на болеста</th>
+                                                                    <th>Дата</th>
+                                                                    <th>Терапия</th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                {% for list in patient.temperatureLists %}
+                                                                <tr>
+                                                                    <td>{{ list.notes }}</td>
+                                                                    <td>{{ list.createdAt|date('d.m.Y H:i:s') }}</td>
+                                                                    <td>
+                                                                        <table class="table table-striped table-bordered  display nowrap"
+                                                                               id="example" style="width:100%">
+                                                                            <thead>
+                                                                            <tr>
+                                                                                <th rowspan="2">Медикамент</th>
+                                                                                <th rowspan="2">Количество</th>
+                                                                                <th rowspan="2">Мерна единица</th>
+                                                                                <th colspan="3">Схема</th>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <th>Сутрин</th>
+                                                                                <th>Обед</th>
+                                                                                <th>Вечер</th>
+                                                                            </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                            {% for drugs in list.therapies %}
+                                                                                <tr>
+                                                                                    <td>{{ drugs.drug }}</td>
+                                                                                    <td>{{ drugs.amount }}</td>
+                                                                                    <td>{{ drugs.unit }}</td>
+                                                                                    <td>{{ drugs.drug }}</td>
+                                                                                    <td>{{ drugs.amount }}</td>
+                                                                                    <td>{{ drugs.unit }}</td>
+
+                                                                                </tr>
+                                                                            {% endfor %}
+                                                                            </tbody>
+                                                                        </table>
+                                                                        {% endfor %}
+                                                                </tbody>
+                                                            </table>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            {% else %}
+                                                <div class="text-center">
+                                                    <p>За този пациент няма добавени данни в температурния лист</p>
+                                                </div>
+                                            {% endif %}
                                         </div>
                                         <!-- Temperature line tab end -->
                                     </div>
@@ -1545,7 +1610,7 @@
 
         <script>
             let el = document.querySelector("#profile-picture-upload-modal > div > div > div.modal-body");
-            if (el.textContent.trim() == '{"username":"test"}'){
+            if (el.textContent.trim() == '{"username":"test"}') {
                 location.reload();
             }
         </script>

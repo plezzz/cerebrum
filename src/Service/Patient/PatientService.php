@@ -17,6 +17,7 @@ use App\Entity\Patient\PsychologicalEvaluationNote;
 use App\Entity\Patient\Report;
 use App\Entity\Patient\SocialEvaluation;
 use App\Entity\Patient\SocialEvaluationNote;
+use App\Entity\Patient\TemperatureList;
 use App\Entity\User;
 use App\Repository\Patient\ContactsRepository;
 use App\Repository\Patient\DetailsRepository;
@@ -30,6 +31,8 @@ use App\Repository\Patient\PsychologicalEvaluationNoteRepository;
 use App\Repository\Patient\ReportRepository;
 use App\Repository\Patient\SocialEvaluationNoteRepository;
 use App\Repository\Patient\SocialEvaluationRepository;
+use App\Repository\Patient\TemperatureListRepository;
+use App\Repository\Patient\TherapyRepository;
 use App\Repository\PatientRepository;
 use App\Service\Common\DateTimeServiceInterface;
 use App\Service\User\UserServiceInterface;
@@ -61,6 +64,8 @@ class PatientService implements PatientServiceInterface
     private PsychologicalEvaluationNoteRepository $psychologicalEvaluationNoteRepository;
     private HabitsRepository $habitsRepository;
     private FamilyRepository $familyRepository;
+    private TemperatureListRepository $temperatureListRepository;
+    private TherapyRepository $therapyRepository;
 
     public function __construct(
         UserServiceInterface                  $userService,
@@ -78,6 +83,8 @@ class PatientService implements PatientServiceInterface
         PsychologicalEvaluationNoteRepository $psychologicalEvaluationNoteRepository,
         HabitsRepository                      $habitsRepository,
         FamilyRepository                      $familyRepository,
+        TemperatureListRepository             $temperatureListRepository,
+        TherapyRepository                     $therapyRepository,
     )
     {
         $this->userService = $userService;
@@ -97,6 +104,8 @@ class PatientService implements PatientServiceInterface
         $this->user = $this->userService->currentUser();
         $this->date = $this->dateTimeService->immutableDateTime();
         $this->familyRepository = $familyRepository;
+        $this->temperatureListRepository = $temperatureListRepository;
+        $this->therapyRepository = $therapyRepository;
     }
 
 
@@ -169,9 +178,9 @@ class PatientService implements PatientServiceInterface
     {
         if ($details->getSex() === 'Жена') {
             $profilePicture = 'female.png';
-        } elseif($details->getSex() === 'Мъж') {
+        } elseif ($details->getSex() === 'Мъж') {
             $profilePicture = 'male.png';
-        }else{
+        } else {
             $profilePicture = 'uni.png';
         }
 
@@ -536,4 +545,62 @@ class PatientService implements PatientServiceInterface
         return $family->getId();
     }
 
+    /**
+     *
+     */
+    public function addTemperatureList(TemperatureList $temperatureList, Patient $patient): void
+    {
+        //$therapies = $temperatureList->getTherapies();
+   //     $file = 'file.txt';
+
+        //file_put_contents($file, print_r($therapies, true));
+//        foreach ($therapies as $therapy) {
+//            $this->therapyRepository->add($therapy);
+//            file_put_contents($file, print_r($therapy, true));
+//        }
+
+       // if (!$isEdit) {
+            $temperatureList->setCreatedBy($this->user);
+            $temperatureList->setCreatedAt($this->date);
+       // }
+
+        $temperatureList->setEditedBy($this->user);
+        $temperatureList->setEditedAt($this->date);
+        $temperatureList->setPatient($patient);
+
+        $this->temperatureListRepository->add($temperatureList);
+        //$patient->addTemperatureList($temperatureList);
+//        $patient->setEditedBy($this->user);
+//        $patient->setEditedAt($this->date);
+//        $this->patientRepository->insert($patient);
+//        foreach ($originalTags as $tag) {
+//            if (false === $task->getTags()->contains($tag)) {
+//                // remove the Task from the Tag
+//                $tag->getTasks()->removeElement($task);
+//
+//                // if it was a many-to-one relationship, remove the relationship like this
+//                // $tag->setTask(null);
+//
+//                $entityManager->persist($tag);
+//
+//                // if you wanted to delete the Tag entirely, you can also do that
+//                // $entityManager->remove($tag);
+//            }
+//        }
+//
+//        $entityManager->persist($task);
+//        $entityManager->flush();
+//
+//        // redirect back to some edit page
+//        return $this->redirectToRoute('task_edit', ['id' => $id]);
+    }
+
+    /**
+     * @param $id
+     * @return array
+     */
+    public function getTemperatureList($id): array
+    {
+        return $this->temperatureListRepository->findBy(['patient' => $id]);
+    }
 }

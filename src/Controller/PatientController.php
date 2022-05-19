@@ -8,6 +8,8 @@ use App\Entity\Patient\Details;
 use App\Entity\Patient\Habits;
 use App\Entity\Patient\IDCard;
 use App\Entity\Patient\Patient;
+use App\Entity\Patient\TemperatureList;
+use App\Entity\Patient\Therapy;
 use App\Form\FamilyType;
 use App\Form\HabitsType;
 use App\Form\IDCardType;
@@ -22,8 +24,10 @@ use App\Form\PatientSocialEvaluationNoteType;
 use App\Form\PatientSocialEvaluationType;
 use App\Form\PatientType;
 use App\Form\ProfilePictureUploadType;
+use App\Form\TemperatureListType;
 use App\Service\Patient\PatientServiceInterface;
 use App\Service\Patient\ProfilePictureUploadService;
+use Doctrine\Common\Collections\ArrayCollection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -629,5 +633,77 @@ class PatientController extends AbstractController
     }
 
 
+    /**
+     * @IsGranted("ROLE_DOCTOR")
+     * @param Request $request
+     * @return Response
+     * @Breadcrumb({
+     *     {"label" = "Начало", "route" = "home"},
+     *     {"label" = "Всички пациенти", "route" = "all-patients"},
+     *     {"label" = "Температурен лист"},
+     *     })
+     */
+    #[Route('/patient/add/temperature-list', name: 'patient_temperature_list')]
+    public function addTemperatureList(Request $request): Response
+    {
+        $id = $request->query->get('id');
+        $patient = $this->patientService->findOneByID($id);
+        $temperatureList = new TemperatureList();
 
+        $form = $this->createForm(TemperatureListType::class,$temperatureList);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $formFields = $form->getData();
+            $this->patientService->addTemperatureList($formFields,$patient);
+            return $this->redirectToRoute('patient', ['id' => $patient->getId(), '_fragment' => 'temperature-line']);
+        }
+
+        return $this->render('patient/temperatureList.html.twig', [
+            'form' => $form->createView(),
+        ]);
+
+//        $task = new Task();
+//
+//        // dummy code - add some example tags to the task
+//        // (otherwise, the template will render an empty list of tags)
+//        $tag1 = new Tag();
+//        $tag1->setName('tag1');
+//        $task->getTags()->add($tag1);
+//        $tag2 = new Tag();
+//        $tag2->setName('tag2');
+//        $task->getTags()->add($tag2);
+//        // end dummy code
+//
+//        $form = $this->createForm(TaskType::class, $task);
+//
+//        $form->handleRequest($request);
+//
+//        if ($form->isSubmitted() && $form->isValid()) {
+//            // ... do your form processing, like saving the Task and Tag entities
+//        }
+//
+//        return $this->renderForm('task/new.html.twig', [
+//            'form' => $form,
+//        ]);
+
+
+//        $id = $request->query->get('id');
+//        $patient = $this->patientService->findOneByID($id);
+//        $isEdit = is_null($patient->getPsychologicalEvaluation());
+//        $form = $this->createForm(PatientPsychologicalEvaluationType::class,$patient->getPsychologicalEvaluation());
+//        $form->handleRequest($request);
+//
+//        if ($form->isSubmitted() && $form->isValid()) {
+//            $formFields = $form->getData();
+//            $this->patientService->PsychologicalEvaluation($formFields, $patient,!$isEdit);
+//            return $this->redirectToRoute('patient', ['id' => $patient->getId(), '_fragment' => 'psychological-evaluation']);
+//
+//        }
+//        return $this->render('patient/psychological-evaluation.html.twig', [
+//            'form' => $form->createView(),
+//            'patient' => $patient,
+//            'isEdit' => $isEdit,
+//        ]);
+    }
 }

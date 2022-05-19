@@ -173,6 +173,11 @@ class Patient
      */
     private $family;
 
+    /**
+     * @ORM\OneToMany(targetEntity=TemperatureList::class, mappedBy="patient", orphanRemoval=true)
+     */
+    private $temperatureLists;
+
 
     public function __construct()
     {
@@ -182,6 +187,7 @@ class Patient
         $this->psychiatricEvaluationNotes = new ArrayCollection();
         $this->socialEvaluationNotes = new ArrayCollection();
         $this->psychologicalEvaluationNotes = new ArrayCollection();
+        $this->temperatureLists = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -659,4 +665,33 @@ class Patient
         return $this;
     }
 
+    /**
+     * @return Collection<int, TemperatureList>
+     */
+    public function getTemperatureLists(): Collection
+    {
+        return $this->temperatureLists;
+    }
+
+    public function addTemperatureList(TemperatureList $temperatureList): self
+    {
+        if (!$this->temperatureLists->contains($temperatureList)) {
+            $this->temperatureLists[] = $temperatureList;
+            $temperatureList->setPatient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTemperatureList(TemperatureList $temperatureList): self
+    {
+        if ($this->temperatureLists->removeElement($temperatureList)) {
+            // set the owning side to null (unless already changed)
+            if ($temperatureList->getPatient() === $this) {
+                $temperatureList->setPatient(null);
+            }
+        }
+
+        return $this;
+    }
 }

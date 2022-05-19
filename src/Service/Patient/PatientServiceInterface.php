@@ -16,6 +16,7 @@ use App\Entity\Patient\PsychologicalEvaluationNote;
 use App\Entity\Patient\Report;
 use App\Entity\Patient\SocialEvaluation;
 use App\Entity\Patient\SocialEvaluationNote;
+use App\Entity\Patient\TemperatureList;
 
 interface PatientServiceInterface
 {
@@ -79,6 +80,10 @@ interface PatientServiceInterface
     public function saveHabits(Habits $habits, Patient $patient, $isEdit): ?int;
 
     public function saveFamily(Family $family, Patient $patient, $isEdit): ?int;
+
+    public function addTemperatureList(TemperatureList $temperatureList,Patient $patient):void;
+
+    public function getTemperatureList($id): array;
 
 
 }

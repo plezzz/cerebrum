@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h3>Добавяне към температурния лист</h3>
+    {{ form_start(form) }}
+    {{ form_row(form.notes) }}
+    <ul class="therapies"
+        data-index="{{ form.therapies|length > 0 ? form.therapies|last.vars.name + 1 : 0 }}"
+        data-prototype="{{ form_widget(form.therapies.vars.prototype)|e('html_attr') }}"
+    ></ul>
+    <button type="button" class="add_item_link" data-collection-holder-class="therapies" id="add_item_link">Добави терапия
+    </button>
+    <button type="submit">Изпрати</button>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascriptend %}
+    <script>
+        document.querySelector("#pcoded > div.pcoded-container.navbar-wrapper > div > div > div > div > div > div > form > fieldset").classList.add('d-none')
+        document
+            .querySelectorAll('ul.therapies li')
+            .forEach((tag) => {
+                addTagFormDeleteLink(tag)
+            })
+        window.onload = function (e) {
+            document
+                .querySelectorAll('.add_item_link')
+                .forEach(btn => {
+                    btn.addEventListener("click", addFormToCollection)
+
+                });
+        }
+        var addFormToCollection = (e) => {
+            const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
+
+            const item = document.createElement('li');
+            item.style = 'border: 1px dashed seagreen;padding: 13px;margin: 3px;'
+            item.classList.add('therapylist');
+            item.innerHTML = collectionHolder
+                .dataset
+                .prototype
+                .replace(
+                    /__name__/g,
+                    collectionHolder.dataset.index
+                );
+
+            collectionHolder.appendChild(item);
+            addTagFormDeleteLink(item)
+            collectionHolder.dataset.index++;
+        };
+
+        const addTagFormDeleteLink = (item) => {
+            const removeFormButton = document.createElement('button');
+            removeFormButton.innerText = 'Изтрии тази терапия';
+
+            item.append(removeFormButton);
+
+            removeFormButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                // remove the li for the tag form
+                item.remove();
+            });
+        }
+    </script>
+{% endblock %}
+
