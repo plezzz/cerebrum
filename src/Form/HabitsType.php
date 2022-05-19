@@ -40,9 +40,9 @@ class HabitsType extends AbstractType
             ->add('howOftenHeConsumesAlcohol', ChoiceType::class, [
                 'label'=> 'Колко често употрвбява алкохол',
                 'choices'  => [
-                    'Всеки ден' => null,
-                    'Няколко пъти седмично' => true,
-                    'Веднъж седмично' => false,
+                    'Всеки ден' => 'Всеки ден',
+                    'Няколко пъти седмично' => 'Няколко пъти седмично',
+                    'Веднъж седмично' => 'Веднъж седмично',
                 ],
                 ])
             ->add('narcotics', CheckboxType::class, [
@@ -52,9 +52,9 @@ class HabitsType extends AbstractType
             ->add('howOftenHeUsesDrugs', ChoiceType::class, [
                 'label'=> 'Колко често употрвбява наркотици',
                 'choices'  => [
-                    'Всеки ден' => null,
-                    'Няколко пъти седмично' => true,
-                    'Веднъж седмично' => false,
+                    'Всеки ден' => 'Всеки ден',
+                    'Няколко пъти седмично' => 'Няколко пъти седмично',
+                    'Веднъж седмично' => 'Веднъж седмично',
                 ],
             ])
             ->add('whatTypeOfDrugUses', TextareaType::class, [

@@ -1166,14 +1166,16 @@
                                                                                 {{ patient.habits ? patient.habits.smoking ? 'Да' : 'Не' : 'Липсват данни' }}
                                                                             </td>
                                                                         </tr>
-                                                                        <tr>
-                                                                            <th class="social-label b-none p-t-0">
-                                                                                Цигари на ден
-                                                                            </th>
-                                                                            <td class="social-user-name b-none p-t-0 text-muted">
-                                                                                {{ patient.habits ? patient.habits.amountOfCigarettesPerDay : 'Липсват данни' }}
-                                                                            </td>
-                                                                        </tr>
+                                                                        {% if patient.habits.smoking ?? false %}
+                                                                            <tr>
+                                                                                <th class="social-label b-none p-t-0">
+                                                                                    Цигари на ден
+                                                                                </th>
+                                                                                <td class="social-user-name b-none p-t-0 text-muted">
+                                                                                    {{ patient.habits ? patient.habits.amountOfCigarettesPerDay : 'Липсват данни' }}
+                                                                                </td>
+                                                                            </tr>
+                                                                        {% endif %}
                                                                         <tr>
                                                                             <th class="social-label b-none p-t-0">
                                                                                 Употребява ли алкохол
@@ -1182,22 +1184,24 @@
                                                                                 {{ patient.habits ? patient.habits.alcohol ? 'Да' : 'Не' : 'Липсват данни' }}
                                                                             </td>
                                                                         </tr>
-                                                                        <tr>
-                                                                            <th class="social-label b-none p-t-0">
-                                                                                Средно количество в мл.
-                                                                            </th>
-                                                                            <td class="social-user-name b-none p-t-0 text-muted">
-                                                                                {{ patient.habits ? patient.habits.amountOfAlcoholPerDay : 'Липсват данни' }}
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <th class="social-label b-none p-t-0">
-                                                                                Употреба на алкохол
-                                                                            </th>
-                                                                            <td class="social-user-name b-none p-t-0 text-muted">
-                                                                                {{ patient.habits ? patient.habits.howOftenHeConsumesAlcohol : 'Липсват данни' }}
-                                                                            </td>
-                                                                        </tr>
+                                                                        {% if patient.habits.alcohol ?? false %}
+                                                                            <tr>
+                                                                                <th class="social-label b-none p-t-0">
+                                                                                    Средно количество в мл.
+                                                                                </th>
+                                                                                <td class="social-user-name b-none p-t-0 text-muted">
+                                                                                    {{ patient.habits ? patient.habits.amountOfAlcoholPerDay : 'Липсват данни' }}
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <th class="social-label b-none p-t-0">
+                                                                                    Употреба на алкохол
+                                                                                </th>
+                                                                                <td class="social-user-name b-none p-t-0 text-muted">
+                                                                                    {{ patient.habits ? patient.habits.howOftenHeConsumesAlcohol : 'Липсват данни' }}
+                                                                                </td>
+                                                                            </tr>
+                                                                        {% endif %}
                                                                         <tr>
                                                                             <th class="social-label b-none p-t-0">
                                                                                 Взима ли наркотици
@@ -1206,30 +1210,32 @@
                                                                                 {{ patient.habits ? patient.habits.narcotics ? 'Да' : 'Не' : 'Липсват данни' }}
                                                                             </td>
                                                                         </tr>
-                                                                        <tr>
-                                                                            <th class="social-label b-none p-t-0">
-                                                                                Употреба на наркотици
-                                                                            </th>
-                                                                            <td class="social-user-name b-none p-t-0 text-muted">
-                                                                                {{ patient.habits ? patient.habits.howOftenHeUsesDrugs : 'Липсват данни' }}
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <th class="social-label b-none p-t-0">
-                                                                                Тип на наркотиците
-                                                                            </th>
-                                                                            <td class="social-user-name b-none p-t-0 text-muted">
-                                                                                {{ patient.habits ? patient.habits.whatTypeOfDrugUses : 'Липсват данни' }}
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <th class="social-label b-none p-t-0">
-                                                                                Употребява ли в момента
-                                                                            </th>
-                                                                            <td class="social-user-name b-none p-t-0 text-muted">
-                                                                                {{ patient.habits ? patient.habits.useInTheMomentNarcotics ? 'Да' : 'Не' : 'Липсват данни' }}
-                                                                            </td>
-                                                                        </tr>
+                                                                        {% if patient.habits.narcotics ?? false %}
+                                                                            <tr>
+                                                                                <th class="social-label b-none p-t-0">
+                                                                                    Употреба на наркотици
+                                                                                </th>
+                                                                                <td class="social-user-name b-none p-t-0 text-muted">
+                                                                                    {{ patient.habits ? patient.habits.howOftenHeUsesDrugs : 'Липсват данни' }}
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <th class="social-label b-none p-t-0">
+                                                                                    Тип на наркотиците
+                                                                                </th>
+                                                                                <td class="social-user-name b-none p-t-0 text-muted">
+                                                                                    {{ patient.habits ? patient.habits.whatTypeOfDrugUses : 'Липсват данни' }}
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <th class="social-label b-none p-t-0">
+                                                                                    Употребява ли в момента
+                                                                                </th>
+                                                                                <td class="social-user-name b-none p-t-0 text-muted">
+                                                                                    {{ patient.habits ? patient.habits.useInTheMomentNarcotics ? 'Да' : 'Не' : 'Липсват данни' }}
+                                                                                </td>
+                                                                            </tr>
+                                                                        {% endif %}
                                                                     </table>
                                                                 </div>
                                                             </div>
@@ -1269,6 +1275,7 @@
                                                                                 {{ patient.family ? patient.family.haveKids ? 'Да' : 'Не' : 'Липсват данни' }}
                                                                             </td>
                                                                         </tr>
+                                                                        {% if patient.family.haveKids ?? false %}
                                                                         <tr>
                                                                             <th class="social-label b-none p-t-0">
                                                                                 Брой момчета
@@ -1285,6 +1292,7 @@
                                                                                 {{ patient.family ? patient.family.amountOfGirls : 'Липсват данни' }}
                                                                             </td>
                                                                         </tr>
+                                                                        {%endif%}
                                                                     </table>
                                                                 </div>
                                                             </div>
@@ -1428,7 +1436,9 @@
                                                                    id="example" style="width:100%">
                                                                 <thead>
                                                                 <tr>
-                                                                    <th>Оплаквания на болния, обективни данни протичане на болеста</th>
+                                                                    <th>Оплаквания на болния, обективни данни протичане
+                                                                        на болеста
+                                                                    </th>
                                                                     <th>Дата</th>
                                                                     <th>Терапия</th>
                                                                 </tr>
@@ -1463,7 +1473,6 @@
                                                                                     <td>{{ drugs.drug }}</td>
                                                                                     <td>{{ drugs.amount }}</td>
                                                                                     <td>{{ drugs.unit }}</td>
-
                                                                                 </tr>
                                                                             {% endfor %}
                                                                             </tbody>
@@ -1471,11 +1480,9 @@
                                                                         {% endfor %}
                                                                 </tbody>
                                                             </table>
-
                                                         </div>
                                                     </div>
                                                 </div>
-
                                             {% else %}
                                                 <div class="text-center">
                                                     <p>За този пациент няма добавени данни в температурния лист</p>
@@ -1493,7 +1500,6 @@
             </div>
         </div>
     </div>
-
     {# Modal Start #}
     <!-- File upload start-->
     <div class="modal fade" id="file-upload-modal" tabindex="-1"

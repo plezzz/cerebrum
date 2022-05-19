@@ -662,48 +662,5 @@ class PatientController extends AbstractController
         return $this->render('patient/temperatureList.html.twig', [
             'form' => $form->createView(),
         ]);
-
-//        $task = new Task();
-//
-//        // dummy code - add some example tags to the task
-//        // (otherwise, the template will render an empty list of tags)
-//        $tag1 = new Tag();
-//        $tag1->setName('tag1');
-//        $task->getTags()->add($tag1);
-//        $tag2 = new Tag();
-//        $tag2->setName('tag2');
-//        $task->getTags()->add($tag2);
-//        // end dummy code
-//
-//        $form = $this->createForm(TaskType::class, $task);
-//
-//        $form->handleRequest($request);
-//
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            // ... do your form processing, like saving the Task and Tag entities
-//        }
-//
-//        return $this->renderForm('task/new.html.twig', [
-//            'form' => $form,
-//        ]);
-
-
-//        $id = $request->query->get('id');
-//        $patient = $this->patientService->findOneByID($id);
-//        $isEdit = is_null($patient->getPsychologicalEvaluation());
-//        $form = $this->createForm(PatientPsychologicalEvaluationType::class,$patient->getPsychologicalEvaluation());
-//        $form->handleRequest($request);
-//
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            $formFields = $form->getData();
-//            $this->patientService->PsychologicalEvaluation($formFields, $patient,!$isEdit);
-//            return $this->redirectToRoute('patient', ['id' => $patient->getId(), '_fragment' => 'psychological-evaluation']);
-//
-//        }
-//        return $this->render('patient/psychological-evaluation.html.twig', [
-//            'form' => $form->createView(),
-//            'patient' => $patient,
-//            'isEdit' => $isEdit,
-//        ]);
     }
 }
