@@ -81,7 +81,7 @@ interface PatientServiceInterface
 
     public function saveFamily(Family $family, Patient $patient, $isEdit): ?int;
 
-    public function addTemperatureList(TemperatureList $temperatureList,Patient $patient):void;
+    public function addTemperatureList(TemperatureList $temperatureList,Patient $patient,bool $isEdit):void;
 
     public function getTemperatureList($id): array;
 

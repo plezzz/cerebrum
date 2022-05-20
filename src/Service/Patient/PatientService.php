@@ -566,9 +566,13 @@ class PatientService implements PatientServiceInterface
     }
 
     /**
-     *
+     * @param TemperatureList $temperatureList
+     * @param Patient $patient
+     * @param bool $isEdit
+     * @throws OptimisticLockException
+     * @throws \Doctrine\ORM\ORMException
      */
-    public function addTemperatureList(TemperatureList $temperatureList, Patient $patient): void
+    public function addTemperatureList(TemperatureList $temperatureList, Patient $patient,bool $isEdit): void
     {
         //$therapies = $temperatureList->getTherapies();
    //     $file = 'file.txt';

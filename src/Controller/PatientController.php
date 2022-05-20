@@ -573,7 +573,6 @@ class PatientController extends AbstractController
     {
         $noteID = $request->query->get('noteID');
         $patient = $this->patientService->findOneByID($id);
-
         $this->patientService->deletePsychiatricNote($noteID);
 
         return $this->redirectToRoute('patient', ['id' => $patient->getId(), '_fragment' => 'psychiatric-evaluation']);
@@ -764,6 +763,7 @@ class PatientController extends AbstractController
     #[Route('/patient/add/temperature-list', name: 'patient_temperature_list')]
     public function addTemperatureList(Request $request): Response
     {
+        $isEdit = false;
         $id = $request->query->get('id');
         $patient = $this->patientService->findOneByID($id);
         $temperatureList = new TemperatureList();
@@ -773,7 +773,7 @@ class PatientController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $formFields = $form->getData();
-            $this->patientService->addTemperatureList($formFields, $patient);
+            $this->patientService->addTemperatureList($formFields, $patient, $isEdit);
             return $this->redirectToRoute('patient', ['id' => $patient->getId(), '_fragment' => 'temperature-line']);
         }
 
