@@ -3,7 +3,13 @@
 {% block title %}Регистрация на пациент Лична карта{% endblock %}
 {% block header %}
     <div class="d-inline">
-        <h4>Нов пациент</h4>
+        <h4 class="text-uppercase">
+            {% if isEdit %}
+                Редактиране
+            {% else %}
+                Добавяне
+            {% endif %}
+            на лична карта за {{ patient.firstName }} {{ patient.firstName }}</h4>
         {# <span>Място където може да добавяте нови работници</span> #}
     </div>
 {% endblock %}

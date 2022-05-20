@@ -972,18 +972,6 @@
                                                                             </tr>
                                                                             <tr>
                                                                                 <th class="social-label b-none">
-                                                                                    Пол
-                                                                                </th>
-                                                                                <td class="social-user-name b-none text-muted">
-                                                                                    {% if patient.details != null %}
-                                                                                        {{ patient.details.sex }}
-                                                                                    {% else %}
-                                                                                        Не е посочено
-                                                                                    {% endif %}
-                                                                                </td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <th class="social-label b-none">
                                                                                     Дата на раждане
                                                                                 </th>
                                                                                 <td class="social-user-name b-none text-muted">
@@ -996,6 +984,64 @@
                                                                                 </th>
                                                                                 <td class="social-user-name b-none text-muted">
                                                                                     {{ patient.eGN }}
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12">
+                                                    <div class="card">
+                                                        <div class="card-header">
+                                                            <h5 class="card-header-text">
+                                                                Допълнителна информация
+                                                            </h5>
+                                                            <a href="{{ path('patient-personal-info-edit', {'id': patient.id}) }}">
+                                                                <button id="edit-btn"
+                                                                        type="button"
+                                                                        class="btn btn-primary waves-effect waves-light f-right">
+                                                                    <i class="icofont icofont-edit"></i>
+                                                                </button>
+                                                            </a>
+                                                        </div>
+                                                        <div class="card-block">
+                                                            <div id="view-info" class="row">
+                                                                <div class="col-lg-12 col-md-12">
+                                                                    <form>
+                                                                        <table class="table table-responsive m-b-0">
+                                                                            <tr>
+                                                                                <th class="social-label b-none">
+                                                                                    Пол
+                                                                                </th>
+                                                                                <td class="social-user-name b-none text-muted">
+                                                                                    {{ patient.details ? patient.details.sex : 'Липсват данни' }}
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <th class="social-label b-none">
+                                                                                    Психичен пол
+                                                                                </th>
+                                                                                <td class="social-user-name b-none text-muted">
+                                                                                    {{ patient.details ? patient.details.gender : 'Липсват данни' }}
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <th class="social-label b-none">
+                                                                                    Тегло
+                                                                                </th>
+                                                                                <td class="social-user-name b-none text-muted">
+                                                                                    {{ patient.details.weight | default("Не е посочено") }}
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <th class="social-label b-none">
+                                                                                    Височина
+                                                                                </th>
+                                                                                <td class="social-user-name b-none text-muted">
+                                                                                    {{ patient.details.height | default("Не е посочено") }}
                                                                                 </td>
                                                                             </tr>
                                                                             <tr>
@@ -1012,14 +1058,6 @@
                                                                                 </th>
                                                                                 <td class="social-user-name b-none text-muted">
                                                                                     {{ patient.details.hairColor | default("Не е посочено") }}
-                                                                                </td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <th class="social-label b-none">
-                                                                                    Тегло
-                                                                                </th>
-                                                                                <td class="social-user-name b-none text-muted">
-                                                                                    {{ patient.details.weight | default("Не е посочено") }}
                                                                                 </td>
                                                                             </tr>
                                                                             <tr>

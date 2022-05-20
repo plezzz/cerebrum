@@ -77,7 +77,7 @@ class PatientController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $patient = $form->getData();
             $egn = $patient->getEGN();
-            $this->patientService->save($patient,$isEdit);
+            $this->patientService->save($patient, $isEdit);
 
             return $this->redirectToRoute('patient-id-card-create', ['egn' => $egn]);
         }
@@ -102,7 +102,7 @@ class PatientController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $patient = $form->getData();
-            $this->patientService->save($patient,$isEdit);
+            $this->patientService->save($patient, $isEdit);
             return $this->redirectToRoute('patient', ['id' => $patient->getId(), '_fragment' => 'about']);
         }
 
@@ -132,12 +132,14 @@ class PatientController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $idCard = $form->getData();
-            $this->patientService->saveIDCard($idCard, $patient,$isEdit);
+            $this->patientService->saveIDCard($idCard, $patient, $isEdit);
             return $this->redirectToRoute('patient-personal-info-create', ['egn' => $egn]);
         }
 
         return $this->render('patient/id-card-create.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'patient' => $patient,
+            'isEdit' => $isEdit
         ]);
     }
 
@@ -151,7 +153,7 @@ class PatientController extends AbstractController
      * @return Response
      */
     #[Route('/patient/id-card-edit/{id}', name: 'patient-id-card-edit')]
-    public function idCardEdit(Request $request,$id): Response
+    public function idCardEdit(Request $request, $id): Response
     {
         $isEdit = true;
         $patient = $this->patientService->findOneByID($id);
@@ -161,12 +163,14 @@ class PatientController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $idCard = $form->getData();
-            $this->patientService->saveIDCard($idCard, $patient,$isEdit);
+            $this->patientService->saveIDCard($idCard, $patient, $isEdit);
             return $this->redirectToRoute('patient', ['id' => $patient->getId(), '_fragment' => 'about']);
         }
 
         return $this->render('patient/id-card-create.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'patient' => $patient,
+            'isEdit' => $isEdit
         ]);
     }
 
@@ -190,12 +194,14 @@ class PatientController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $personalInfo = $form->getData();
-            $this->patientService->savePersonalDetails($personalInfo, $patient,$isEdit);
+            $this->patientService->savePersonalDetails($personalInfo, $patient, $isEdit);
             return $this->redirectToRoute('patient-habits-create', ['egn' => $egn]);
         }
 
         return $this->render('patient/personal-info-create.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'patient' => $patient,
+            'isEdit' => $isEdit
         ]);
     }
 
@@ -209,7 +215,7 @@ class PatientController extends AbstractController
      * @return Response
      */
     #[Route('/patient/personal-info-edit/{id}', name: 'patient-personal-info-edit')]
-    public function personalInfoEdit(Request $request,$id): Response
+    public function personalInfoEdit(Request $request, $id): Response
     {
         $isEdit = true;
         $patient = $this->patientService->findOneByID($id);
@@ -219,12 +225,14 @@ class PatientController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $personalInfo = $form->getData();
-            $this->patientService->savePersonalDetails($personalInfo, $patient,$isEdit);
+            $this->patientService->savePersonalDetails($personalInfo, $patient, $isEdit);
             return $this->redirectToRoute('patient', ['id' => $patient->getId(), '_fragment' => 'about']);
         }
 
         return $this->render('patient/personal-info-create.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'patient' => $patient,
+            'isEdit' => $isEdit
         ]);
     }
 
@@ -242,14 +250,12 @@ class PatientController extends AbstractController
         $isEdit = false;
         $egn = $request->query->get('egn');
         $patient = $this->patientService->findOneByEGN($egn);
-//        $habits = new Habits();
-//        //$idCard->setPatient($patient);
         $form = $this->createForm(HabitsType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $habits = $form->getData();
-            $this->patientService->saveHabits($habits,$patient, $isEdit);
+            $this->patientService->saveHabits($habits, $patient, $isEdit);
 
             return $this->redirectToRoute('patient-family-create', ['egn' => $egn]);
         }
@@ -278,7 +284,7 @@ class PatientController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $family = $form->getData();
-            $this->patientService->saveFamily($family,$patient, $isEdit);
+            $this->patientService->saveFamily($family, $patient, $isEdit);
 
             return $this->redirectToRoute('patient-contacts-create', ['egn' => $egn]);
         }
@@ -300,18 +306,17 @@ class PatientController extends AbstractController
         $egn = $request->query->get('egn');
         $patient = $this->patientService->findOneByEGN($egn);
         $contacts = new Contacts();
-        //$idCard->setPatient($patient);
         $form = $this->createForm(PatientContactType::class, $contacts);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid() ) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $contacts = $form->getData();
             $this->patientService->saveContacts($contacts, $patient, $isEdit);
 
 
-            if ( 'saveAndAdd' === $form->getClickedButton()->getName()) {
+            if ('saveAndAdd' === $form->getClickedButton()->getName()) {
                 return $this->redirectToRoute('patient-contacts-create', ['egn' => $egn]);
-            } else if('saveAndView' === $form->getClickedButton()->getName()){
+            } else if ('saveAndView' === $form->getClickedButton()->getName()) {
                 return $this->redirectToRoute('patient', ['id' => $patient->getId()]);
             }
         }
@@ -476,12 +481,12 @@ class PatientController extends AbstractController
         $id = $request->query->get('id');
         $patient = $this->patientService->findOneByID($id);
         $isEdit = is_null($patient->getPsychiatricEvaluation());
-        $form = $this->createForm(PatientPsychiatricEvaluationType::class,$patient->getPsychiatricEvaluation());
+        $form = $this->createForm(PatientPsychiatricEvaluationType::class, $patient->getPsychiatricEvaluation());
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $formFields = $form->getData();
-            $this->patientService->PsychiatricEvaluation($formFields, $patient,!$isEdit);
+            $this->patientService->PsychiatricEvaluation($formFields, $patient, !$isEdit);
             return $this->redirectToRoute('patient', ['id' => $patient->getId(), '_fragment' => 'psychiatric-evaluation']);
 
         }
@@ -509,21 +514,21 @@ class PatientController extends AbstractController
         $noteID = $request->query->get('noteID');
         $patient = $this->patientService->findOneByID($id);
         $isEdit = is_null($noteID);
-        if (!$isEdit){
+        if (!$isEdit) {
             $note = $this->patientService->getPsychiatricNote($noteID);
-            $form = $this->createForm(PatientPsychiatricEvaluationNoteType::class,$note);
-        }else{
+            $form = $this->createForm(PatientPsychiatricEvaluationNoteType::class, $note);
+        } else {
             $form = $this->createForm(PatientPsychiatricEvaluationNoteType::class);
         }
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $formFields = $form->getData();
-            $this->patientService->PsychiatricEvaluationNote($formFields, $patient,!$isEdit);
+            $this->patientService->PsychiatricEvaluationNote($formFields, $patient, !$isEdit);
             return $this->redirectToRoute('patient', ['id' => $patient->getId(), '_fragment' => 'psychiatric-evaluation']);
         }
         return $this->render('patient/psychiatric-evaluation-note.html.twig', [
             'form' => $form->createView(),
-            'patient' =>  $patient,
+            'patient' => $patient,
             'isEdit' => $isEdit,
         ]);
     }
@@ -562,12 +567,12 @@ class PatientController extends AbstractController
         $id = $request->query->get('id');
         $patient = $this->patientService->findOneByID($id);
         $isEdit = is_null($patient->getSocialEvaluation());
-        $form = $this->createForm(PatientSocialEvaluationType::class,$patient->getSocialEvaluation());
+        $form = $this->createForm(PatientSocialEvaluationType::class, $patient->getSocialEvaluation());
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $formFields = $form->getData();
-            $this->patientService->SocialEvaluation($formFields, $patient,!$isEdit);
+            $this->patientService->SocialEvaluation($formFields, $patient, !$isEdit);
             return $this->redirectToRoute('patient', ['id' => $patient->getId(), '_fragment' => 'social-evaluation']);
 
         }
@@ -595,21 +600,21 @@ class PatientController extends AbstractController
         $noteID = $request->query->get('noteID');
         $patient = $this->patientService->findOneByID($id);
         $isEdit = is_null($noteID);
-        if (!$isEdit){
+        if (!$isEdit) {
             $note = $this->patientService->getSocialNote($noteID);
-            $form = $this->createForm(PatientSocialEvaluationNoteType::class,$note);
-        }else{
+            $form = $this->createForm(PatientSocialEvaluationNoteType::class, $note);
+        } else {
             $form = $this->createForm(PatientSocialEvaluationNoteType::class);
         }
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $formFields = $form->getData();
-            $this->patientService->SocialEvaluationNote($formFields, $patient,!$isEdit);
+            $this->patientService->SocialEvaluationNote($formFields, $patient, !$isEdit);
             return $this->redirectToRoute('patient', ['id' => $patient->getId(), '_fragment' => 'social-evaluation']);
         }
         return $this->render('patient/social-evaluation-note.html.twig', [
             'form' => $form->createView(),
-            'patient' =>  $patient,
+            'patient' => $patient,
             'isEdit' => $isEdit,
         ]);
     }
@@ -647,12 +652,12 @@ class PatientController extends AbstractController
         $id = $request->query->get('id');
         $patient = $this->patientService->findOneByID($id);
         $isEdit = is_null($patient->getPsychologicalEvaluation());
-        $form = $this->createForm(PatientPsychologicalEvaluationType::class,$patient->getPsychologicalEvaluation());
+        $form = $this->createForm(PatientPsychologicalEvaluationType::class, $patient->getPsychologicalEvaluation());
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $formFields = $form->getData();
-            $this->patientService->PsychologicalEvaluation($formFields, $patient,!$isEdit);
+            $this->patientService->PsychologicalEvaluation($formFields, $patient, !$isEdit);
             return $this->redirectToRoute('patient', ['id' => $patient->getId(), '_fragment' => 'psychological-evaluation']);
 
         }
@@ -680,21 +685,21 @@ class PatientController extends AbstractController
         $noteID = $request->query->get('noteID');
         $patient = $this->patientService->findOneByID($id);
         $isEdit = is_null($noteID);
-        if (!$isEdit){
+        if (!$isEdit) {
             $note = $this->patientService->getPsychologicalNote($noteID);
-            $form = $this->createForm(PatientPsychologicalEvaluationNoteType::class,$note);
-        }else{
+            $form = $this->createForm(PatientPsychologicalEvaluationNoteType::class, $note);
+        } else {
             $form = $this->createForm(PatientPsychologicalEvaluationNoteType::class);
         }
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $formFields = $form->getData();
-            $this->patientService->PsychologicalEvaluationNote($formFields, $patient,!$isEdit);
+            $this->patientService->PsychologicalEvaluationNote($formFields, $patient, !$isEdit);
             return $this->redirectToRoute('patient', ['id' => $patient->getId(), '_fragment' => 'psychological-evaluation']);
         }
         return $this->render('patient/psychological-evaluation-note.html.twig', [
             'form' => $form->createView(),
-            'patient' =>  $patient,
+            'patient' => $patient,
             'isEdit' => $isEdit,
         ]);
     }
@@ -734,12 +739,12 @@ class PatientController extends AbstractController
         $patient = $this->patientService->findOneByID($id);
         $temperatureList = new TemperatureList();
 
-        $form = $this->createForm(TemperatureListType::class,$temperatureList);
+        $form = $this->createForm(TemperatureListType::class, $temperatureList);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $formFields = $form->getData();
-            $this->patientService->addTemperatureList($formFields,$patient);
+            $this->patientService->addTemperatureList($formFields, $patient);
             return $this->redirectToRoute('patient', ['id' => $patient->getId(), '_fragment' => 'temperature-line']);
         }
 
