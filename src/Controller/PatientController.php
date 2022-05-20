@@ -88,12 +88,8 @@ class PatientController extends AbstractController
     }
 
     /**
-     * @Breadcrumb(
-     *     {"label" = "Начало", "route" = "home"},
-     *     {"label" = "Редактиране на пациент", "route" = "patient-create"}
-     *     )
+     * @Breadcrumb({"label" = "Начало", "route" = "home"},{"label" = "Създаване на пациент", "route" = "patient-create"})
      * @param Request $request
-     * @param $id
      * @return Response
      */
     #[Route('/patient-edit/{id}', name: 'patient-edit')]
@@ -101,14 +97,12 @@ class PatientController extends AbstractController
     {
         $isEdit = true;
         $patient = $this->patientService->findOneByID($id);
-
         $form = $this->createForm(PatientType::class, $patient);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $patient = $form->getData();
             $this->patientService->save($patient,$isEdit);
-
             return $this->redirectToRoute('patient', ['id' => $patient->getId(), '_fragment' => 'about']);
         }
 
@@ -118,25 +112,27 @@ class PatientController extends AbstractController
     }
 
     /**
-     * @Breadcrumb({"label" = "Начало", "route" = "home"},{"label" = "Пациент", "route" = "patient-create"},{"label" = "Регистрация на лична карта", "route" = "patient-id-card-create"})
+     * @Breadcrumb(
+     *     {"label" = "Начало", "route" = "home"},
+     *     {"label" = "Пациент", "route" = "patient-create"},
+     *     {"label" = "Регистрация на лична карта", "route" = "patient-id-card-create"}
+     *     )
      * @param Request $request
      * @return Response
      */
     #[Route('/patient/id-card-create', name: 'patient-id-card-create')]
     public function idCardCreate(Request $request): Response
     {
+        $isEdit = false;
         $egn = $request->query->get('egn');
         $patient = $this->patientService->findOneByEGN($egn);
         $idCard = new IDCard();
-        //$idCard->setPatient($patient);
         $form = $this->createForm(IDCardType::class, $idCard);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $idCard = $form->getData();
-            $this->patientService->saveIDCard($idCard, $patient);
-
-
+            $this->patientService->saveIDCard($idCard, $patient,$isEdit);
             return $this->redirectToRoute('patient-personal-info-create', ['egn' => $egn]);
         }
 
@@ -146,27 +142,85 @@ class PatientController extends AbstractController
     }
 
     /**
-     * @Breadcrumb({"label" = "Начало", "route" = "home"},{"label" = "Пациент", "route" = "patient-create"},{"label" = "Лична информация", "route" = "patient-personal-info-create"})
+     * @Breadcrumb(
+     *     {"label" = "Начало", "route" = "home"},
+     *     {"label" = "Пациент", "route" = "patient-create"},
+     *     {"label" = "Редактиране на лична карта", "route" = "patient-id-card-create"}
+     *     )
+     * @param Request $request
+     * @return Response
+     */
+    #[Route('/patient/id-card-edit/{id}', name: 'patient-id-card-edit')]
+    public function idCardEdit(Request $request,$id): Response
+    {
+        $isEdit = true;
+        $patient = $this->patientService->findOneByID($id);
+        $idCard = $patient->getIDCard();
+        $form = $this->createForm(IDCardType::class, $idCard);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $idCard = $form->getData();
+            $this->patientService->saveIDCard($idCard, $patient,$isEdit);
+            return $this->redirectToRoute('patient', ['id' => $patient->getId(), '_fragment' => 'about']);
+        }
+
+        return $this->render('patient/id-card-create.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Breadcrumb(
+     *     {"label" = "Начало", "route" = "home"},
+     *     {"label" = "Пациент", "route" = "patient-create"},
+     *     {"label" = "Добавяне на лична информация", "route" = "patient-personal-info-create"})
      * @param Request $request
      * @return Response
      */
     #[Route('/patient/personal-info-create', name: 'patient-personal-info-create')]
     public function personalInfoCreate(Request $request): Response
     {
-
+        $isEdit = false;
         $egn = $request->query->get('egn');
         $patient = $this->patientService->findOneByEGN($egn);
         $personalInfo = new Details();
-        //$idCard->setPatient($patient);
         $form = $this->createForm(PatientDetailsType::class, $personalInfo);
         $form->handleRequest($request);
 
+        if ($form->isSubmitted() && $form->isValid()) {
+            $personalInfo = $form->getData();
+            $this->patientService->savePersonalDetails($personalInfo, $patient,$isEdit);
+            return $this->redirectToRoute('patient-habits-create', ['egn' => $egn]);
+        }
+
+        return $this->render('patient/personal-info-create.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Breadcrumb(
+     *     {"label" = "Начало", "route" = "home"},
+     *     {"label" = "Пациент", "route" = "patient-create"},
+     *     {"label" = "Редактиране на лична информация", "route" = "patient-personal-info-create"})
+     * @param Request $request
+     * @param $id
+     * @return Response
+     */
+    #[Route('/patient/personal-info-edit/{id}', name: 'patient-personal-info-edit')]
+    public function personalInfoEdit(Request $request,$id): Response
+    {
+        $isEdit = true;
+        $patient = $this->patientService->findOneByID($id);
+        $personalInfo = $patient->getDetails();
+        $form = $this->createForm(PatientDetailsType::class, $personalInfo);
+        $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $personalInfo = $form->getData();
-            $this->patientService->savePersonalDetails($personalInfo, $patient);
-
-            return $this->redirectToRoute('patient-habits-create', ['egn' => $egn]);
+            $this->patientService->savePersonalDetails($personalInfo, $patient,$isEdit);
+            return $this->redirectToRoute('patient', ['id' => $patient->getId(), '_fragment' => 'about']);
         }
 
         return $this->render('patient/personal-info-create.html.twig', [

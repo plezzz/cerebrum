@@ -110,9 +110,12 @@ class PatientService implements PatientServiceInterface
 
 
     /**
+     * @param Patient $patient
+     * @param bool $isEdit
+     * @return string
      * @throws \Doctrine\ORM\ORMException
      */
-    public function save(Patient $patient, $isEdit): string
+    public function save(Patient $patient, bool $isEdit): string
     {
         if (!$isEdit) {
             $patient->setCreatedBy($this->user);
@@ -157,13 +160,20 @@ class PatientService implements PatientServiceInterface
     }
 
     /**
+     * @param IDCard $IDCard
+     * @param Patient $patient
+     * @param bool $isEdit
+     * @return int|null
      * @throws \Doctrine\ORM\ORMException
      */
-    public function saveIDCard(IDCard $IDCard, Patient $patient): ?int
+    public function saveIDCard(IDCard $IDCard, Patient $patient,bool $isEdit): ?int
     {
-        $IDCard->setCreatedBy($this->user);
+        if (!$isEdit) {
+            $IDCard->setCreatedBy($this->user);
+            $IDCard->setCreatedAt($this->date);
+        }
+
         $IDCard->setEditedBy($this->user);
-        $IDCard->setCreatedAt($this->date);
         $IDCard->setEditedAt($this->date);
 
         $this->IDCardRepository->insert($IDCard);
@@ -175,9 +185,13 @@ class PatientService implements PatientServiceInterface
     }
 
     /**
+     * @param Details $details
+     * @param Patient $patient
+     * @param bool $isEdit
+     * @return int|null
      * @throws \Doctrine\ORM\ORMException
      */
-    public function savePersonalDetails(Details $details, Patient $patient): ?int
+    public function savePersonalDetails(Details $details, Patient $patient,bool $isEdit): ?int
     {
         if ($details->getSex() === 'Жена') {
             $profilePicture = 'female.png';
@@ -187,9 +201,12 @@ class PatientService implements PatientServiceInterface
             $profilePicture = 'uni.png';
         }
 
-        $details->setCreatedBy($this->user);
+        if (!$isEdit) {
+            $details->setCreatedBy($this->user);
+            $details->setCreatedAt($this->date);
+        }
+
         $details->setEditedBy($this->user);
-        $details->setCreatedAt($this->date);
         $details->setEditedAt($this->date);
 
         $this->detailsRepository->insert($details);

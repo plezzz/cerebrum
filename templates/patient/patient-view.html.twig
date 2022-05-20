@@ -948,12 +948,13 @@
                                                         <div class="card-header">
                                                             <h5 class="card-header-text">
                                                                 Основна информация
-                                                            </h5><a href="{{ path('patient-edit', {'id': patient.id}) }}">
-                                                            <button id="edit-btn"
-                                                                    type="button"
-                                                                    class="btn btn-primary waves-effect waves-light f-right">
-                                                                <i class="icofont icofont-edit"></i>
-                                                            </button>
+                                                            </h5>
+                                                            <a href="{{ path('patient-edit', {'id': patient.id}) }}">
+                                                                <button id="edit-btn"
+                                                                        type="button"
+                                                                        class="btn btn-primary waves-effect waves-light f-right">
+                                                                    <i class="icofont icofont-edit"></i>
+                                                                </button>
                                                             </a>
                                                         </div>
                                                         <div class="card-block">
@@ -1049,10 +1050,13 @@
                                                         <div class="card-header">
                                                             <h5 class="card-header-text">
                                                                 Контакти</h5>
-                                                            <button id="edit-Contact" type="button"
-                                                                    class="btn btn-primary waves-effect waves-light f-right">
-                                                                <i class="icofont icofont-edit"></i>
-                                                            </button>
+                                                            <a href="{{ path('patient-edit', {'id': patient.id}) }}">
+                                                                <button id="edit-btn"
+                                                                        type="button"
+                                                                        class="btn btn-primary waves-effect waves-light f-right">
+                                                                    <i class="icofont icofont-edit"></i>
+                                                                </button>
+                                                            </a>
                                                         </div>
                                                         <div class="card-block">
                                                             <div id="contact-info" class="row">
@@ -1086,10 +1090,13 @@
                                                             <h5 class="card-header-text">
                                                                 Лична карта
                                                             </h5>
-                                                            <button id="edit-work" type="button"
-                                                                    class="btn btn-primary waves-effect waves-light f-right">
-                                                                <i class="icofont icofont-edit"></i>
-                                                            </button>
+                                                            <a href="{{ path('patient-id-card-edit', {'id': patient.id}) }}">
+                                                                <button id="edit-btn"
+                                                                        type="button"
+                                                                        class="btn btn-primary waves-effect waves-light f-right">
+                                                                    <i class="icofont icofont-edit"></i>
+                                                                </button>
+                                                            </a>
                                                         </div>
                                                         <div class="card-block">
                                                             <div id="work-info" class="row">
@@ -1277,23 +1284,23 @@
                                                                             </td>
                                                                         </tr>
                                                                         {% if patient.family.haveKids ?? false %}
-                                                                        <tr>
-                                                                            <th class="social-label b-none p-t-0">
-                                                                                Брой момчета
-                                                                            </th>
-                                                                            <td class="social-user-name b-none p-t-0 text-muted">
-                                                                                {{ patient.family ? patient.family.amountOfBoys : 'Липсват данни' }}
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <th class="social-label b-none p-t-0">
-                                                                                Брой момичета
-                                                                            </th>
-                                                                            <td class="social-user-name b-none p-t-0 text-muted">
-                                                                                {{ patient.family ? patient.family.amountOfGirls : 'Липсват данни' }}
-                                                                            </td>
-                                                                        </tr>
-                                                                        {%endif%}
+                                                                            <tr>
+                                                                                <th class="social-label b-none p-t-0">
+                                                                                    Брой момчета
+                                                                                </th>
+                                                                                <td class="social-user-name b-none p-t-0 text-muted">
+                                                                                    {{ patient.family ? patient.family.amountOfBoys : 'Липсват данни' }}
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <th class="social-label b-none p-t-0">
+                                                                                    Брой момичета
+                                                                                </th>
+                                                                                <td class="social-user-name b-none p-t-0 text-muted">
+                                                                                    {{ patient.family ? patient.family.amountOfGirls : 'Липсват данни' }}
+                                                                                </td>
+                                                                            </tr>
+                                                                        {% endif %}
                                                                     </table>
                                                                 </div>
                                                             </div>

@@ -31,9 +31,9 @@ interface PatientServiceInterface
 
     public function findOneByID($id): ?Patient;
 
-    public function saveIDCard(IDCard $IDCard, Patient $patient);
+    public function saveIDCard(IDCard $IDCard, Patient $patient,bool $isEdit);
 
-    public function savePersonalDetails(Details $details, Patient $patient);
+    public function savePersonalDetails(Details $details, Patient $patient,bool $isEdit);
 
     public function saveContacts(Contacts $contacts, Patient $patient, $isEdit);
 
