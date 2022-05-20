@@ -19,6 +19,9 @@
 {% block body %}
     {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
     {{ form_widget(form) }}
+    <input type="hidden" id="isEditSmoking" value="{{ patient.habits.smoking }}">
+    <input type="hidden" id="isEditAlcohol" value="{{ patient.habits.alcohol }}">
+    <input type="hidden" id="isEditNarcotics" value="{{ patient.habits.narcotics }}">
     <button type="submit">Запис</button>
     {{ form_end(form) }}
 {% endblock %}
@@ -27,80 +30,102 @@
 {% endblock %}
 {% block javascriptend %}
     <script>
-       let smoker =  document.querySelector("#habits_smoking");
-       let alcohol = document.querySelector("#habits_alcohol");
-       let narcotics = document.querySelector("#habits_narcotics")
-       let inputSmoke = document.querySelector("#habits_amountOfCigarettesPerDay");
-       let labelSmoke = document.querySelector("#habits > div:nth-child(2) > label");
-       let labelAlcoholAmount = document.querySelector("#habits > div:nth-child(4) > label");
-       let inputAlcoholAmount = document.querySelector("#habits_amountOfAlcoholPerDay");
-       let labelAlcoholConsumes = document.querySelector("#habits > div:nth-child(5) > label");
-       let inputAlcoholConsumes = document.querySelector("#habits_howOftenHeConsumesAlcohol");
-       let labelNarcoticsAmount = document.querySelector("#habits > div:nth-child(7) > label");
-       let inputNarcoticsAmount = document.querySelector("#habits_howOftenHeUsesDrugs");
-       let inputNarcoticsType = document.querySelector("#habits_whatTypeOfDrugUses");
-       let labelNarcoticsUsesInMoment =document.querySelector("#habits > div:nth-child(9) > div > label");
-       let inputNarcoticsUsesInMoment = document.querySelector("#habits_useInTheMomentNarcotics");
+        let isSmoking = document.querySelector("#isEditSmoking").value;
+        let isAlcohol = document.querySelector("#isEditAlcohol").value;
+        let isNarcotics = document.querySelector("#isEditNarcotics").value;
+        let smoker = document.querySelector("#habits_smoking");
+        let alcohol = document.querySelector("#habits_alcohol");
+        let narcotics = document.querySelector("#habits_narcotics")
+        let inputSmoke = document.querySelector("#habits_amountOfCigarettesPerDay");
+        let labelSmoke = document.querySelector("#habits > div:nth-child(2) > label");
+        let labelAlcoholAmount = document.querySelector("#habits > div:nth-child(4) > label");
+        let inputAlcoholAmount = document.querySelector("#habits_amountOfAlcoholPerDay");
+        let labelAlcoholConsumes = document.querySelector("#habits > div:nth-child(5) > label");
+        let inputAlcoholConsumes = document.querySelector("#habits_howOftenHeConsumesAlcohol");
+        let labelNarcoticsAmount = document.querySelector("#habits > div:nth-child(7) > label");
+        let inputNarcoticsAmount = document.querySelector("#habits_howOftenHeUsesDrugs");
+        let inputNarcoticsType = document.querySelector("#habits_whatTypeOfDrugUses");
+        let labelNarcoticsUsesInMoment = document.querySelector("#habits > div:nth-child(9) > div > label");
+        let inputNarcoticsUsesInMoment = document.querySelector("#habits_useInTheMomentNarcotics");
 
+        hideSmoke()
+        hideAlcohol()
+        hideNarcotics()
+        if (isSmoking){
+           showSmoke()
+            smoker.checked = true;
+        }
+        if (isAlcohol){
+            showAlcohol()
+            alcohol.checked = true;
+        }
+        if (isNarcotics){
+            showNarcotics()
+            narcotics.checked = true;
+        }
 
-       hideSmoke()
-       hideAlcohol()
-       hideNarcotics()
+        alcohol.addEventListener('change', (event) => {
+            if (event.currentTarget.checked) {
+                showAlcohol()
+            } else {
+                hideAlcohol()
+            }
+        })
 
-       alcohol.addEventListener('change', (event) => {
-           if (event.currentTarget.checked) {
-               showAlcohol()
-           } else {
-               hideAlcohol()
-           }})
+        smoker.addEventListener('change', (event) => {
+            if (event.currentTarget.checked) {
+                showSmoke()
+            } else {
+                hideSmoke()
+            }
+        })
 
-       smoker.addEventListener('change', (event) => {
-           if (event.currentTarget.checked) {
-               showSmoke()
-           } else {
-              hideSmoke()
-           }})
+        narcotics.addEventListener('change', (event) => {
+            if (event.currentTarget.checked) {
+                showNarcotics()
+            } else {
+                hideNarcotics()
+            }
+        })
 
-       narcotics.addEventListener('change', (event) => {
-           if (event.currentTarget.checked) {
-               showNarcotics()
-           } else {
-              hideNarcotics()
-           }})
+        function showSmoke() {
+            inputSmoke.style.display = "inline-block";
+            labelSmoke.style.display = "inline-block";
+        }
 
-       function showSmoke(){
-           inputSmoke.style.display = "inline-block";
-           labelSmoke.style.display = "inline-block";
-       }
-       function hideSmoke(){
-           inputSmoke.style.display = "none";
-           labelSmoke.style.display = "none";
-       }
-       function showAlcohol(){
-           inputAlcoholConsumes.style.display = "inline-block";
-           inputAlcoholAmount.style.display = "inline-block";
-           labelAlcoholConsumes.style.display = "inline-block";
-           labelAlcoholAmount.style.display = "inline-block";
-       }
-       function hideAlcohol(){
-           inputAlcoholConsumes.style.display = "none";
-           inputAlcoholAmount.style.display = "none";
-           labelAlcoholConsumes.style.display = "none";
-           labelAlcoholAmount.style.display = "none";
-       }
-       function  showNarcotics(){
-           labelNarcoticsAmount.style.display = "inline-block";
-           inputNarcoticsAmount.style.display = "inline-block";
-           inputNarcoticsType.style.display = "inline-block";
-           labelNarcoticsUsesInMoment.style.display = "inline-block";
-           inputNarcoticsUsesInMoment.style.display = "inline-block";
-       }
-       function  hideNarcotics(){
-           labelNarcoticsAmount.style.display = "none";
-           inputNarcoticsAmount.style.display = "none";
-           inputNarcoticsType.style.display = "none";
-           labelNarcoticsUsesInMoment.style.display = "none";
-           inputNarcoticsUsesInMoment.style.display = "none";
-       }
+        function hideSmoke() {
+            inputSmoke.style.display = "none";
+            labelSmoke.style.display = "none";
+        }
+
+        function showAlcohol() {
+            inputAlcoholConsumes.style.display = "inline-block";
+            inputAlcoholAmount.style.display = "inline-block";
+            labelAlcoholConsumes.style.display = "inline-block";
+            labelAlcoholAmount.style.display = "inline-block";
+        }
+
+        function hideAlcohol() {
+            inputAlcoholConsumes.style.display = "none";
+            inputAlcoholAmount.style.display = "none";
+            labelAlcoholConsumes.style.display = "none";
+            labelAlcoholAmount.style.display = "none";
+        }
+
+        function showNarcotics() {
+            labelNarcoticsAmount.style.display = "inline-block";
+            inputNarcoticsAmount.style.display = "inline-block";
+            inputNarcoticsType.style.display = "inline-block";
+            labelNarcoticsUsesInMoment.style.display = "inline-block";
+            inputNarcoticsUsesInMoment.style.display = "inline-block";
+        }
+
+        function hideNarcotics() {
+            labelNarcoticsAmount.style.display = "none";
+            inputNarcoticsAmount.style.display = "none";
+            inputNarcoticsType.style.display = "none";
+            labelNarcoticsUsesInMoment.style.display = "none";
+            inputNarcoticsUsesInMoment.style.display = "none";
+        }
     </script>
 {% endblock %}
