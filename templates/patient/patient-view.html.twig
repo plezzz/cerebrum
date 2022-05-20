@@ -1295,8 +1295,9 @@
                                                             <h5 class="card-header-text">
                                                                 Семейно положение
                                                             </h5>
-                                                            <a href="{{ path('patient-create') }}">
-                                                                <button id="edit-work" type="button"
+                                                            <a href="{{ path('patient-family-edit', {'id': patient.id}) }}">
+                                                                <button id="edit-btn"
+                                                                        type="button"
                                                                         class="btn btn-primary waves-effect waves-light f-right">
                                                                     <i class="icofont icofont-edit"></i>
                                                                 </button>

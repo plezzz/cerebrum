@@ -298,7 +298,7 @@ class PatientController extends AbstractController
      * @Breadcrumb(
      *     {"label" = "Начало", "route" = "home"},
      *     {"label" = "Пациент", "route" = "patient-create"},
-     *     {"label" = "Семейство на пациента"})
+     *     {"label" = "Добавяне на семейното положение на пациента"})
      * @param Request $request
      * @return Response
      */
@@ -314,12 +314,43 @@ class PatientController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $family = $form->getData();
             $this->patientService->saveFamily($family, $patient, $isEdit);
-
             return $this->redirectToRoute('patient-contacts-create', ['egn' => $egn]);
         }
 
         return $this->render('patient/family-create.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'patient' => $patient,
+            'isEdit' => $isEdit
+        ]);
+    }
+
+    /**
+     * @Breadcrumb(
+     *     {"label" = "Начало", "route" = "home"},
+     *     {"label" = "Пациент", "route" = "patient-create"},
+     *     {"label" = "Редактиране семейното положение на пациента"})
+     * @param Request $request
+     * @param $id
+     * @return Response
+     */
+    #[Route('/patient/family-edit/{id}', name: 'patient-family-edit')]
+    public function familyEdit(Request $request,$id): Response
+    {
+        $isEdit = true;
+        $patient = $this->patientService->findOneByID($id);
+        $form = $this->createForm(FamilyType::class, $patient->getFamily());
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $family = $form->getData();
+            $this->patientService->saveFamily($family, $patient, $isEdit);
+            return $this->redirectToRoute('patient', ['id' => $patient->getId(), '_fragment' => 'about']);
+        }
+
+        return $this->render('patient/family-create.html.twig', [
+            'form' => $form->createView(),
+            'patient' => $patient,
+            'isEdit' => $isEdit
         ]);
     }
 
