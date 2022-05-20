@@ -157,8 +157,7 @@ class PatientController extends AbstractController
     {
         $isEdit = true;
         $patient = $this->patientService->findOneByID($id);
-        $idCard = $patient->getIDCard();
-        $form = $this->createForm(IDCardType::class, $idCard);
+        $form = $this->createForm(IDCardType::class, $patient->getIDCard());
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -219,8 +218,7 @@ class PatientController extends AbstractController
     {
         $isEdit = true;
         $patient = $this->patientService->findOneByID($id);
-        $personalInfo = $patient->getDetails();
-        $form = $this->createForm(PatientDetailsType::class, $personalInfo);
+        $form = $this->createForm(PatientDetailsType::class, $patient->getDetails());
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -240,7 +238,7 @@ class PatientController extends AbstractController
      * @Breadcrumb(
      *     {"label" = "Начало", "route" = "home"},
      *     {"label" = "Пациент", "route" = "patient-create"},
-     *     {"label" = "Навици на пациента"})
+     *     {"label" = "Добавяне навици на пациента"})
      * @param Request $request
      * @return Response
      */
@@ -256,12 +254,43 @@ class PatientController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $habits = $form->getData();
             $this->patientService->saveHabits($habits, $patient, $isEdit);
-
             return $this->redirectToRoute('patient-family-create', ['egn' => $egn]);
         }
 
         return $this->render('patient/habits-create.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'patient' => $patient,
+            'isEdit' => $isEdit
+        ]);
+    }
+
+    /**
+     * @Breadcrumb(
+     *     {"label" = "Начало", "route" = "home"},
+     *     {"label" = "Пациент", "route" = "patient-create"},
+     *     {"label" = "Редактиране навици на пациента"})
+     * @param Request $request
+     * @param $id
+     * @return Response
+     */
+    #[Route('/patient/habits-edit/{id}', name: 'patient-habits-edit')]
+    public function habitsEdit(Request $request, $id): Response
+    {
+        $isEdit = true;
+        $patient = $this->patientService->findOneByID($id);
+        $form = $this->createForm(HabitsType::class, $patient->getHabits());
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $habits = $form->getData();
+            $this->patientService->saveHabits($habits, $patient, $isEdit);
+            return $this->redirectToRoute('patient', ['id' => $patient->getId(), '_fragment' => 'about']);
+        }
+
+        return $this->render('patient/habits-create.html.twig', [
+            'form' => $form->createView(),
+            'patient' => $patient,
+            'isEdit' => $isEdit
         ]);
     }
 

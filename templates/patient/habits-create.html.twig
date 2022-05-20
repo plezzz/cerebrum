@@ -3,7 +3,13 @@
 {% block title %}Регистрация на пациент Навици{% endblock %}
 {% block header %}
     <div class="d-inline">
-        <h4>Навици на пациента</h4>
+        <h4 class="text-uppercase">
+            {% if isEdit %}
+                Редактиране
+            {% else %}
+                Добавяне
+            {% endif %}
+            на вредни навици за {{ patient.firstName }} {{ patient.firstName }}</h4>
         {# <span>Място където може да добавяте нови работници</span> #}
     </div>
 {% endblock %}
