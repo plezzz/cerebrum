@@ -112,11 +112,14 @@ class PatientService implements PatientServiceInterface
     /**
      * @throws \Doctrine\ORM\ORMException
      */
-    public function save(Patient $patient): string
+    public function save(Patient $patient, $isEdit): string
     {
-        $patient->setCreatedBy($this->user);
+        if (!$isEdit) {
+            $patient->setCreatedBy($this->user);
+            $patient->setCreatedAt($this->date);
+        }
+
         $patient->setEditedBy($this->user);
-        $patient->setCreatedAt($this->date);
         $patient->setEditedAt($this->date);
         $patient->setProfilePicture('uni.png');
         $patient->setPatientID($this->generateID($patient));

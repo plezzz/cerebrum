@@ -65,10 +65,10 @@ class PatientController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    // #[Route('/patient-create', name: 'patient-create',methods: ["GET"])]
     #[Route('/patient-create', name: 'patient-create')]
     public function patientCreate(Request $request): Response
     {
+        $isEdit = false;
         $patient = new Patient();
         $form = $this->createForm(PatientType::class, $patient);
         $form->handleRequest($request);
@@ -77,9 +77,39 @@ class PatientController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $patient = $form->getData();
             $egn = $patient->getEGN();
-            $this->patientService->save($patient);
+            $this->patientService->save($patient,$isEdit);
 
             return $this->redirectToRoute('patient-id-card-create', ['egn' => $egn]);
+        }
+
+        return $this->render('patient/patient-create.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Breadcrumb(
+     *     {"label" = "Начало", "route" = "home"},
+     *     {"label" = "Редактиране на пациент", "route" = "patient-create"}
+     *     )
+     * @param Request $request
+     * @param $id
+     * @return Response
+     */
+    #[Route('/patient-edit/{id}', name: 'patient-edit')]
+    public function patientEdit(Request $request, $id): Response
+    {
+        $isEdit = true;
+        $patient = $this->patientService->findOneByID($id);
+
+        $form = $this->createForm(PatientType::class, $patient);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $patient = $form->getData();
+            $this->patientService->save($patient,$isEdit);
+
+            return $this->redirectToRoute('patient', ['id' => $patient->getId(), '_fragment' => 'about']);
         }
 
         return $this->render('patient/patient-create.html.twig', [

@@ -21,7 +21,7 @@ use App\Entity\Patient\TemperatureList;
 interface PatientServiceInterface
 {
 
-    public function save(Patient $patient): string;
+    public function save(Patient $patient,bool $isEdit): string;
 
     public function edit(Patient $patient): bool;
 

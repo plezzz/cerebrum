@@ -948,12 +948,13 @@
                                                         <div class="card-header">
                                                             <h5 class="card-header-text">
                                                                 Основна информация
-                                                            </h5>
+                                                            </h5><a href="{{ path('patient-edit', {'id': patient.id}) }}">
                                                             <button id="edit-btn"
                                                                     type="button"
                                                                     class="btn btn-primary waves-effect waves-light f-right">
                                                                 <i class="icofont icofont-edit"></i>
                                                             </button>
+                                                            </a>
                                                         </div>
                                                         <div class="card-block">
                                                             <div id="view-info" class="row">
