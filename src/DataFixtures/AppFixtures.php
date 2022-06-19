@@ -24,7 +24,7 @@ class AppFixtures extends Fixture
 
     }
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $roles = ['Потребител' => 'ROLE_USER','Персонал' => 'ROLE_PERSONAL','Лекар' => 'ROLE_DOCTOR', 'Администратор' => 'ROLE_ADMIN', 'Супер Администратор' => 'ROLE_SUPER_ADMIN'];
         foreach ($roles as $key => $value) {
