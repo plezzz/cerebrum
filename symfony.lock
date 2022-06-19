@@ -558,17 +558,17 @@
         "version": "v5.2.8"
     },
     "symfony/twig-bundle": {
-        "version": "5.2",
+        "version": "5.0",
         "recipe": {
             "repo": "github.com/symfony/recipes",
-            "branch": "main",
+            "branch": "master",
             "version": "5.0",
-            "ref": "1766a292f47e3bf94bcfc192c2aa090588f9f46d"
+            "ref": "fab9149bbaa4d5eca054ed93f9e1b66cc500895d"
         },
         "files": [
-            "config/packages/test/twig.yaml",
-            "config/packages/twig.yaml",
-            "templates/base.html.twig"
+            "./config/packages/test/twig.yaml",
+            "./config/packages/twig.yaml",
+            "./templates/base.html.twig"
         ]
     },
     "symfony/validator": {
