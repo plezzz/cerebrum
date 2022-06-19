@@ -19,9 +19,15 @@
 {% block body %}
     {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
     {{ form_widget(form) }}
+    {% if patient.habits.smoking is defined and patient.habits.smoking is not null %}
     <input type="hidden" id="isEditSmoking" value="{{ patient.habits.smoking }}">
+    {% endif %}
+    {% if patient.habits.alcohol is defined and patient.habits.alcohol is not null %}
     <input type="hidden" id="isEditAlcohol" value="{{ patient.habits.alcohol }}">
+    {% endif %}
+    {% if patient.habits.narcotics is defined and patient.habits.narcotics is not null %}
     <input type="hidden" id="isEditNarcotics" value="{{ patient.habits.narcotics }}">
+    {% endif %}
     <button type="submit">Запис</button>
     {{ form_end(form) }}
 {% endblock %}
@@ -30,9 +36,9 @@
 {% endblock %}
 {% block javascriptend %}
     <script>
-        let isSmoking = document.querySelector("#isEditSmoking").value;
-        let isAlcohol = document.querySelector("#isEditAlcohol").value;
-        let isNarcotics = document.querySelector("#isEditNarcotics").value;
+        let isSmoking = document.querySelector("#isEditSmoking")?document.querySelector("#isEditSmoking").value:false;
+        let isAlcohol = document.querySelector("#isEditAlcohol")?document.querySelector("#isEditAlcohol").value:false;
+        let isNarcotics = document.querySelector("#isEditNarcotics")?document.querySelector("#isEditAlcohol").value:false;
         let smoker = document.querySelector("#habits_smoking");
         let alcohol = document.querySelector("#habits_alcohol");
         let narcotics = document.querySelector("#habits_narcotics")

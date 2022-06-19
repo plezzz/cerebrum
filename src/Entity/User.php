@@ -293,6 +293,11 @@ class User implements UserInterface
         return $this;
     }
 
+    public function getFullName(): ?string
+    {
+        return $this->firstName." ".$this->getLastName();
+    }
+
     public function getIsActive(): ?bool
     {
         return $this->isActive;

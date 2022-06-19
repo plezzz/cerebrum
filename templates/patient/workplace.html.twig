@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h3>Добавяне на работни места</h3>
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+    {{ form_widget(form) }}
+    {% if workplace is not null%}
+    <input type="hidden" id="isEditMoreInformation" value="{{ workplace.moreInformation }}">
+    <input type="hidden" id="isEditIsWorkHere" value="{{ workplace.isWorkHere }}">
+    {% endif%}
+    <hr>
+    <div class="row">
+        <button type="submit" class="btn btn-success btn-round">Запази</button>
+        {{ form_end(form) }}
+        <a href="/patient/{{ patient.id }}#workplaces">
+            <button class="btn btn-info btn-round ml-2" type="button">Обратно към пациента</button>
+        </a>
+    </div>
+{% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ asset('bower_components/smoothness/jquery-ui.css') }}">
+{% endblock %}
+{% block javascriptend %}
+    <script src="{{ asset('assets/js/calendar-settings.js') }}" type="text/javascript"></script>
+    <script>
+        const isEditMoreInformation = document.querySelector("#isEditMoreInformation");
+        const isEditIsWorkHere = document.querySelector("#isEditIsWorkHere");
+        let moreInformationButton = document.querySelector("#workplace_moreInformation");
+        let  isWorkHereButton = document.querySelector("#workplace_isWorkHere");
+        let workTo = document.querySelector("#workplace_workTo");
+
+        if  (isEditIsWorkHere.value.toString() === "1"){
+            isWorkHereButton.checked = true
+            isWorkHere()
+        }else{
+            isWorkHereButton.checked = false
+        }
+        isWorkHereButton.addEventListener('change',()=>{
+            isWorkHere()
+        })
+        if (isEditMoreInformation.value.toString() === "1") {
+            console.log(isEditMoreInformation.value)
+            moreInformationButton.checked = true
+            moreInformation()
+        }
+
+        $('.js-datepicker').datepicker();
+
+        moreInformationButton.addEventListener('change', () => {
+            moreInformation()
+        })
+
+        function moreInformation() {
+            const inputs = document.querySelectorAll('.moreInformation');
+            inputs.forEach(input => {
+                if (moreInformationButton.checked === true) {
+                    input.classList.remove("d-none");
+                } else {
+                    input.classList.add("d-none");
+                }
+            });
+        }
+        function isWorkHere(){
+            workTo.disabled = isWorkHereButton.checked === true;
+        }
+    </script>
+{% endblock %}
+

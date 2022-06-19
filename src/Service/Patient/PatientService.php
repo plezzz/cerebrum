@@ -18,6 +18,8 @@ use App\Entity\Patient\Report;
 use App\Entity\Patient\SocialEvaluation;
 use App\Entity\Patient\SocialEvaluationNote;
 use App\Entity\Patient\TemperatureList;
+use App\Entity\Patient\Workplace;
+use App\Entity\Patient\Workplaces;
 use App\Entity\User;
 use App\Repository\Patient\ContactsRepository;
 use App\Repository\Patient\DetailsRepository;
@@ -33,12 +35,15 @@ use App\Repository\Patient\SocialEvaluationNoteRepository;
 use App\Repository\Patient\SocialEvaluationRepository;
 use App\Repository\Patient\TemperatureListRepository;
 use App\Repository\Patient\TherapyRepository;
+use App\Repository\Patient\WorkplaceRepository;
+use App\Repository\Patient\WorkplacesRepository;
 use App\Repository\PatientRepository;
 use App\Service\Common\DateTimeServiceInterface;
 use App\Service\User\UserServiceInterface;
 use DateTimeImmutable;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
+use function PHPUnit\Framework\isNull;
 
 /**
  * @method getDoctrine()
@@ -66,6 +71,8 @@ class PatientService implements PatientServiceInterface
     private FamilyRepository $familyRepository;
     private TemperatureListRepository $temperatureListRepository;
     private TherapyRepository $therapyRepository;
+    private WorkplacesRepository $workplacesRepository;
+    private WorkplaceRepository $workplaceRepository;
 
     public function __construct(
         UserServiceInterface                  $userService,
@@ -85,6 +92,8 @@ class PatientService implements PatientServiceInterface
         FamilyRepository                      $familyRepository,
         TemperatureListRepository             $temperatureListRepository,
         TherapyRepository                     $therapyRepository,
+        WorkplacesRepository                  $workplacesRepository,
+        WorkplaceRepository                   $workplaceRepository,
     )
     {
         $this->userService = $userService;
@@ -106,6 +115,8 @@ class PatientService implements PatientServiceInterface
         $this->familyRepository = $familyRepository;
         $this->temperatureListRepository = $temperatureListRepository;
         $this->therapyRepository = $therapyRepository;
+        $this->workplacesRepository = $workplacesRepository;
+        $this->workplaceRepository = $workplaceRepository;
     }
 
 
@@ -166,9 +177,9 @@ class PatientService implements PatientServiceInterface
      * @return int|null
      * @throws \Doctrine\ORM\ORMException
      */
-    public function saveIDCard(IDCard $IDCard, Patient $patient,bool $isEdit): ?int
+    public function saveIDCard(IDCard $IDCard, Patient $patient, bool $isEdit): ?int
     {
-        if (!$isEdit) {
+        if (!$isEdit||is_null($IDCard->getCreatedAt())) {
             $IDCard->setCreatedBy($this->user);
             $IDCard->setCreatedAt($this->date);
         }
@@ -191,7 +202,7 @@ class PatientService implements PatientServiceInterface
      * @return int|null
      * @throws \Doctrine\ORM\ORMException
      */
-    public function savePersonalDetails(Details $details, Patient $patient,bool $isEdit): ?int
+    public function savePersonalDetails(Details $details, Patient $patient, bool $isEdit): ?int
     {
         if ($details->getSex() === 'Жена') {
             $profilePicture = 'female.png';
@@ -201,7 +212,7 @@ class PatientService implements PatientServiceInterface
             $profilePicture = 'uni.png';
         }
 
-        if (!$isEdit) {
+        if (!$isEdit||is_null($details->getCreatedAt())) {
             $details->setCreatedBy($this->user);
             $details->setCreatedAt($this->date);
         }
@@ -525,7 +536,7 @@ class PatientService implements PatientServiceInterface
      */
     public function saveHabits(Habits $habits, Patient $patient, $isEdit): ?int
     {
-        if (!$isEdit) {
+        if (!$isEdit ||is_null($habits->getCreatedAt())) {
             $habits->setCreatedBy($this->user);
             $habits->setCreatedAt($this->date);
         }
@@ -548,7 +559,7 @@ class PatientService implements PatientServiceInterface
      */
     public function saveFamily(Family $family, Patient $patient, $isEdit): ?int
     {
-        if (!$isEdit) {
+        if (!$isEdit||is_null($family->getCreatedAt())) {
             $family->setCreatedBy($this->user);
             $family->setCreatedAt($this->date);
         }
@@ -572,10 +583,10 @@ class PatientService implements PatientServiceInterface
      * @throws OptimisticLockException
      * @throws \Doctrine\ORM\ORMException
      */
-    public function addTemperatureList(TemperatureList $temperatureList, Patient $patient,bool $isEdit): void
+    public function addTemperatureList(TemperatureList $temperatureList, Patient $patient, bool $isEdit): void
     {
         //$therapies = $temperatureList->getTherapies();
-   //     $file = 'file.txt';
+        //     $file = 'file.txt';
 
         //file_put_contents($file, print_r($therapies, true));
 //        foreach ($therapies as $therapy) {
@@ -583,10 +594,10 @@ class PatientService implements PatientServiceInterface
 //            file_put_contents($file, print_r($therapy, true));
 //        }
 
-       // if (!$isEdit) {
-            $temperatureList->setCreatedBy($this->user);
-            $temperatureList->setCreatedAt($this->date);
-       // }
+        // if (!$isEdit) {
+        $temperatureList->setCreatedBy($this->user);
+        $temperatureList->setCreatedAt($this->date);
+        // }
 
         $temperatureList->setEditedBy($this->user);
         $temperatureList->setEditedAt($this->date);
@@ -626,5 +637,90 @@ class PatientService implements PatientServiceInterface
     public function getTemperatureList($id): array
     {
         return $this->temperatureListRepository->findBy(['patient' => $id]);
+    }
+
+    /**
+     * @param Workplaces $workplaces
+     * @param Patient $patient
+     * @param bool $isEdit
+     * @throws OptimisticLockException
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function workplaces(Workplaces $workplaces, Patient $patient, bool $isEdit): void
+    {
+
+        if (!$isEdit) {
+            $workplaces->setCreatedBy($this->user);
+            $workplaces->setCreatedAt($this->date);
+            foreach ($workplaces->getWorkplace() as $workplace) {
+                $workplace->setCreatedAt($this->date);
+                $workplace->setCreatedBy($this->user);
+            }
+        }
+
+        $workplaces->setEditedBy($this->user);
+        $workplaces->setEditedAt($this->date);
+        foreach ($workplaces->getWorkplace() as $workplace) {
+            $workplace->setEditedAt($this->date);
+            $workplace->setEditedBy($this->user);
+        }
+        $workplaces->setPatient($patient);
+
+
+        $this->workplacesRepository->add($workplaces);
+    }
+
+    /**
+     * @param $id
+     * @return Workplace|null
+     */
+    public function getWorkplace($id): Workplace|null
+    {
+        return $this->workplaceRepository->find($id);
+    }
+
+    /**
+     * @param Workplace $workplace
+     * @param Patient $patient
+     * @param bool $isEdit
+     * @return void
+     */
+    public function workplace(Workplace $workplace, Patient $patient, bool $isEdit): void
+    {
+        if (!$isEdit) {
+            $workplace->setCreatedAt($this->date);
+            $workplace->setCreatedBy($this->user);
+        }
+        $workplace->setEditedAt($this->date);
+        $workplace->setEditedBy($this->user);
+
+        if (empty($patient->getWorkplaces())) {
+            $workplaces = new Workplaces();
+            $workplaces->setCreatedBy($this->user);
+            $workplaces->setCreatedAt($this->date);
+            $workplaces->setEditedBy($this->user);
+            $workplaces->setEditedAt($this->date);
+            $workplaces->addWorkplace($workplace);
+            $workplaces->setPatient($patient);
+            $this->workplacesRepository->add($workplaces);
+        }else{
+            $this->workplacesRepository->add($patient->getWorkplaces()->addWorkplace($workplace));
+        }
+        // $this->workplaceRepository->add($workplace);
+
+
+
+
+    }
+
+    /**
+     * @param $workplace
+     * @return void
+     * @throws OptimisticLockException
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function removeWorkplace($workplace): void
+    {
+        $this->workplaceRepository->remove($workplace);
     }
 }

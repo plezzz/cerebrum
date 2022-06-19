@@ -178,6 +178,13 @@ class Patient
      */
     private $temperatureLists;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Workplaces::class, mappedBy="patient", cascade={"persist", "remove"})
+     */
+    private $workplaces;
+
+
+
 
     public function __construct()
     {
@@ -691,6 +698,28 @@ class Patient
                 $temperatureList->setPatient(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getWorkplaces(): ?Workplaces
+    {
+        return $this->workplaces;
+    }
+
+    public function setWorkplaces(?Workplaces $workplaces): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($workplaces === null && $this->workplaces !== null) {
+            $this->workplaces->setPatient(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($workplaces !== null && $workplaces->getPatient() !== $this) {
+            $workplaces->setPatient($this);
+        }
+
+        $this->workplaces = $workplaces;
 
         return $this;
     }

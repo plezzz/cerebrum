@@ -22,7 +22,7 @@ class IDCardType extends AbstractType
                 'label' => 'Дата на раждане',
                 'widget' => 'single_text',
                 'html5' => false,
-                'attr' => ['class' => 'js-datepicker'],
+                'attr' => ['class' => 'js-datepicker','autocomplete' => 'disabled'],
                 'format' => 'dd-MM-yyyy',
                 'empty_data' => '0000-00-00'
 

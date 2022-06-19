@@ -19,7 +19,9 @@
 {% block body %}
     {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
     {{ form_widget(form) }}
+    {% if patient.family.haveKids is defined and patient.family.haveKids is not null %}
     <input type="hidden" id="isEditKids" value="{{ patient.family.haveKids }}">
+    {% endif%}
     <button type="submit">Запис</button>
     {{ form_end(form) }}
 {% endblock %}
@@ -28,12 +30,11 @@
 {% endblock %}
 {% block javascriptend %}
     <script>
-        let isHaveKids = document.querySelector("#isEditKids").value;
+        let isHaveKids = document.querySelector("#isEditKids")?document.querySelector("#isEditKids").value:false;
         let haveKids = document.querySelector("#family_haveKids");
         let boys = document.querySelector("#family > div:nth-child(3)")
         let girls = document.querySelector("#family > div:nth-child(4)");
 
-        console.log(haveKids)
         hideKids()
         if (isHaveKids){
             showKids()

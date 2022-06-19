@@ -254,6 +254,12 @@
                                                    role="tab">Температурна линия</a>
                                                 <div class="slide"></div>
                                             </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" data-toggle="tab"
+                                                   href="#workplaces"
+                                                   role="tab">Работни позиции</a>
+                                                <div class="slide"></div>
+                                            </li>
                                         </ul>
                                     </div>
                                     <!-- Tab panes -->
@@ -1365,30 +1371,19 @@
                                                     <div class="col-lg-12 col-xl-6">
                                                         <div class="card">
                                                             <div class="card-block post-timelines">
-                                                                                                    <span class="dropdown-toggle addon-btn text-muted f-right service-btn"
-                                                                                                          data-toggle="dropdown"
-                                                                                                          aria-haspopup="true"
-                                                                                                          aria-expanded="true"
-                                                                                                          role="tooltip">
-                                                                                                    </span>
+                                                                <span class="dropdown-toggle addon-btn text-muted f-right service-btn"
+                                                                      data-toggle="dropdown" aria-haspopup="true"
+                                                                      aria-expanded="true" role="tooltip">
+                                                                </span>
                                                                 <div class="dropdown-menu dropdown-menu-right b-none services-list">
-                                                                    <a class="dropdown-item"
-                                                                       href="#">Remove
-                                                                        tag</a>
-                                                                    <a class="dropdown-item"
-                                                                       href="#">Report
-                                                                        Photo</a>
-                                                                    <a class="dropdown-item"
-                                                                       href="#">Hide From
+                                                                    <a class="dropdown-item" href="#">Remove tag</a>
+                                                                    <a class="dropdown-item" href="#">Report Photo</a>
+                                                                    <a class="dropdown-item" href="#">Hide From
                                                                         Timeline</a>
-                                                                    <a class="dropdown-item"
-                                                                       href="#">Blog
-                                                                        User</a>
+                                                                    <a class="dropdown-item" href="#">Blog User</a>
                                                                 </div>
-                                                                <div
-                                                                        class="media bg-white d-flex">
-                                                                    <div
-                                                                            class="media-left media-middle">
+                                                                <div class="media bg-white d-flex">
+                                                                    <div class="media-left media-middle">
                                                                         {% if document.type[0] == "image" %}
                                                                             <a href="#">
                                                                                 <img class="media-object image-patient"
@@ -1407,16 +1402,12 @@
                                                                                 </div>
                                                                             </div>
                                                                         {% endif %}
-
                                                                     </div>
-                                                                    <div
-                                                                            class="media-body friend-elipsis">
-                                                                        <div
-                                                                                class="f-15 f-bold m-b-5">
+                                                                    <div class="media-body friend-elipsis">
+                                                                        <div class="f-15 f-bold m-b-5">
                                                                             {{ document.originalName }}
                                                                         </div>
-                                                                        <div
-                                                                                class="text-muted social-designation">
+                                                                        <div class="text-muted social-designation">
                                                                             Качен
                                                                             от {{ document.createdBy.firstName }} {{ document.createdBy.lastName }} {{ document.createdAt|date('d.m.Y H:i:s') }}
                                                                         </div>
@@ -1538,6 +1529,169 @@
                                             {% endif %}
                                         </div>
                                         <!-- Temperature line tab end -->
+                                        <!-- Workplaces tab start -->
+                                        <div class="tab-pane" id="workplaces">
+                                            <div class="text-center">
+                                                <a   href="{{ path('patient-workplace-edit', {'id': 0,'patientID':patient.id}) }}"
+                                                   class="btn btn-primary waves-effect waves-light m-b-30">Добавете работна позиция
+                                                </a>
+                                            </div>
+                                            {% if patient.workplaces is not empty %}
+                                                <div class="row">
+                                                    {% for workplace in patient.workplaces.workplace | reverse %}
+                                                        <div class="col-sm-12">
+                                                            <div class="card">
+                                                                <div class="card-header">
+                                                                    <h5 class="card-header-text">
+                                                                        Заемана
+                                                                        длъжност/позиция: {{ workplace.position }}
+                                                                    </h5>
+                                                                    <span class="dropdown-toggle addon-btn text-muted f-right service-btn"
+                                                                          data-toggle="dropdown" aria-haspopup="true"
+                                                                          aria-expanded="true" role="tooltip">
+                                                                    </span>
+                                                                    <div class="dropdown-menu dropdown-menu-right b-none services-list">
+                                                                        <a class="dropdown-item"
+                                                                           href="{{ path('patient-workplace-edit', {'id': workplace.id,'patientID':patient.id}) }}">Промени</a>
+                                                                        <a class="dropdown-item"
+                                                                           href="{{ path('patient-workplace-remove', {'id': workplace.id,'patientID':patient.id}) }}">Изтрии</a>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="card-block">
+                                                                    <div id="work-info" class="row">
+                                                                        <div class="col-lg-12 col-md-12">
+                                                                            <table class="table table-responsive m-b-0">
+                                                                                <tr>
+                                                                                    <th class="social-label b-none p-t-0">
+                                                                                        Работодател
+                                                                                    </th>
+                                                                                    <td class="social-user-name b-none p-t-0 text-muted">
+                                                                                        {{ workplace.employer | default("Не е посочено") }}
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th class="social-label b-none p-t-0">
+                                                                                        Град
+                                                                                    </th>
+                                                                                    <td class="social-user-name b-none p-t-0 text-muted">
+                                                                                        {{ workplace.city | default("Не е посочено") }}
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th class="social-label b-none p-t-0">
+                                                                                        Дата на започване
+                                                                                    </th>
+                                                                                    <td class="social-user-name b-none p-t-0 text-muted">
+                                                                                        {{ workplace.workFrom is null ? "Не е посочено" : workplace.workFrom|date('d.m.Y') }}
+                                                                                    </td>
+                                                                                    <th class="social-label b-none p-t-0">
+                                                                                        Дата на приключване
+                                                                                    </th>
+                                                                                    <td class="social-user-name b-none p-t-0 text-muted">
+                                                                                        {% if workplace.isWorkHere %}
+                                                                                            Все още работи на текущата позиция
+                                                                                        {% else %}
+                                                                                            {{ workplace.workTo is null ? "Не е посочено" : workplace.workTo|date('d.m.Y') }}
+                                                                                        {% endif %}
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th class="social-label b-none p-t-0">
+                                                                                        Държава
+                                                                                    </th>
+                                                                                    <td class="social-user-name b-none p-t-0 text-muted">
+                                                                                        {{ workplace.country.name | default("Не е посочено") }}
+                                                                                    </td>
+                                                                                </tr>
+                                                                                {% if workplace.moreInformation %}
+                                                                                    <tr>
+                                                                                        <th class="social-label b-none p-t-0">
+                                                                                            Основни дейности и
+                                                                                            отговорности
+                                                                                        </th>
+                                                                                        <td class="social-user-name b-none p-t-0 text-muted">
+                                                                                            {{ workplace.responsibilities | default("Не е посочено") }}
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <th class="social-label b-none p-t-0">
+                                                                                            Сектор
+                                                                                        </th>
+                                                                                        <td class="social-user-name b-none p-t-0 text-muted">
+                                                                                            {{ workplace.sector | default("Не е посочено") }}
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <th class="social-label b-none p-t-0">
+                                                                                            Отдел
+                                                                                        </th>
+                                                                                        <td class="social-user-name b-none p-t-0 text-muted">
+                                                                                            {{ workplace.department | default("Не е посочено") }}
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <th class="social-label b-none p-t-0">
+                                                                                            Адрес
+                                                                                        </th>
+                                                                                        <td class="social-user-name b-none p-t-0 text-muted">
+                                                                                            {{ workplace.address | default("Не е посочено") }}
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <th class="social-label b-none p-t-0">
+                                                                                            Пощенски код
+                                                                                        </th>
+                                                                                        <td class="social-user-name b-none p-t-0 text-muted">
+                                                                                            {{ workplace.postcode | default("Не е посочено") }}
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <th class="social-label b-none p-t-0">
+                                                                                            Телефон
+                                                                                        </th>
+                                                                                        <td class="social-user-name b-none p-t-0 text-muted">
+                                                                                            {{ workplace.phone | default("Не е посочено") }}
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <th class="social-label b-none p-t-0">
+                                                                                            Имейл
+                                                                                        </th>
+                                                                                        <td class="social-user-name b-none p-t-0 text-muted">
+                                                                                            {{ workplace.email | default("Не е посочено") }}
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <th class="social-label b-none p-t-0">
+                                                                                            Уеб сайт
+                                                                                        </th>
+                                                                                        <td class="social-user-name b-none p-t-0 text-muted">
+                                                                                            {{ workplace.website | default("Не е посочено") }}
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                {% endif %}
+                                                                            </table>
+                                                                        </div>
+                                                                    </div>
+                                                                    <hr>
+                                                                    <div class="text-muted social-designation">
+                                                                        Създаден от {{ workplace.createdBy.fullName }} нa {{ workplace.createdAt|date('d.m.Y H:i:s') }}
+                                                                        <br>
+                                                                        Редактиран от {{ workplace.editedBy.fullName }} нa {{ workplace.editedAt|date('d.m.Y H:i:s') }}                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    {% endfor %}
+                                                </div>
+                                            {% else %}
+                                                <div class="text-center">
+                                                    <p class="text-center">За този пациент няма добавени данни за
+                                                        работни позиции</p>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                        <!-- Workplaces tab end -->
                                     </div>
                                     <!-- Row end -->
                                 </div>

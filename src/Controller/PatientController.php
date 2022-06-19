@@ -10,6 +10,8 @@ use App\Entity\Patient\IDCard;
 use App\Entity\Patient\Patient;
 use App\Entity\Patient\TemperatureList;
 use App\Entity\Patient\Therapy;
+use App\Entity\Patient\Workplace;
+use App\Entity\Patient\Workplaces;
 use App\Form\FamilyType;
 use App\Form\HabitsType;
 use App\Form\IDCardType;
@@ -25,6 +27,8 @@ use App\Form\PatientSocialEvaluationType;
 use App\Form\PatientType;
 use App\Form\ProfilePictureUploadType;
 use App\Form\TemperatureListType;
+use App\Form\WorkplacesType;
+use App\Form\WorkplaceType;
 use App\Service\Patient\PatientServiceInterface;
 use App\Service\Patient\ProfilePictureUploadService;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -194,7 +198,7 @@ class PatientController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $personalInfo = $form->getData();
             $this->patientService->savePersonalDetails($personalInfo, $patient, $isEdit);
-            return $this->redirectToRoute('patient-habits-create', ['egn' => $egn]);
+            return $this->redirectToRoute('patient-workplaces', ['egn' => $egn]);
         }
 
         return $this->render('patient/personal-info-create.html.twig', [
@@ -334,7 +338,7 @@ class PatientController extends AbstractController
      * @return Response
      */
     #[Route('/patient/family-edit/{id}', name: 'patient-family-edit')]
-    public function familyEdit(Request $request,$id): Response
+    public function familyEdit(Request $request, $id): Response
     {
         $isEdit = true;
         $patient = $this->patientService->findOneByID($id);
@@ -372,7 +376,6 @@ class PatientController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $contacts = $form->getData();
             $this->patientService->saveContacts($contacts, $patient, $isEdit);
-
 
             if ('saveAndAdd' === $form->getClickedButton()->getName()) {
                 return $this->redirectToRoute('patient-contacts-create', ['egn' => $egn]);
@@ -812,4 +815,98 @@ class PatientController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    /**
+     * @IsGranted("ROLE_DOCTOR")
+     * @Breadcrumb(
+     *     {"label" = "Начало", "route" = "home"},
+     *     {"label" = "Пациент", "route" = "patient-create"},
+     *     {"label" = "Добавяне на работни позиции за пациента"})
+     * @param Request $request
+     * @return Response
+     */
+    #[Route('/patient/add/workplaces', name: 'patient-workplaces')]
+    public function workplacesCreate(Request $request): Response
+    {
+        $isEdit = false;
+        $egn = $request->query->get('egn');
+        $patient = $this->patientService->findOneByEGN($egn);
+        $workplaces = new Workplaces();
+        $form = $this->createForm(WorkplacesType::class, $workplaces);
+        $form->handleRequest($request);
+
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $formFields = $form->getData();
+            $this->patientService->workplaces($formFields, $patient, $isEdit);
+            return $this->redirectToRoute('patient-habits-create', ['egn' => $egn]);
+        } else {
+            $errors = (string)$form->getErrors(true, false);
+            // $formFields = $form->getData();
+            // print_r($errors);
+            //  print_r($formFields->toString());
+        }
+
+        return $this->render('patient/workplaces-create.html.twig', [
+            'form' => $form->createView(),
+            'patient' => $patient,
+            'isEdit' => $isEdit
+        ]);
+    }
+
+    /**
+     * @IsGranted("ROLE_DOCTOR")
+     * @Breadcrumb(
+     *     {"label" = "Начало", "route" = "home"},
+     *     {"label" = "Пациент", "route" = "patient-create"},
+     *     {"label" = "Редактиране на работни позиции за пациента"})
+     * @param Request $request
+     * @param $id
+     * @return Response
+     */
+    #[Route('/patient/edit/workplace/{id}', name: 'patient-workplace-edit')]
+    public function workplaceEdit(Request $request, $id): Response
+    {
+        $isEdit = !($id == 0);
+        $patientID = $request->query->get('patientID');
+        $patient = $this->patientService->findOneByID($patientID);
+        $workplace = $id == 0 ? new Workplace() : $this->patientService->getWorkplace($id);
+
+        $form = $this->createForm(WorkplaceType::class, $workplace);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $formFields = $form->getData();
+            $this->patientService->workplace($formFields, $patient, $isEdit);
+            return $this->redirectToRoute('patient', ['id' => $patient->getId(), '_fragment' => 'workplaces']);
+        }
+
+        return $this->render('patient/workplace.html.twig', [
+            'form' => $form->createView(),
+            'patient' => $patient,
+            'isEdit' => $isEdit,
+            'workplace' => $workplace
+        ]);
+    }
+
+    /**
+     * @IsGranted("ROLE_DOCTOR")
+     * @Breadcrumb(
+     *     {"label" = "Начало", "route" = "home"},
+     *     {"label" = "Пациент", "route" = "patient-create"},
+     *     {"label" = "Премахване на работни позиции за пациента"})
+     * @param Request $request
+     * @param $id
+     * @return Response
+     */
+    #[Route('/patient/remove/workplace/{id}', name: 'patient-workplace-remove')]
+    public function workplaceRemove(Request $request, $id): Response
+    {
+        $patientID = $request->query->get('patientID');
+        $patient = $this->patientService->findOneByID($patientID);
+        $workplace = $this->patientService->getWorkplace($id);
+        $this->patientService->removeWorkplace($workplace);
+        return $this->redirectToRoute('patient', ['id' => $patient->getId(), '_fragment' => 'workplaces']);
+    }
+
 }

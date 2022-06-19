@@ -17,6 +17,8 @@ use App\Entity\Patient\Report;
 use App\Entity\Patient\SocialEvaluation;
 use App\Entity\Patient\SocialEvaluationNote;
 use App\Entity\Patient\TemperatureList;
+use App\Entity\Patient\Workplace;
+use App\Entity\Patient\Workplaces;
 
 interface PatientServiceInterface
 {
@@ -85,5 +87,11 @@ interface PatientServiceInterface
 
     public function getTemperatureList($id): array;
 
+    public function workplaces(Workplaces $workplaces, Patient $patient,bool $isEdit): void;
 
+    public function getWorkplace($id): Workplace|null;
+
+    public function workplace(Workplace $workplace, Patient $patient, bool $isEdit): void;
+
+    public function removeWorkplace($workplace): void;
 }
