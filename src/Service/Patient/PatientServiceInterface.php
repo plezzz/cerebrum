@@ -14,6 +14,8 @@ use App\Entity\Patient\PsychiatricEvaluationNote;
 use App\Entity\Patient\PsychologicalEvaluation;
 use App\Entity\Patient\PsychologicalEvaluationNote;
 use App\Entity\Patient\Report;
+use App\Entity\Patient\School;
+use App\Entity\Patient\Schools;
 use App\Entity\Patient\SocialEvaluation;
 use App\Entity\Patient\SocialEvaluationNote;
 use App\Entity\Patient\TemperatureList;
@@ -94,4 +96,12 @@ interface PatientServiceInterface
     public function workplace(Workplace $workplace, Patient $patient, bool $isEdit): void;
 
     public function removeWorkplace($workplace): void;
+
+    public function schools(Schools $schools, Patient $patient,bool $isEdit): void;
+
+    public function getSchool($id): School|null;
+
+    public function school(School $school, Patient $patient, bool $isEdit): void;
+
+    public function removeSchool($school): void;
 }

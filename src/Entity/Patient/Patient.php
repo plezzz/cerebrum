@@ -183,6 +183,11 @@ class Patient
      */
     private $workplaces;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Schools::class, mappedBy="patient", cascade={"persist", "remove"})
+     */
+    private $schools;
+
 
 
 
@@ -720,6 +725,23 @@ class Patient
         }
 
         $this->workplaces = $workplaces;
+
+        return $this;
+    }
+
+    public function getSchools(): ?Schools
+    {
+        return $this->schools;
+    }
+
+    public function setSchools(Schools $schools): self
+    {
+        // set the owning side of the relation if necessary
+        if ($schools->getPatient() !== $this) {
+            $schools->setPatient($this);
+        }
+
+        $this->schools = $schools;
 
         return $this;
     }

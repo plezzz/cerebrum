@@ -8,6 +8,8 @@ use App\Entity\Patient\Details;
 use App\Entity\Patient\Habits;
 use App\Entity\Patient\IDCard;
 use App\Entity\Patient\Patient;
+use App\Entity\Patient\School;
+use App\Entity\Patient\Schools;
 use App\Entity\Patient\TemperatureList;
 use App\Entity\Patient\Therapy;
 use App\Entity\Patient\Workplace;
@@ -26,6 +28,8 @@ use App\Form\PatientSocialEvaluationNoteType;
 use App\Form\PatientSocialEvaluationType;
 use App\Form\PatientType;
 use App\Form\ProfilePictureUploadType;
+use App\Form\SchoolsType;
+use App\Form\SchoolType;
 use App\Form\TemperatureListType;
 use App\Form\WorkplacesType;
 use App\Form\WorkplaceType;
@@ -839,7 +843,7 @@ class PatientController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $formFields = $form->getData();
             $this->patientService->workplaces($formFields, $patient, $isEdit);
-            return $this->redirectToRoute('patient-habits-create', ['egn' => $egn]);
+            return $this->redirectToRoute('patient-schools', ['egn' => $egn]);
         } else {
             $errors = (string)$form->getErrors(true, false);
             // $formFields = $form->getData();
@@ -909,4 +913,91 @@ class PatientController extends AbstractController
         return $this->redirectToRoute('patient', ['id' => $patient->getId(), '_fragment' => 'workplaces']);
     }
 
+    /**
+     * @IsGranted("ROLE_DOCTOR")
+     * @Breadcrumb(
+     *     {"label" = "Начало", "route" = "home"},
+     *     {"label" = "Пациент", "route" = "patient-create"},
+     *     {"label" = "Добавяне на образователни институции за пациента"})
+     * @param Request $request
+     * @return Response
+     */
+    #[Route('/patient/add/schools', name: 'patient-schools')]
+    public function schoolsCreate(Request $request): Response
+    {
+        $isEdit = false;
+        $egn = $request->query->get('egn');
+        $patient = $this->patientService->findOneByEGN($egn);
+        $schools = new Schools();
+        $form = $this->createForm(SchoolsType::class, $schools);
+        $form->handleRequest($request);
+
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $formFields = $form->getData();
+            $this->patientService->schools($formFields, $patient, $isEdit);
+            return $this->redirectToRoute('patient-habits-create', ['egn' => $egn]);
+        }
+
+        return $this->render('patient/schools-create.html.twig', [
+            'form' => $form->createView(),
+            'patient' => $patient,
+            'isEdit' => $isEdit
+        ]);
+    }
+
+    /**
+     * @IsGranted("ROLE_DOCTOR")
+     * @Breadcrumb(
+     *     {"label" = "Начало", "route" = "home"},
+     *     {"label" = "Пациент", "route" = "patient-create"},
+     *     {"label" = "Редактиране на образователни институции за пациента"})
+     * @param Request $request
+     * @param $id
+     * @return Response
+     */
+    #[Route('/patient/edit/school/{id}', name: 'patient-school-edit')]
+    public function schoolEdit(Request $request, $id): Response
+    {
+        $isEdit = !($id == 0);
+        $patientID = $request->query->get('patientID');
+        $patient = $this->patientService->findOneByID($patientID);
+        $school = $id == 0 ? new School() : $this->patientService->getSchool($id);
+
+        $form = $this->createForm(SchoolType::class, $school);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $formFields = $form->getData();
+            $this->patientService->school($formFields, $patient, $isEdit);
+            return $this->redirectToRoute('patient', ['id' => $patient->getId(), '_fragment' => 'schools']);
+        }
+
+        return $this->render('patient/school.html.twig', [
+            'form' => $form->createView(),
+            'patient' => $patient,
+            'isEdit' => $isEdit,
+            'school' => $school
+        ]);
+    }
+
+    /**
+     * @IsGranted("ROLE_DOCTOR")
+     * @Breadcrumb(
+     *     {"label" = "Начало", "route" = "home"},
+     *     {"label" = "Пациент", "route" = "patient-create"},
+     *     {"label" = "Премахване на образователни институции за пациента"})
+     * @param Request $request
+     * @param $id
+     * @return Response
+     */
+    #[Route('/patient/remove/school/{id}', name: 'patient-school-remove')]
+    public function schoolRemove(Request $request, $id): Response
+    {
+        $patientID = $request->query->get('patientID');
+        $patient = $this->patientService->findOneByID($patientID);
+        $school = $this->patientService->getSchool($id);
+        $this->patientService->removeSchool($school);
+        return $this->redirectToRoute('patient', ['id' => $patient->getId(), '_fragment' => 'school']);
+    }
 }

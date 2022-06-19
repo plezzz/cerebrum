@@ -15,6 +15,8 @@ use App\Entity\Patient\PsychiatricEvaluationNote;
 use App\Entity\Patient\PsychologicalEvaluation;
 use App\Entity\Patient\PsychologicalEvaluationNote;
 use App\Entity\Patient\Report;
+use App\Entity\Patient\School;
+use App\Entity\Patient\Schools;
 use App\Entity\Patient\SocialEvaluation;
 use App\Entity\Patient\SocialEvaluationNote;
 use App\Entity\Patient\TemperatureList;
@@ -31,6 +33,8 @@ use App\Repository\Patient\PsychiatricEvaluationRepository;
 use App\Repository\Patient\PsychologicalEvaluationRepository;
 use App\Repository\Patient\PsychologicalEvaluationNoteRepository;
 use App\Repository\Patient\ReportRepository;
+use App\Repository\Patient\SchoolRepository;
+use App\Repository\Patient\SchoolsRepository;
 use App\Repository\Patient\SocialEvaluationNoteRepository;
 use App\Repository\Patient\SocialEvaluationRepository;
 use App\Repository\Patient\TemperatureListRepository;
@@ -73,6 +77,8 @@ class PatientService implements PatientServiceInterface
     private TherapyRepository $therapyRepository;
     private WorkplacesRepository $workplacesRepository;
     private WorkplaceRepository $workplaceRepository;
+    private SchoolRepository $schoolRepository;
+    private SchoolsRepository $schoolsRepository;
 
     public function __construct(
         UserServiceInterface                  $userService,
@@ -94,6 +100,8 @@ class PatientService implements PatientServiceInterface
         TherapyRepository                     $therapyRepository,
         WorkplacesRepository                  $workplacesRepository,
         WorkplaceRepository                   $workplaceRepository,
+        SchoolRepository                      $schoolRepository,
+        SchoolsRepository                     $schoolsRepository,
     )
     {
         $this->userService = $userService;
@@ -117,6 +125,8 @@ class PatientService implements PatientServiceInterface
         $this->therapyRepository = $therapyRepository;
         $this->workplacesRepository = $workplacesRepository;
         $this->workplaceRepository = $workplaceRepository;
+        $this->schoolRepository = $schoolRepository;
+        $this->schoolsRepository = $schoolsRepository;
     }
 
 
@@ -179,7 +189,7 @@ class PatientService implements PatientServiceInterface
      */
     public function saveIDCard(IDCard $IDCard, Patient $patient, bool $isEdit): ?int
     {
-        if (!$isEdit||is_null($IDCard->getCreatedAt())) {
+        if (!$isEdit || is_null($IDCard->getCreatedAt())) {
             $IDCard->setCreatedBy($this->user);
             $IDCard->setCreatedAt($this->date);
         }
@@ -212,7 +222,7 @@ class PatientService implements PatientServiceInterface
             $profilePicture = 'uni.png';
         }
 
-        if (!$isEdit||is_null($details->getCreatedAt())) {
+        if (!$isEdit || is_null($details->getCreatedAt())) {
             $details->setCreatedBy($this->user);
             $details->setCreatedAt($this->date);
         }
@@ -536,7 +546,7 @@ class PatientService implements PatientServiceInterface
      */
     public function saveHabits(Habits $habits, Patient $patient, $isEdit): ?int
     {
-        if (!$isEdit ||is_null($habits->getCreatedAt())) {
+        if (!$isEdit || is_null($habits->getCreatedAt())) {
             $habits->setCreatedBy($this->user);
             $habits->setCreatedAt($this->date);
         }
@@ -559,7 +569,7 @@ class PatientService implements PatientServiceInterface
      */
     public function saveFamily(Family $family, Patient $patient, $isEdit): ?int
     {
-        if (!$isEdit||is_null($family->getCreatedAt())) {
+        if (!$isEdit || is_null($family->getCreatedAt())) {
             $family->setCreatedBy($this->user);
             $family->setCreatedAt($this->date);
         }
@@ -657,6 +667,9 @@ class PatientService implements PatientServiceInterface
                 $workplace->setCreatedBy($this->user);
             }
         }
+        if ($workplaces->getIsWorking() === null){
+            $workplaces->setIsWorking(false);
+        }
 
         $workplaces->setEditedBy($this->user);
         $workplaces->setEditedAt($this->date);
@@ -703,14 +716,9 @@ class PatientService implements PatientServiceInterface
             $workplaces->addWorkplace($workplace);
             $workplaces->setPatient($patient);
             $this->workplacesRepository->add($workplaces);
-        }else{
+        } else {
             $this->workplacesRepository->add($patient->getWorkplaces()->addWorkplace($workplace));
         }
-        // $this->workplaceRepository->add($workplace);
-
-
-
-
     }
 
     /**
@@ -722,5 +730,87 @@ class PatientService implements PatientServiceInterface
     public function removeWorkplace($workplace): void
     {
         $this->workplaceRepository->remove($workplace);
+    }
+
+    /**
+     * @param Schools $schools
+     * @param Patient $patient
+     * @param bool $isEdit
+     * @throws OptimisticLockException
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function schools(Schools $schools, Patient $patient, bool $isEdit): void
+    {
+
+        if (!$isEdit) {
+            $schools->setCreatedBy($this->user);
+            $schools->setCreatedAt($this->date);
+            foreach ($schools->getSchool() as $school) {
+                $school->setCreatedAt($this->date);
+                $school->setCreatedBy($this->user);
+            }
+        }
+
+        $schools->setEditedBy($this->user);
+        $schools->setEditedAt($this->date);
+        foreach ($schools->getSchool() as $school) {
+            $school->setEditedAt($this->date);
+            $school->setEditedBy($this->user);
+        }
+        $schools->setPatient($patient);
+
+
+        $this->schoolsRepository->add($schools);
+    }
+
+    /**
+     * @param $id
+     * @return School|null
+     */
+    public function getSchool($id): School|null
+    {
+        return $this->schoolRepository->find($id);
+    }
+
+    /**
+     * @param School $school
+     * @param Patient $patient
+     * @param bool $isEdit
+     * @return void
+     * @throws OptimisticLockException
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function school(School $school, Patient $patient, bool $isEdit): void
+    {
+        if (!$isEdit) {
+            $school->setCreatedAt($this->date);
+            $school->setCreatedBy($this->user);
+        }
+        $school->setEditedAt($this->date);
+        $school->setEditedBy($this->user);
+
+        if (empty($patient->getSchools())) {
+            $schools = new Schools();
+            $schools->setCreatedBy($this->user);
+            $schools->setCreatedAt($this->date);
+            $schools->setEditedBy($this->user);
+            $schools->setEditedAt($this->date);
+            $schools->addSchool($school);
+            $schools->setPatient($patient);
+            $this->schoolsRepository->add($schools);
+        } else {
+            $this->schoolsRepository->add($patient->getSchools()->addSchool($school));
+        }
+    }
+
+    /**
+     * @param $school
+     * @return void
+     * @throws OptimisticLockException
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function removeSchool($school): void
+    {
+        $this->schoolRepository->remove($school);
     }
 }
