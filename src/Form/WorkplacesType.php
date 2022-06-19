@@ -16,7 +16,7 @@ class WorkplacesType extends AbstractType
         $builder
             ->add('isWorking', CheckboxType::class, [
                 'label' => 'Работи ли в момента',
-                'data' => false
+                'data' => true
             ])
             ->add('workplace', CollectionType::class, [
                 'entry_type' => WorkplaceType::class,
@@ -24,7 +24,7 @@ class WorkplacesType extends AbstractType
                 'allow_add' => true,
                 'by_reference' => false,
                 'allow_delete' => true,
-            ]);;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
