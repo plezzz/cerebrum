@@ -139,10 +139,10 @@
                                             <div class="card-header">
                                                 <h5 class="card-header-text">Контакти</h5>
                                                 <span class="label label-info f-right">
-                                                    <a href="/patient/contact-view-all/{{ patient.id }}">Виж всички</a>
+                                                    <a href="{{ path('patient-contacts-view-all', {'id': patient.id}) }}">Виж всички</a>
                                                 </span>
                                                 <span class="label label-primary f-right">
-                                                    <a href="/patient/contact-create?egn={{ patient.eGN }}">Добави нов</a>
+                                                    <a href="{{path('patient-contacts-create', {'egn': patient.eGN}) }}">Добави нов</a>
                                                 </span>
                                             </div>
                                             <div class="card-block user-box">
@@ -179,8 +179,8 @@
                                                             <div
                                                                     class="dropdown-menu dropdown-menu-right b-none services-list">
                                                                 <a class="dropdown-item"
-                                                                   href="/patient/contact-edit/{{ contact.id }}">Промени</a>
-                                                                <a id="contactDelete" href="#" data-toggle="modal"
+                                                                   href="{{path('patient-contacts-edit',{'id': contact.id})}}">Промени</a>
+                                                                <a id="contactDelete" href="{{path('patient-contacts-delete',{'id': contact.id})}}" data-toggle="modal"
                                                                    data-target="#delete-contact-modal"
                                                                    data-contactID="{{ contact.id }}"
                                                                    data-firstName="{{ contact.firstName }}"
@@ -1361,6 +1361,9 @@
                                             <div class="text-center">
                                                 <p>За този пациент няма добавени тестове</p>
                                                 <p>Очаквайте скоро тази функционалност</p>
+                                                {% apply upper %}
+                                                    This text becomes uppercase
+                                                {% endapply %}
                                             </div>
                                         </div>
                                         <!-- Tests tab end -->
