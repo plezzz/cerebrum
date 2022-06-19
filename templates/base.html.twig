@@ -31,7 +31,11 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ERLYDM9V60"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
         gtag('js', new Date());
 
         gtag('config', 'G-ERLYDM9V60');
@@ -213,7 +217,7 @@
         <!-- Sidebar inner chat end-->
         <div class="pcoded-main-container">
             <div class="pcoded-wrapper">
-{#               {% block left  %}{% endblock %}#}
+                {#               {% block left  %}{% endblock %} #}
                 {{ block("left", "navigation/left.html.twig") }}
                 <div class="pcoded-content">
                     <div class="pcoded-inner-content">
@@ -273,6 +277,45 @@
 {% block javascriptend %}{% endblock %}
 <!-- Custom js -->
 <script type="text/javascript" src="{{ asset('assets/js/script.js') }}"></script>
-
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        var searchRequest = null;
+        $("#search").keyup(function () {
+            var minlength = 3;
+            var that = this;
+            var value = $(this).val();
+            var entitySelector = $("#entitiesNav").html('');
+            if (value.length >= minlength) {
+                if (searchRequest != null)
+                    searchRequest.abort();
+                searchRequest = $.ajax({
+                    type: "GET",
+                    url: "{{ path('ajax_search') }}",
+                    data: {
+                        'q': value
+                    },
+                    dataType: "text",
+                    success: function (msg) {
+                        //we need to check if the value is the same
+                        if (value == $(that).val()) {
+                            var result = JSON.parse(msg);
+                            $.each(result, function (key, arr) {
+                                $.each(arr, function (id, value) {
+                                    if (key == 'entities') {
+                                        if (id != 'error') {
+                                            entitySelector.append('<li><a href="/patient/' + id + '">' + value + '</a></li><br>');
+                                        } else {
+                                            entitySelector.append('<li class="errorLi">' + value + '</li>');
+                                        }
+                                    }
+                                });
+                            });
+                        }
+                    }
+                });
+            }
+        });
+    });
+</script>
 </body>
 </html>
