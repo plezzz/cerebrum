@@ -23,7 +23,6 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
-            - '../src/Tests/'
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
@@ -33,11 +32,3 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
-    #File Uploads
-    App\Service\Common\FileUploadService:
-        arguments:
-            $targetDirectory: '%upload_directory%'
-    #File Uploads
-    App\Service\Patient\ProfilePictureUploadService:
-        arguments:
-            $targetDirectory: '%profile_upload_directory%'
