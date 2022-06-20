@@ -4,6 +4,7 @@
 namespace App\Service\Patient;
 
 
+use App\Entity\Patient\Allergy;
 use App\Entity\Patient\Contacts;
 use App\Entity\Patient\Details;
 use App\Entity\Patient\Family;
@@ -23,6 +24,7 @@ use App\Entity\Patient\TemperatureList;
 use App\Entity\Patient\Workplace;
 use App\Entity\Patient\Workplaces;
 use App\Entity\User;
+use App\Repository\Patient\AllergyRepository;
 use App\Repository\Patient\ContactsRepository;
 use App\Repository\Patient\DetailsRepository;
 use App\Repository\Patient\FamilyRepository;
@@ -79,6 +81,7 @@ class PatientService implements PatientServiceInterface
     private WorkplaceRepository $workplaceRepository;
     private SchoolRepository $schoolRepository;
     private SchoolsRepository $schoolsRepository;
+    private AllergyRepository $allergyRepository;
 
     public function __construct(
         UserServiceInterface                  $userService,
@@ -102,6 +105,7 @@ class PatientService implements PatientServiceInterface
         WorkplaceRepository                   $workplaceRepository,
         SchoolRepository                      $schoolRepository,
         SchoolsRepository                     $schoolsRepository,
+        AllergyRepository                     $allergyRepository,
     )
     {
         $this->userService = $userService;
@@ -127,6 +131,7 @@ class PatientService implements PatientServiceInterface
         $this->workplaceRepository = $workplaceRepository;
         $this->schoolRepository = $schoolRepository;
         $this->schoolsRepository = $schoolsRepository;
+        $this->allergyRepository = $allergyRepository;
     }
 
 
@@ -812,5 +817,55 @@ class PatientService implements PatientServiceInterface
     public function removeSchool($school): void
     {
         $this->schoolRepository->remove($school);
+    }
+
+    /**
+     * @param Allergy $allergy
+     * @param Patient $patient
+     * @param bool $isEdit
+     * @return void
+     * @throws OptimisticLockException
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function allergy(Allergy $allergy, Patient $patient, bool $isEdit): void
+    {
+        if (!$isEdit) {
+            $allergy->setCreatedAt($this->date);
+            $allergy->setCreatedBy($this->user);
+        }
+        $allergy->setEditedBy($this->user);
+        $allergy->setEditedAt($this->date);
+        $allergy->setPatient($patient);
+
+        $this->allergyRepository->add($allergy);
+    }
+
+    /**
+     * @param $id
+     * @return Allergy|null
+     */
+    public function getAllergy($id): Allergy|null
+    {
+        return $this->allergyRepository->find($id);
+    }
+    /**
+     * @param $id
+     * @return Allergy[]
+     */
+    public function getAllAllergy(): array
+    {
+        return $this->allergyRepository->findAll();
+    }
+
+
+    /**
+     * @param Allergy $allergy
+     * @return void
+     * @throws OptimisticLockException
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function allergyRemove(Allergy $allergy): void
+    {
+        $this->allergyRepository->remove($allergy);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Service\Patient;
 
 
+use App\Entity\Patient\Allergy;
 use App\Entity\Patient\Contacts;
 use App\Entity\Patient\Details;
 use App\Entity\Patient\Family;
@@ -25,7 +26,7 @@ use App\Entity\Patient\Workplaces;
 interface PatientServiceInterface
 {
 
-    public function save(Patient $patient,bool $isEdit): string;
+    public function save(Patient $patient, bool $isEdit): string;
 
     public function edit(Patient $patient): bool;
 
@@ -35,9 +36,9 @@ interface PatientServiceInterface
 
     public function findOneByID($id): ?Patient;
 
-    public function saveIDCard(IDCard $IDCard, Patient $patient,bool $isEdit);
+    public function saveIDCard(IDCard $IDCard, Patient $patient, bool $isEdit);
 
-    public function savePersonalDetails(Details $details, Patient $patient,bool $isEdit);
+    public function savePersonalDetails(Details $details, Patient $patient, bool $isEdit);
 
     public function saveContacts(Contacts $contacts, Patient $patient, $isEdit);
 
@@ -85,11 +86,11 @@ interface PatientServiceInterface
 
     public function saveFamily(Family $family, Patient $patient, $isEdit): ?int;
 
-    public function addTemperatureList(TemperatureList $temperatureList,Patient $patient,bool $isEdit):void;
+    public function addTemperatureList(TemperatureList $temperatureList, Patient $patient, bool $isEdit): void;
 
     public function getTemperatureList($id): array;
 
-    public function workplaces(Workplaces $workplaces, Patient $patient,bool $isEdit): void;
+    public function workplaces(Workplaces $workplaces, Patient $patient, bool $isEdit): void;
 
     public function getWorkplace($id): Workplace|null;
 
@@ -97,11 +98,19 @@ interface PatientServiceInterface
 
     public function removeWorkplace($workplace): void;
 
-    public function schools(Schools $schools, Patient $patient,bool $isEdit): void;
+    public function schools(Schools $schools, Patient $patient, bool $isEdit): void;
 
     public function getSchool($id): School|null;
 
     public function school(School $school, Patient $patient, bool $isEdit): void;
 
     public function removeSchool($school): void;
+
+    public function allergy(Allergy $allergy, Patient $patient, bool $isEdit): void;
+
+    public function getAllergy($id): Allergy|null;
+
+    public function getAllAllergy(): array;
+
+    public function allergyRemove(Allergy $allergy): void;
 }

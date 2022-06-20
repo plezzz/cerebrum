@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 
+use App\Entity\Patient\Allergy;
 use App\Entity\Patient\Contacts;
 use App\Entity\Patient\Details;
 use App\Entity\Patient\Habits;
@@ -14,6 +15,7 @@ use App\Entity\Patient\TemperatureList;
 use App\Entity\Patient\Therapy;
 use App\Entity\Patient\Workplace;
 use App\Entity\Patient\Workplaces;
+use App\Form\AllergyType;
 use App\Form\FamilyType;
 use App\Form\HabitsType;
 use App\Form\IDCardType;
@@ -1000,4 +1002,83 @@ class PatientController extends AbstractController
         $this->patientService->removeSchool($school);
         return $this->redirectToRoute('patient', ['id' => $patient->getId(), '_fragment' => 'school']);
     }
+
+    /**
+     * @IsGranted("ROLE_DOCTOR")
+     * @Breadcrumb(
+     *     {"label" = "Начало", "route" = "home"},
+     *     {"label" = "Пациент", "route" = "patient-create"},
+     *     {"label" = "Добавяне на алергия на пациента"})
+     * @param Request $request
+     * @return Response
+     */
+    #[Route('/patient/add/allergy', name: 'patient-allergy')]
+    public function allergy(Request $request): Response
+    {
+        $egn = $request->query->get('egn');
+        $edit = $request->query->get('edit');
+        $allergyID = $request->query->get('id');
+        $isEdit = $edit === "yes";
+        $patient = $this->patientService->findOneByEGN($egn);
+        $allergy = $isEdit?$this->patientService->getAllergy($allergyID):new Allergy();
+        $form = $this->createForm(AllergyType::class, $allergy);
+        $form->handleRequest($request);
+
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $formFields = $form->getData();
+            $this->patientService->allergy($formFields, $patient, $isEdit);
+            return $this->redirectToRoute('patient', ['id' => $patient->getId(), '_fragment' => 'timeline']);
+        }
+
+        return $this->render('patient/allergy.html.twig', [
+            'form' => $form->createView(),
+            'patient' => $patient,
+            'isEdit' => $isEdit
+        ]);
+    }
+
+    /**
+     * @IsGranted("ROLE_DOCTOR")
+     * @Breadcrumb(
+     *     {"label" = "Начало", "route" = "home"},
+     *     {"label" = "Пациент", "route" = "patient-create"},
+     *     {"label" = "Премахване на алергия за пациента"})
+     * @param Request $request
+     * @param $id
+     * @return Response
+     */
+    #[Route('/patient/remove/allergy/{id}', name: 'patient-allergy-remove')]
+    public function allergyRemove(Request $request, $id): Response
+    {
+        $allergy = $this->patientService->getAllergy($id);
+        $patient = $this->patientService->findOneByID($allergy->getPatient()->getId());
+        $this->patientService->allergyRemove($allergy);
+
+        return $this->redirectToRoute('patient', ['id' => $patient->getId()]);
+    }
+
+    /**
+     * @Breadcrumb({"label" = "Начало", "route" = "home"},
+     *     {"label" = "Пациент", "route" = "patient"},
+     *     {"label" = "Алергии на пацеинта", "route" = "patient-allergy-all"})
+     * @param Request $request
+     * @param $id
+     * @return Response
+     */
+    #[Route('/patient/allergy-all/{id}', name: 'patient-allergy-all')]
+    public function allergyAll(Request $request, $id): Response
+    {
+        $patient = $this->patientService->findOneByID($id);
+        if ($patient === null) {
+            return $this->redirectToRoute('home');
+        }
+        $allAllergy = $patient->getAllergies();
+
+        return $this->render('patient/patient-allergy-all.html.twig', [
+            'patient' => $patient,
+            'allAllergy' => $allAllergy
+        ]);
+    }
+
 }

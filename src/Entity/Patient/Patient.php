@@ -188,6 +188,11 @@ class Patient
      */
     private $schools;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Allergy::class, mappedBy="patient", orphanRemoval=true)
+     */
+    private $allergies;
+
 
 
 
@@ -200,6 +205,7 @@ class Patient
         $this->socialEvaluationNotes = new ArrayCollection();
         $this->psychologicalEvaluationNotes = new ArrayCollection();
         $this->temperatureLists = new ArrayCollection();
+        $this->allergies = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -742,6 +748,36 @@ class Patient
         }
 
         $this->schools = $schools;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Allergy>
+     */
+    public function getAllergies(): Collection
+    {
+        return $this->allergies;
+    }
+
+    public function addAllergy(Allergy $allergy): self
+    {
+        if (!$this->allergies->contains($allergy)) {
+            $this->allergies[] = $allergy;
+            $allergy->setPatient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAllergy(Allergy $allergy): self
+    {
+        if ($this->allergies->removeElement($allergy)) {
+            // set the owning side to null (unless already changed)
+            if ($allergy->getPatient() === $this) {
+                $allergy->setPatient(null);
+            }
+        }
 
         return $this;
     }

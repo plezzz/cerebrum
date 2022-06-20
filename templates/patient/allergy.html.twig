@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Връзка с пациент{% endblock %}
+{% block title %}Алергия на пациент{% endblock %}
 {% block header %}
     <div class="d-inline">
-        <h4>Връзка с пациент</h4>
+        <h4>Алергии на пациента</h4>
         {# <span>Място където може да добавяте нови работници</span> #}
     </div>
 {% endblock %}
@@ -13,6 +13,8 @@
 {% block body %}
     {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
     {{ form_widget(form) }}
+    <button type="submit">Запис</button>
+    {{ form_end(form) }}
 {% endblock %}
 
 {% block stylesheets %}
